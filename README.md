@@ -1,6 +1,6 @@
 # Poekelmon Weiss Schwarz – Soul Link
 
-Dashboard für eine Pokémon-Soul-Link-Challenge in **Pokémon Schwarz/Weiß (deutsche Version)** zu dritt: Hagenau, Weissi und Zinni. Es zeigt Routen und Fänge, wer welchen Encounter getötet hat, Tode, Run-Zähler, Level-Caps und eine Auswertung über alle Runs. Alle drei sehen live denselben Stand.
+Dashboard für eine Pokémon-Soul-Link-Challenge in **Pokémon Schwarz/Weiß (deutsche Version)** zu dritt: . Es zeigt Routen und Fänge, wer welchen Encounter getötet hat, Tode, Run-Zähler, Level-Caps und eine Auswertung über alle Runs. Alle drei sehen live denselben Stand.
 
 **Live:** `https://weissiefficiency.github.io/Poekelmon-Weiss-Schwarz/` (sobald GitHub Pages aktiv ist)
 
