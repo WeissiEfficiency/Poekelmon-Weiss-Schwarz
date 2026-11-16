@@ -27,7 +27,7 @@ var S={meta:defMeta(),routes:new Map(),history:[]};
 var store=null, mode="local", canWrite=true, loaded=false, routesLoaded=false;
 var auth=null, authUser=null, isAdmin=false, authKnown=false;   // nur im Firebase-Modus
 var pend=new Map(), busy=new Set(), metaPend=null, metaBusy=false, timers=new Map(), metaTimer=null;
-var ui={filter:"all",q:"",view:"edit"};
+var ui={filter:"all",q:"",view:"edit",showAll:false};
 var $=function(id){return document.getElementById(id)};
 
 function el(tag,attrs,kids){var e=document.createElement(tag);if(attrs)for(var k in attrs){if(k==="text")e.textContent=attrs[k];else if(k==="class")e.className=attrs[k];else e.setAttribute(k,attrs[k]);}(kids||[]).forEach(function(c){e.appendChild(c)});return e}
@@ -211,13 +211,23 @@ function matches(r,st){
   var hay=[r.name||"",nickOf(r)];for(var i=0;i<3;i++){hay.push(cellOf(r,i).sp)}
   return hay.join(" ").toLowerCase().indexOf(q)>-1;
 }
+/* Routen erscheinen nacheinander: alles bis zur ersten noch offenen Standard-Route nach der letzten
+   bearbeiteten. Eigene Routen immer, das Fossil (extra) blockiert nicht. Filter, Suche oder "Alle zeigen" zeigen alles. */
+function revealLimit(arr){
+  var last=-1;arr.forEach(function(e,i){if(!e[1].custom&&status(e[1])!=="open")last=i});
+  for(var i=last+1;i<arr.length;i++){var r=arr[i][1];if(!r.custom&&!r.extra)return r.order||0}
+  return Infinity;
+}
+function revealOn(){return ui.filter==="all"&&!ui.q.trim()&&!ui.showAll}
 function renderList(){
-  var arr=sorted(),seen={},shown=0,pos=0;
+  var arr=sorted(),seen={},shown=0,pos=0,lim=revealLimit(arr),rev=revealOn(),later=0;
   arr.forEach(function(e,idx){
     var id=e[0],row=rowEls.get(id);
     if(!row){row=buildRow(id);rowEls.set(id,row);if(!canWrite)row.querySelectorAll("input,select,button").forEach(function(x){x.disabled=true})}
     seen[id]=1;updateRow(row,id,idx);
-    var vis=matches(e[1],status(e[1]));row.hidden=!vis;if(vis)shown++;
+    var vis=matches(e[1],status(e[1]));
+    if(vis&&!e[1].custom&&(e[1].order||0)>lim){later++;if(rev)vis=false}
+    row.hidden=!vis;if(vis)shown++;
     if(listEl.children[pos]!==row)listEl.insertBefore(row,listEl.children[pos]||null);
     pos++;
   });
@@ -226,6 +236,9 @@ function renderList(){
   if(arr.length===0){em.hidden=!routesLoaded;$("emptyT").textContent="Noch keine Routen. Lege die Standard-Routen an oder spiel unten ein Backup ein. (・・;)";seed.hidden=!canWrite}
   else{$("emptyT").textContent="Keine Route passt zum Filter. (・・;)";seed.hidden=true;em.hidden=shown>0||ui.view!=="edit"}
   $("rtCount").textContent=shown+" von "+arr.length+" Routen";
+  var mb=$("moreBtn"),useful=later>0&&ui.filter==="all"&&!ui.q.trim();mb.hidden=!useful;
+  if(useful)mb.textContent=ui.showAll?"Nur bisherige Routen zeigen":"Alle Routen zeigen ("+later+" weitere)";
+  mb.setAttribute("aria-expanded",String(ui.showAll));
 }
 
 /* ---------- Gesamtliste ---------- */
@@ -485,9 +498,10 @@ async function seedRoutes(){
   $("seedBtn").disabled=false;renderAll();
 }
 $("seedBtn").addEventListener("click",seedRoutes);
+$("moreBtn").addEventListener("click",function(){ui.showAll=!ui.showAll;renderList()});
 function setView(v){ui.view=v;
   $("viewSeg").querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-v")===v))});
-  listEl.hidden=v!=="edit";$("viewAll").hidden=v!=="all";$("addBtn").hidden=v!=="edit";
+  listEl.hidden=v!=="edit";$("viewAll").hidden=v!=="all";$("listFoot").hidden=v!=="edit";
   renderList();if(v==="all")renderAllView();
 }
 $("viewSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setView(b.getAttribute("data-v"))});

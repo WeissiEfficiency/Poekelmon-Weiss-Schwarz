@@ -130,6 +130,7 @@ input::placeholder,textarea::placeholder{color:var(--ph);font-weight:600}
 .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .tools .grow{flex:1;min-width:180px}
 .list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.listfoot{margin-top:14px}
 .row{background:var(--card);border:3px solid var(--ink);border-radius:var(--r);display:grid;grid-template-columns:240px minmax(0,1fr);position:relative;overflow:hidden;box-shadow:var(--sh)}
 .row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--line);border-right:3px solid var(--ink)}
 .row[data-st=alive]::before{background:var(--mint)}
@@ -220,7 +221,7 @@ details[open]>summary::before{content:"▾ "}
 footer{margin:30px 0 44px;color:var(--mute);font-size:13.5px;font-weight:700}
 body.ro input,body.ro select,body.ro .seg button,body.ro .btn,body.ro .chipb,body.ro .tick,body.ro .stp{pointer-events:none;opacity:.7}
 /* Lesen, Filtern, Suchen und Anmelden bleiben auch ohne Schreibrecht bedienbar */
-body.ro #q,body.ro #filter button,body.ro #viewSeg button,body.ro #themeSeg button,body.ro .btn.authbtn,body.ro #copyBtn{pointer-events:auto;opacity:1}
+body.ro #q,body.ro #filter button,body.ro #viewSeg button,body.ro #themeSeg button,body.ro .btn.authbtn,body.ro #copyBtn,body.ro #moreBtn{pointer-events:auto;opacity:1}
 
 /* Anmeldung */
 .topr{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
