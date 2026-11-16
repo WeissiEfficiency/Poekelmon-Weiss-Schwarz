@@ -60,9 +60,11 @@ emails: [ "name@gmail.com", ... ]   // nur Admin schreibt, lesbar für Freigesch
 
 `firestore.rules` prüft bei jedem Schreiben zuerst `isWriter()` (siehe oben) und dann jedes Dokument gegen dieses Datenmodell: nur bekannte Felder, Textlängen begrenzt, Status-Werte aus festen Listen, Routen-IDs `r00`–`r99` oder `c…`, `meta` nur als `main`. `meta` und `history` sind nicht löschbar, `history` ist nach dem Anlegen unveränderlich (gleiche Daten erneut schreiben ist erlaubt, damit Backups eingespielt werden können). Ein neues Feld braucht deshalb drei Stellen: Standardwert in `defMeta()` bzw. beim Anlegen der Route, `firestore.rules`, und die Regeln neu in der Firebase-Konsole veröffentlichen.
 
-## Backup-Erinnerung
+## Backups
 
-`renderBk()` zeigt oben einen Hinweis, wenn Routen vorhanden sind und `backupAt` fehlt oder mindestens 7 Tage alt ist (`BK_DAYS`). Der Zeitpunkt gilt für alle Spieler gemeinsam.
+- **Von Hand**: „Backup kopieren“ / „Als Datei speichern“ (nur Admin) setzen `meta.backupAt`.
+- **Automatisch**: GitHub Action `.github/workflows/backup.yml` ruft täglich `tools/backup.py` auf. Das Skript liest `meta`, `routes`, `history` über die Firestore-REST-API (Lesen ist offen, Projekt-ID und API-Key aus `config.js`), schreibt im Exportformat von `exportData()` (`app`, `version`, `exportedAt`, `meta`, `routes`, `history`, zusätzlich `source: "auto"`) nach `backups/latest.json` und `backups/JJJJ-MM-TT.json` und nur, wenn sich der Inhalt geändert hat. Leere Routen brechen ab, damit kein leeres Backup das letzte gute ersetzt.
+- **Erinnerung**: `renderBk()` lädt `config.js autoBackupUrl` (raw.githubusercontent.com, unabhängig vom Pages-Build) und zeigt den Hinweis nur, wenn das jüngere der beiden Backups mindestens 7 Tage alt ist (`BK_DAYS`) und die aktuellen Daten vom automatischen Backup abweichen (`autoBkCurrent()`, Vergleich per `canon()` ohne `backupAt`).
 
 ## Zählung
 

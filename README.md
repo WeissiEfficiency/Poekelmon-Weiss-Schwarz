@@ -56,7 +56,9 @@ Im alten Dashboard auf claude.ai ganz unten **Daten sichern und umziehen > Backu
 - Lesen kann jeder mit dem Link. Schreiben kann nur, wer mit Google angemeldet ist und freigeschaltet ist (Admin oder E-Mail unter **Schreibrechte**). Backup und Schreibrechte sieht nur der Admin. Die E-Mails stehen in Firestore (`access/main`), nicht im Repo.
 - Die Regeln in `firestore.rules` lassen nur Daten in der Form des Dashboards zu (bekannte Felder, begrenzte Textlängen). Run-Daten und Run-Verlauf lassen sich nicht löschen, einzelne Routen schon. Neue Felder müssen auch in `firestore.rules` ergänzt und dort neu veröffentlicht werden, sonst schlägt Speichern fehl.
 - Kosten: Das Projekt läuft im kostenlosen Spark-Tarif ohne Zahlungsart. Beim Tageslimit stoppt das Speichern bis zum nächsten Tag, es entstehen keine Kosten. Nicht auf den Blaze-Tarif wechseln.
-- Firebase sichert im Spark-Tarif nicht automatisch. Die Seite erinnert oben, wenn die letzte Sicherung älter als 7 Tage ist. Dann **Als Datei speichern** im Backup-Bereich.
+- Automatisches Backup: Die GitHub Action **Backup** (`.github/workflows/backup.yml`) läuft täglich um 03:17 UTC, liest die Daten mit `tools/backup.py` und committet sie nach `backups/` (`latest.json` plus eine Datei pro Tag mit Änderungen). Von Hand starten: **Actions > Backup > Run workflow**, lokal: `python3 tools/backup.py`. Einspielen wie jedes Backup über **Backup einspielen** (Inhalt von `backups/latest.json` einfügen oder Datei wählen). Die Freischaltliste ist nicht im Backup.
+- Die Backups liegen öffentlich im Repo (nur Spielernamen, Pokémon, Routen, Zähler). Die Seite erinnert den Admin nur noch, wenn sich Daten geändert haben und seit 7 Tagen kein Backup (automatisch oder von Hand) entstanden ist.
+- GitHub pausiert zeitgesteuerte Actions in Repos, in denen 60 Tage lang nichts passiert. Dann kommt eine Mail, und die Action lässt sich unter **Actions** wieder einschalten.
 - Der kostenlose Firebase-Tarif (Spark) reicht für drei Spieler.
 
 Mehr zum Aufbau: [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md). Was als Nächstes kommt: [docs/BACKLOG.md](docs/BACKLOG.md).

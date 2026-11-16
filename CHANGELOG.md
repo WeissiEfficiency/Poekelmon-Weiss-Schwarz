@@ -3,6 +3,7 @@
 ## 2026-11-16
 
 ### Hinzugefügt
+- Automatisches Backup: GitHub Action sichert täglich mit `tools/backup.py` nach `backups/` (nur bei Änderungen). Die Backup-Erinnerung berücksichtigt das automatische Backup.
 - Google-Anmeldung: Schreiben nur noch für den Admin und freigeschaltete Google-E-Mails, ohne Anmeldung nur lesen. Backup und neuer Bereich „Schreibrechte“ nur für den Admin.
 - Backup-Erinnerung: Hinweis oben auf der Seite, wenn die letzte Sicherung fehlt oder älter als 7 Tage ist; Datum der letzten Sicherung im Backup-Bereich (neues Feld `meta.backupAt`).
 - Strengere Firestore-Regeln: nur bekannte Felder und begrenzte Textlängen, Run-Daten und Run-Verlauf nicht löschbar.

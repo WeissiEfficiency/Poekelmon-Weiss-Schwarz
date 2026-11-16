@@ -363,12 +363,27 @@ function renderAna(){
 function renderAll(){renderRun();renderCaps();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna();renderBk()}
 
 /* ---------- Backup-Erinnerung ---------- */
-var BK_DAYS=7;
-function backupAge(){var t=Date.parse(S.meta.backupAt||"");return isNaN(t)?null:Math.floor((Date.now()-t)/864e5)}
+var BK_DAYS=7, autoBk=null;   // autoBk: letztes automatisches Backup (GitHub Action, config.js autoBackupUrl)
+function ageOf(iso){var t=Date.parse(iso||"");return isNaN(t)?null:Math.floor((Date.now()-t)/864e5)}
+function ageText(iso){var a=ageOf(iso);return new Date(iso).toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"})+(a===0?" (heute)":a===1?" (gestern)":" (vor "+a+" Tagen)")}
+function canon(x){if(Array.isArray(x))return "["+x.map(canon).join(",")+"]";
+  if(x&&typeof x==="object")return "{"+Object.keys(x).sort().map(function(k){return JSON.stringify(k)+":"+canon(x[k])}).join(",")+"}";
+  return JSON.stringify(x)}
+function dataKey(meta,routes,history){var m=clone(meta);delete m.backupAt;return canon({meta:m,routes:routes,history:history})}
+function autoBkCurrent(){   // entspricht das automatische Backup genau den aktuellen Daten?
+  if(!autoBk)return false;var r={},h={};S.routes.forEach(function(v,id){r[id]=v});S.history.forEach(function(x){h[x.id]=x.data});
+  return dataKey(dm(defMeta(),clone(autoBk.meta||{})),autoBk.routes||{},autoBk.history||{})===dataKey(S.meta,r,h);
+}
+function loadAutoBackup(){
+  var url=(window.SOULLINK_CONFIG||{}).autoBackupUrl;if(!url||mode!=="firebase")return;
+  fetch(url,{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(o){if(o&&o.app==="soullink-bw"){autoBk=o;renderBk()}}).catch(function(){});
+}
 function renderBk(){
-  var age=backupAge(),last=$("bkLast"),warn=$("bkWarn");
-  last.textContent=age===null?"Noch keine Sicherung gemacht.":"Letzte Sicherung: "+new Date(S.meta.backupAt).toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"})+(age===0?" (heute)":age===1?" (gestern)":" (vor "+age+" Tagen)");
-  var show=loaded&&routesLoaded&&canWrite&&backupAllowed()&&S.routes.size>0&&(age===null||age>=BK_DAYS);
+  var man=S.meta.backupAt||"",auto=autoBk?autoBk.exportedAt:"",last=$("bkLast"),warn=$("bkWarn");
+  var parts=[];if(auto)parts.push("Automatisch: "+ageText(auto));if(man)parts.push("Von Hand: "+ageText(man));
+  last.textContent=parts.length?"Letzte Sicherung. "+parts.join(" · "):"Noch keine Sicherung gemacht.";
+  var ages=[ageOf(man),ageOf(auto)].filter(function(a){return a!==null}),age=ages.length?Math.min.apply(null,ages):null;
+  var show=loaded&&routesLoaded&&canWrite&&backupAllowed()&&S.routes.size>0&&(age===null||age>=BK_DAYS)&&!autoBkCurrent();
   warn.hidden=!show;
   if(show)$("bkWarnT").textContent=age===null?"Es gibt noch keine Sicherung der Daten.":"Die letzte Sicherung ist "+age+" Tage alt.";
 }
@@ -619,6 +634,7 @@ var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreich
       $("bkDl").hidden=false;
       setCanWrite(false);applyRole();renderAuth();   // bis die Anmeldung geklärt ist: nur lesen
       auth=firebase.auth();auth.onAuthStateChanged(onAuth);
+      loadAutoBackup();
     }else if(window.claude&&window.claude.use){
       mode="artifact";
       var user=await claude.use("user");

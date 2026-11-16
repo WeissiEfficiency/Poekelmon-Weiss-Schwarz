@@ -2,7 +2,7 @@
 
 ## Aktueller Stand
 
-Seite ist fertig und als Repo angelegt. GitHub Pages ist aktiv (https://weissiefficiency.github.io/Poekelmon-Weiss-Schwarz/) und speichert live in Firebase (Projekt `soul-link-weiss-schwarz`, Firestore in Frankfurt, Regeln aus `firestore.rules` veröffentlicht). Das Backup aus claude.ai ist eingespielt. Die Firestore-Regeln prüfen das Datenmodell, die Seite erinnert an Sicherungen, und Schreiben geht nur noch mit Google-Anmeldung (Weissi ist Admin). Ab jetzt nur noch auf der GitHub-Seite eintragen.
+Seite ist fertig und als Repo angelegt. GitHub Pages ist aktiv (https://weissiefficiency.github.io/Poekelmon-Weiss-Schwarz/) und speichert live in Firebase (Projekt `soul-link-weiss-schwarz`, Firestore in Frankfurt, Regeln aus `firestore.rules` veröffentlicht). Das Backup aus claude.ai ist eingespielt. Die Firestore-Regeln prüfen das Datenmodell, die Seite erinnert an Sicherungen, Schreiben geht nur noch mit Google-Anmeldung (Weissi ist Admin), und eine GitHub Action sichert täglich nach `backups/`. Ab jetzt nur noch auf der GitHub-Seite eintragen.
 
 **Nächster Schritt:** T-009 (Google-E-Mails von Hagenau und Zinni unter „Schreibrechte“ eintragen), dann T-004.
 
@@ -18,6 +18,7 @@ Seite ist fertig und als Repo angelegt. GitHub Pages ist aktiv (https://weissief
 | T-006 | Automatischer Smoke-Test (Playwright) für Eintragen, Tod, Neuer Run | niedrig | Idee | M2 |
 | T-007 | Regelmäßiges Backup erinnern (z. B. Hinweis, wenn letzte Sicherung alt ist) | niedrig | erledigt | M2 |
 | T-008 | Firebase App Check (reCAPTCHA), damit nur die eigene Seite schreiben darf | niedrig | verworfen (durch Anmeldung erledigt) | M2 |
+| T-010 | Automatisches tägliches Backup per GitHub Action nach `backups/` | mittel | erledigt | M2 |
 | T-009 | Google-E-Mails von Hagenau und Zinni unter „Schreibrechte“ eintragen | hoch | offen | M1 |
 
 ## Erledigt

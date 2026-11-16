@@ -18,6 +18,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 - `js/pokemon.js`: 649 deutsche Pokémon-Namen, Index + 1 = Dex-Nummer
 - `config.js`: Firebase-Werte; Platzhalter `DEIN-PROJEKT` = lokaler Modus
 - `firestore.rules`: Firestore-Regeln, werden in der Firebase-Konsole eingefügt (nicht automatisch)
+- `tools/backup.py` + `.github/workflows/backup.yml`: tägliches Auto-Backup nach `backups/` (nicht von Hand bearbeiten)
 
 ## Konventionen
 

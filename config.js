@@ -13,5 +13,7 @@ window.SOULLINK_CONFIG = {
   },
   // Firebase-Kennung (UID) des Admins: darf Backups machen und andere freischalten.
   // Muss mit der UID in firestore.rules (isAdmin) übereinstimmen. Die UID ist keine E-Mail und nicht geheim.
-  adminUid: "3jGRsgfX3DcYPwOTzzTWJBm8EJF2"
+  adminUid: "3jGRsgfX3DcYPwOTzzTWJBm8EJF2",
+  // Letztes automatisches Backup (GitHub Action, tools/backup.py). Dient nur der Backup-Erinnerung.
+  autoBackupUrl: "https://raw.githubusercontent.com/WeissiEfficiency/Poekelmon-Weiss-Schwarz/main/backups/latest.json"
 };
