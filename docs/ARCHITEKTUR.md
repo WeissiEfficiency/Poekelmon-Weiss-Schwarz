@@ -44,7 +44,9 @@ perPlayer: { p0: { run, death, enc }, ... }
 
 ## Designs (Themes)
 
-Drei Designs mit denselben Bausteinen: `pastell` (Standard), `tsundere`, `pokedex`. Umschalter oben rechts (`#themeSeg`), gesetzt als `<html data-theme="…">`, gemerkt pro Gerät in `localStorage` (`soullink-theme`), nicht in der Datenbank. Ein kleines Skript im `<head>` setzt das Attribut vor dem ersten Zeichnen.
+Drei Designs mit denselben Bausteinen: `pokedex` (Standard für alle), `pastell`, `lovecraft`. Gesetzt als `<html data-theme="…">` (im Markup steht `pokedex`).
+- **Wer wählen darf**: nur der Admin (Firebase-Modus) bzw. jeder im Lokal- und Artifact-Modus (`themeChoiceAllowed()`). Nur dann ist der Umschalter `#themeSeg` sichtbar. Alle anderen bekommen nach der Anmeldeprüfung immer `pokedex` (`applyThemeRole()`, aufgerufen aus `applyRole()`).
+- **Gemerkt** pro Gerät in `localStorage` (`soullink-theme`), nicht in der Datenbank. Ein kleines Skript im `<head>` setzt ein gespeichertes `pastell`/`lovecraft` vor dem ersten Zeichnen, damit es beim Admin nicht flackert; bei allen anderen schaltet `applyThemeRole()` nach der Anmeldeprüfung auf Pokédex zurück.
 - **Farben, Schriften, Formen**: nur über CSS-Variablen in `:root` (z. B. `--ink`, `--surface`, `--hdr`, `--mark`) und je Theme einen Block `:root[data-theme=…]` am Ende von `css/style.css`. Keine festen Farben in Bausteinen, neue Flächen bekommen eine Variable.
 - **Sprüche**: `THEME_TXT` in `js/app.js` (Untertitel, Run-Zeile, leerer Friedhof), abgerufen mit `tt(key)`.
 - Neues Theme: Eintrag in `THEMES` und `THEME_TXT`, Knopf in `#themeSeg`, CSS-Block. Schriften im Google-Fonts-Link in `index.html` (werden nur geladen, wenn sie genutzt werden).

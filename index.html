@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="pokedex">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Soul Link Schwarz Weiß</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Crimson+Pro:wght@400;500;600;700&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script>/* Theme vor dem ersten Zeichnen setzen, damit nichts flackert (gemerkt pro Gerät) */try{var t=localStorage.getItem("soullink-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>/* Theme vor dem ersten Zeichnen setzen (Standard Pokédex; andere Wahl nur für den Admin, prüft js/app.js nach der Anmeldung) */try{var t=localStorage.getItem("soullink-theme");if(t==="pastell"||t==="lovecraft")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
 <body>
 <header class="top">
@@ -16,12 +16,12 @@
       <div class="ball" aria-hidden="true"></div>
       <div>
         <h1>Soul Link ✦ Schwarz &amp; Weiß</h1>
-        <p id="tagline">Einall-Run zu dritt (◕‿◕)♡</p>
+        <p id="tagline">Einall · Soul Link · 3 Trainer</p>
       </div>
     </div>
     <div class="topr">
-      <div class="seg themeseg" id="themeSeg" role="group" aria-label="Design">
-        <button type="button" data-t="pastell" aria-pressed="true">Pastell</button><button type="button" data-t="tsundere" aria-pressed="false">Tsundere</button><button type="button" data-t="pokedex" aria-pressed="false">Pokédex</button>
+      <div class="seg themeseg" id="themeSeg" role="group" aria-label="Design (nur für dich sichtbar)" hidden>
+        <button type="button" data-t="pokedex" aria-pressed="true">Pokédex</button><button type="button" data-t="pastell" aria-pressed="false">Pastell</button><button type="button" data-t="lovecraft" aria-pressed="false">Lovecraft</button>
       </div>
       <div class="sync" id="sync" data-s="load" role="status"><i></i><span id="syncT">Lädt …</span></div>
       <div class="auth" id="auth" hidden><span id="authT"></span><button type="button" class="btn authbtn" id="authBtn" hidden>Mit Google anmelden</button></div>

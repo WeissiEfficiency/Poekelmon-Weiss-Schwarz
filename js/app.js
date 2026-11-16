@@ -41,14 +41,16 @@ function status(r){var s=P.map(function(_,i){return cellOf(r,i).st});
   if(s.every(function(x){return x==="alive"}))return"alive";if(s.indexOf("alive")>-1)return"part";return"open"}
 var STL={alive:"Lebendig ♡",dead:"Tot (×_×)",miss:"Verpasst",part:"Teilweise",open:"Offen"};
 
-/* ---------- Themes (Design pro Gerät, nicht in der Datenbank) ----------
+/* ---------- Themes ----------
+   Pokédex ist das Design für alle. Nur der Admin (bzw. lokal/Artifact) sieht den Umschalter und kann
+   Pastell oder Lovecraft wählen; die Wahl liegt pro Gerät in localStorage, nicht in der Datenbank.
    Farben und Formen stehen in css/style.css unter :root[data-theme=…]; hier nur die Sprüche. */
-var THEMES=["pastell","tsundere","pokedex"];
+var THEMES=["pokedex","pastell","lovecraft"], DEFAULT_THEME="pokedex";
 var THEME_TXT={
+  pokedex:{tag:"Einall · Soul Link · 3 Trainer",run:"Run läuft. Viel Erfolg, Trainer!",won:"Glückwunsch! Ihr habt die Liga bezwungen!",lost:"… alle Pokémon kampfunfähig.",grave:"Noch kein Link gestorben."},
   pastell:{tag:"Einall-Run zu dritt (◕‿◕)♡",run:"Run läuft (๑•̀ㅂ•́)و✧",won:"Run gewonnen ✧*。٩(ˊᗜˋ*)و✧*。",lost:"(×_×)",grave:"Noch kein Link gestorben. (◕‿◕)"},
-  tsundere:{tag:"N-nicht, dass mich euer Run interessiert! (￣^￣)",run:"Run läuft … streng dich ja an, Baka! (｀へ´)",won:"G-gewonnen?! War doch klar … hmpf. (〃＞＿＜;〃)",lost:"Hmpf. Selber schuld! (╬Ò﹏Ó)",grave:"Noch keiner tot. Nicht dass ich mir Sorgen gemacht hätte! (¬_¬)"},
-  pokedex:{tag:"Einall · Soul Link · 3 Trainer",run:"Run läuft. Viel Erfolg, Trainer!",won:"Glückwunsch! Ihr habt die Liga bezwungen!",lost:"… alle Pokémon kampfunfähig.",grave:"Noch kein Link gestorben."}};
-function themeName(){var t=document.documentElement.getAttribute("data-theme");return THEMES.indexOf(t)>-1?t:"pastell"}
+  lovecraft:{tag:"Drei Seelen, ein Bund – und etwas, das unter Einall schläft",run:"Der Run währt fort. Etwas beobachtet euch aus der Tiefe.",won:"Bezwungen … vorerst. Die Sterne stehen noch nicht richtig.",lost:"– verschlungen von namenlosem Grauen.",grave:"Noch ruht kein Link in der Tiefe."}};
+function themeName(){var t=document.documentElement.getAttribute("data-theme");return THEMES.indexOf(t)>-1?t:DEFAULT_THEME}
 function tt(k){return THEME_TXT[themeName()][k]}
 var STC={alive:"Lebendig",dead:"Tot",miss:"Verpasst",part:"Teilweise",open:"Offen"};
 function sorted(){return Array.from(S.routes.entries()).sort(function(a,b){return (a[1].order||0)-(b[1].order||0)})}
@@ -565,6 +567,7 @@ function setCanWrite(v){
 function applyRole(){
   $("bkSec").hidden=!backupAllowed();
   $("accSec").hidden=!(mode==="firebase"&&isAdmin);
+  applyThemeRole();
   renderBk();
 }
 function renderAuth(){
@@ -614,16 +617,23 @@ $("accSave").addEventListener("click",function(){
     .then(function(){s.textContent="Gespeichert ✧ ("+list.length+" freigeschaltet)"},function(){s.textContent="Speichern fehlgeschlagen";s.classList.add("err")});
 });
 
-/* ---------- Theme-Umschalter ---------- */
+/* ---------- Theme-Umschalter (nur Admin) ---------- */
+function themeChoiceAllowed(){return mode==="firebase"?(authKnown&&isAdmin):true}
+function storedTheme(){try{return localStorage.getItem("soullink-theme")}catch(e){return null}}
+function applyThemeRole(){
+  var ok=themeChoiceAllowed();$("themeSeg").hidden=!ok;
+  if(mode==="firebase"&&!authKnown)return;   // Anmeldung noch offen: nichts umschalten, sonst flackert es beim Admin
+  setTheme(ok?(storedTheme()||DEFAULT_THEME):DEFAULT_THEME,false);
+}
 function setTheme(t,save){
-  if(THEMES.indexOf(t)<0)t="pastell";
+  if(THEMES.indexOf(t)<0)t=DEFAULT_THEME;
   document.documentElement.setAttribute("data-theme",t);
   if(save){try{localStorage.setItem("soullink-theme",t)}catch(e){}}
   $("themeSeg").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-t")===t))});
   $("tagline").textContent=tt("tag");
   renderAll();
 }
-$("themeSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setTheme(b.getAttribute("data-t"),true)});
+$("themeSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&themeChoiceAllowed())setTheme(b.getAttribute("data-t"),true)});
 setTheme(themeName(),false);
 
 /* ---------- Start ---------- */
@@ -669,6 +679,7 @@ var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreich
       mode="local";LIVE_LABEL="Nur auf diesem Gerät gespeichert";store=makeLocalStore();$("bkDl").hidden=false;
     }
   }catch(e){mode="local";LIVE_LABEL="Online-Speicher nicht erreichbar, nur lokal";store=makeLocalStore();$("bkDl").hidden=false;setCanWrite(true);applyRole();renderAuth()}
+  if(mode!=="firebase")applyThemeRole();   // lokal/Artifact: Umschalter sichtbar
   subscribe();
 })();
 })();

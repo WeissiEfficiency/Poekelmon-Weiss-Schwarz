@@ -16,7 +16,7 @@ Hagenau und Zinni brauchen keinen Account, sie öffnen nur den Link. Wer den Lin
 - Level-Caps aller Arenaleiter, Top Vier, N und G-Cis zum Abhaken
 - Gesamtliste, Friedhof, Auswertung mit Run-Verlauf
 - Backup als Text oder Datei, Umzug zwischen Speicherorten
-- Drei Designs zum Umschalten (Pastell, Tsundere, Pokédex), gemerkt pro Gerät
+- Design Pokédex für alle; der Admin kann zusätzlich Pastell oder Lovecraft wählen (gemerkt pro Gerät)
 
 ## Lokal starten
 

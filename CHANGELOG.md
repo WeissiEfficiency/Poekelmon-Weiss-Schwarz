@@ -3,7 +3,7 @@
 ## 2026-11-16
 
 ### Hinzugefügt
-- Drei Designs zum Umschalten oben rechts: Pastell (wie bisher), Tsundere (Kirschrot, scharfe Kanten, Manga-Schrift, freche Sprüche) und Pokédex (Rot/Weiß, Pixelschrift, Textboxen, KP-Balken). Die Wahl merkt sich jedes Gerät.
+- Designs: Pokédex (Rot/Weiß, Pixelschrift, Textboxen, KP-Balken) ist Standard für alle. Der Admin kann oben rechts zusätzlich Pastell (bisheriges Design) oder Lovecraft (Tiefsee-Nacht, Pergament, alte Druckschrift, blinzelndes Auge) wählen; die Wahl merkt sich sein Gerät.
 
 ### Behoben
 - Handy: Der Run-Kasten war rechts abgeschnitten („Neuer Run starten“, „Gewonnen“).

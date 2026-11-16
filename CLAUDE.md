@@ -13,7 +13,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 ## Dateien
 
 - `index.html`: Markup aller Bereiche
-- `css/style.css`: Design (Tokens in `:root`, Themes Pastell/Tsundere/Pokédex als `:root[data-theme=…]` am Dateiende)
+- `css/style.css`: Design (Tokens in `:root`, Themes Pokédex (Standard), Pastell, Lovecraft als `:root[data-theme=…]` am Dateiende; Umschalter nur für den Admin)
 - `js/app.js`: gesamte Logik (Speicher-Adapter, Rendering, Zähler, Suche)
 - `js/pokemon.js`: 649 deutsche Pokémon-Namen, Index + 1 = Dex-Nummer
 - `config.js`: Firebase-Werte; Platzhalter `DEIN-PROJEKT` = lokaler Modus
