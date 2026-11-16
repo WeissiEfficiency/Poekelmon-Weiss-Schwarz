@@ -3,7 +3,7 @@
 ## 2026-11-16
 
 ### Hinzugefügt
-- Run-Status ohne Umschalter: Knopf „Run verloren“ (mit „Doch nicht verloren“), „Gewonnen“ automatisch, sobald jede Route gespielt ist, mit kleinem Feuerwerk. „Neuer Run starten“ erscheint erst, wenn der Run verloren oder gewonnen ist.
+- Run-Status ohne Umschalter: Knopf „Run verloren“ (mit „Doch nicht verloren“), „Gewonnen“ automatisch, sobald jede Route gespielt ist, oder per Knopf „Run gewonnen“ (nur Admin), mit kleinem Feuerwerk. „Neuer Run starten“ erscheint erst, wenn der Run verloren oder gewonnen ist.
 - Nicht gefangen (∅) zählt wie ein Tod: Die verbundenen Pokémon sterben mit, der Link steht im Friedhof, und jeder, der nicht gefangen hat, bekommt einen Encounter.
 - Routen erscheinen nacheinander: Sichtbar sind die bisher bearbeiteten Routen und die nächste offene. Sobald dort ein Spitzname, ein Pokémon oder ein Zustand eingetragen ist, kommt die nächste dazu. „Alle Routen zeigen“ und „Route hinzufügen“ stehen jetzt unter der Liste; Filter und Suche zeigen weiter alle passenden Routen.
 - Designs: Pokédex (Rot/Weiß, Pixelschrift, Textboxen, KP-Balken) ist Standard für alle. Der Admin kann oben rechts zusätzlich Pastell (bisheriges Design) oder Lovecraft (Tiefsee-Nacht, Pergament, alte Druckschrift, blinzelndes Auge) wählen; die Wahl merkt sich sein Gerät.

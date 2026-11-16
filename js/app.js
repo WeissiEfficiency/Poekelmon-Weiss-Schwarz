@@ -351,13 +351,14 @@ function renderCaps(){
    (jeder hat gefangen oder verpasst, oder der Link ist tot). Das Fossil (extra) zählt nicht mit. */
 function played(r){var st=status(r);return st!=="open"&&st!=="part"}
 function routesLeft(){var n=0,any=false;S.routes.forEach(function(r){if(r.extra)return;any=true;if(!played(r))n++});return any?n:-1}
-function runState(){if(S.meta.run.status==="lost")return"lost";return routesLoaded&&routesLeft()===0?"won":"run"}
+function runState(){var s=S.meta.run.status;if(s==="lost"||s==="won")return s;return routesLoaded&&routesLeft()===0?"won":"run"}
 var lastRunState=null;
 function renderRun(){
   var r=S.meta.run,state=runState();
   fill($("runNo"),String(r.no));
   var chip=$("runChip");chip.className="chip "+state;chip.textContent={run:"Läuft",lost:"Verloren",won:"Gewonnen"}[state];
-  $("runLost").hidden=state!=="run";$("runBack").hidden=state!=="lost";$("newRun").hidden=state==="run";
+  $("runLost").hidden=state!=="run";$("runWon").hidden=!(state==="run"&&backupAllowed());
+  var back=$("runBack");back.hidden=!(r.status==="lost"||(r.status==="won"&&backupAllowed()));back.textContent=r.status==="won"?"Doch nicht gewonnen":"Doch nicht verloren";$("newRun").hidden=state==="run";
   var left=routesLeft();$("runHint").textContent=state==="run"&&left>0?"Gewonnen ist der Run automatisch, sobald jede Route gespielt ist (noch "+left+(left===1?" Route":" Routen")+").":"";
   if(loaded&&routesLoaded){if(state==="won"&&lastRunState&&lastRunState!=="won")fireworks();lastRunState=state}
   var lost=state==="lost";$("runEnd").hidden=!lost;
@@ -542,6 +543,7 @@ $("players").addEventListener("input",function(e){var t=e.target,i=t.getAttribut
 $("runWhere").addEventListener("input",function(){patchMeta({run:{where:this.value}})});
 $("runCause").addEventListener("input",function(){patchMeta({run:{cause:this.value}})});
 $("runLost").addEventListener("click",function(){if(!canWrite)return;patchMeta({run:{status:"lost"}});renderAll()});
+$("runWon").addEventListener("click",function(){if(!canWrite||!backupAllowed())return;patchMeta({run:{status:"won"}});renderAll()});
 $("runBack").addEventListener("click",function(){if(!canWrite)return;patchMeta({run:{status:"run"}});renderAll()});
 
 /* ---------- Feuerwerk beim Sieg (Farben aus dem aktiven Theme) ---------- */
@@ -633,7 +635,7 @@ function applyRole(){
   $("bkSec").hidden=!backupAllowed();
   $("accSec").hidden=!(mode==="firebase"&&isAdmin);
   applyThemeRole();
-  renderBk();
+  renderBk();renderRun();
 }
 function renderAuth(){
   var box=$("auth"),t=$("authT"),b=$("authBtn");box.hidden=mode!=="firebase";if(box.hidden)return;
