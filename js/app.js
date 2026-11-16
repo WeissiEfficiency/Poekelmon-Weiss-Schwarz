@@ -3,7 +3,7 @@
 "use strict";
 /* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
    APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
-var APP_V="202611162338";
+var APP_V="202611162354";
 var HTML_V=document.documentElement.getAttribute("data-v");
 if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
 var P=["p0","p1","p2"], MARK=["●","■","▲"], DEF=["Hagenau","Weissi","Zinni"];
@@ -551,34 +551,54 @@ $("runLost").addEventListener("click",function(){if(!canWrite)return;patchMeta({
 $("runWon").addEventListener("click",function(){if(!canWrite||!backupAllowed())return;patchMeta({run:{status:"won"}});renderAll()});
 $("runBack").addEventListener("click",function(){if(!canWrite)return;patchMeta({run:{status:"run"}});renderAll()});
 
-/* ---------- Feuerwerk beim Sieg (Farben aus dem aktiven Theme) ---------- */
+/* ---------- Feuerwerk beim Sieg (Farben aus dem aktiven Theme) ----------
+   Raketen mit Funkenregen, dazu zwei Explosionen als Pixelbild (Pokéball, Pikachu). */
+var FW_SHAPES={
+  ball:["....KKKKK....","..KKRRRRRKK..",".KRRRRRRRRRK.",".KRRRRRRRRRK.","KRRRRRRRRRRRK","KRRRRKKKRRRRK","KKKKKKWKKKKKK","KWWWWKKKWWWWK","KWWWWWWWWWWWK",".KWWWWWWWWWK.",".KWWWWWWWWWK.","..KKWWWWWKK..","....KKKKK...."],
+  pika:["K.............K","KK...........KK",".KY.........YK.",".YY.........YY.","..YY.......YY..","..YYYYYYYYYYY..",".YYYYYYYYYYYYY.",".YYKKYYYYYKKYY.",".YYKKYYYYYKKYY.","YYYYYYYKYYYYYYY","YRRYYYYYYYYYRRY","YRRYYKYYYKYYRRY",".YYYYYKKKYYYYY.","..YYYYYYYYYYY..","....YYYYYYY...."]
+};
 function fireworks(){
   try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return}catch(e){}
-  var cs=getComputedStyle(document.documentElement),cols=["--pink","--sky","--mint","--lemon","--lilac","--p0","--p1","--p2"].map(function(v){return cs.getPropertyValue(v).trim()}).filter(Boolean);
+  var cs=getComputedStyle(document.documentElement),cv0=function(v,d){return cs.getPropertyValue(v).trim()||d};
+  var cols=["--pink","--sky","--mint","--lemon","--lilac","--p0","--p1","--p2"].map(function(v){return cs.getPropertyValue(v).trim()}).filter(Boolean);
   if(!cols.length)return;
+  var PAL={K:cv0("--ink","#1d1d2b"),R:cv0("--pink","#e3262a"),W:cv0("--surface","#fff"),Y:cv0("--lemon","#f8d030")};
   var cv=document.createElement("canvas");cv.className="fw";cv.setAttribute("aria-hidden","true");document.body.appendChild(cv);
   var ctx=cv.getContext("2d"),W=innerWidth,H=innerHeight,dpr=window.devicePixelRatio||1;
   cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
-  var rockets=[],sparks=[],plan=[],t0=performance.now(),last=t0,G=0.12;
-  for(var i=0;i<8;i++)plan.push(i*380+Math.random()*200);
+  var G=0.12,rockets=[],sparks=[],pix=[],t0=performance.now(),last=t0,plan=[];
+  for(var i=0;i<14;i++)plan.push({t:i*480+Math.random()*240,k:"r"});
+  plan.push({t:2000,k:"s",s:"ball",x:0.3},{t:4300,k:"s",s:"pika",x:0.7});
+  plan.sort(function(a,b){return a.t-b.t});
   function pick(){return cols[Math.floor(Math.random()*cols.length)]}
-  function launch(){var h=H*(0.45+Math.random()*0.3);rockets.push({x:W*(0.15+Math.random()*0.7),y:H,vx:(Math.random()-0.5)*1.5,vy:-Math.sqrt(2*G*h),c:pick()})}
-  function burst(x,y,c){var n=60+Math.floor(Math.random()*30),c2=pick();
-    for(var k=0;k<n;k++){var a=Math.random()*Math.PI*2,sp=1.5+Math.random()*4.5;sparks.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,dec:0.011+Math.random()*0.012,c:k%3?c:c2})}}
+  function rocket(x,h,c,shape){rockets.push({x:x,y:H,vx:shape?0:(Math.random()-0.5)*1.6,vy:-Math.sqrt(2*G*h),c:c,shape:shape})}
+  function burst(x,y,c){var n=100+Math.floor(Math.random()*50),c2=pick();
+    for(var k=0;k<n;k++){var a=Math.random()*Math.PI*2,sp=2+Math.random()*5;sparks.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,dec:0.008+Math.random()*0.008,c:k%3?c:c2})}}
+  function shapeBurst(x,y,name,now){var m=FW_SHAPES[name],rows=m.length,cl=m[0].length,cell=Math.max(8,Math.min(24,Math.min(W,H)/44));
+    for(var r=0;r<rows;r++)for(var c=0;c<cl;c++){var ch=m[r][c];if(ch===".")continue;
+      pix.push({x0:x,y0:y,tx:x+(c-cl/2+0.5)*cell,ty:y+(r-rows/2+0.5)*cell,sz:cell*0.86,c:PAL[ch],born:now,vy:0,dy:0,ph:Math.random()*6})}
+    burst(x,y,PAL.Y);}
   function frame(now){
     var f=Math.min(3,Math.max(0,(now-last)/16.7));last=now;
-    while(plan.length&&now-t0>=plan[0]){plan.shift();launch()}
-    ctx.globalCompositeOperation="destination-out";ctx.fillStyle="rgba(0,0,0,"+Math.min(1,0.22*f)+")";ctx.fillRect(0,0,W,H);
+    while(plan.length&&now-t0>=plan[0].t){var p=plan.shift();
+      if(p.k==="r")rocket(W*(0.12+Math.random()*0.76),H*(0.45+Math.random()*0.3),pick(),null);
+      else rocket(W*p.x,H*0.62,PAL.Y,p.s)}
+    ctx.globalCompositeOperation="destination-out";ctx.fillStyle="rgba(0,0,0,"+Math.min(1,0.2*f)+")";ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation="source-over";
-    rockets=rockets.filter(function(r){r.x+=r.vx*f;r.y+=r.vy*f;r.vy+=G*f;ctx.globalAlpha=1;ctx.fillStyle=r.c;ctx.beginPath();ctx.arc(r.x,r.y,2.6,0,7);ctx.fill();
-      if(r.vy>=-0.6){burst(r.x,r.y,r.c);return false}return true});
+    rockets=rockets.filter(function(r){r.x+=r.vx*f;r.y+=r.vy*f;r.vy+=G*f;ctx.globalAlpha=1;ctx.fillStyle=r.c;ctx.beginPath();ctx.arc(r.x,r.y,r.shape?4:3,0,7);ctx.fill();
+      if(r.vy>=-0.6){if(r.shape)shapeBurst(r.x,r.y,r.shape,now);else burst(r.x,r.y,r.c);return false}return true});
     sparks=sparks.filter(function(s){s.vx*=Math.pow(0.985,f);s.vy=s.vy*Math.pow(0.985,f)+0.05*f;s.x+=s.vx*f;s.y+=s.vy*f;s.life-=s.dec*f;
-      if(s.life<=0)return false;ctx.globalAlpha=s.life;ctx.fillStyle=s.c;ctx.beginPath();ctx.arc(s.x,s.y,2.8,0,7);ctx.fill();return true});
+      if(s.life<=0)return false;ctx.globalAlpha=s.life;ctx.fillStyle=s.c;ctx.beginPath();ctx.arc(s.x,s.y,3,0,7);ctx.fill();return true});
+    pix=pix.filter(function(q){var age=(now-q.born)/1000,x,y,al=1;
+      if(age<0.55){var e=1-Math.pow(1-age/0.55,3);x=q.x0+(q.tx-q.x0)*e;y=q.y0+(q.ty-q.y0)*e}
+      else if(age<2.3){x=q.tx;y=q.ty;al=0.82+0.18*Math.sin(now/90+q.ph)}
+      else{q.vy+=0.06*f;q.dy+=q.vy*f;x=q.tx;y=q.ty+q.dy;al=1-(age-2.3)/1.3;if(al<=0)return false}
+      ctx.globalAlpha=al;ctx.fillStyle=q.c;ctx.fillRect(x-q.sz/2,y-q.sz/2,q.sz,q.sz);return true});
     ctx.globalAlpha=1;
-    if(plan.length||rockets.length||sparks.length)requestAnimationFrame(frame);else cv.remove();
+    if(plan.length||rockets.length||sparks.length||pix.length)requestAnimationFrame(frame);else cv.remove();
   }
   requestAnimationFrame(frame);
-  setTimeout(function(){cv.remove()},12000);
+  setTimeout(function(){cv.remove()},20000);
 }
 $("enders").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var i=+b.getAttribute("data-p"),part={run:{enders:{}}};part.run.enders[P[i]]=!(S.meta.run.enders||{})[P[i]];patchMeta(part);renderAll()});
 $("runNoM").addEventListener("click",function(){setRunNo((+S.meta.run.no||1)-1)});
@@ -627,10 +647,21 @@ $("bkGo").addEventListener("click",async function(){
 });
 
 /* ---------- Anmeldung und Rechte (nur Firebase-Modus) ----------
-   Lesen darf jeder. Schreiben darf, wer mit Google angemeldet ist und entweder Admin ist
+   Anzeigen nur nach Freigabe (setGate), lesen könnten die Firestore-Regeln aber noch jeden lassen. Schreiben darf, wer mit Google angemeldet ist und entweder Admin ist
    (config.js adminUid) oder dessen E-Mail in access/main steht. Backup und Freischaltung nur für den Admin.
    Die echte Prüfung machen die Firestore-Regeln; die Seite blendet nur passend ein und aus. */
 function backupAllowed(){return mode!=="firebase"||isAdmin}
+/* Zugang: Im Firebase-Modus sehen nur der Admin und die unter „Schreibrechte“ eingetragenen Konten das Dashboard,
+   alle anderen die Willkommensseite (#gate). Daten werden erst nach der Freigabe abonniert. */
+var subscribed=false;
+function setGate(st){   // st: "" = Dashboard zeigen, sonst "load" | "out" | "no"
+  document.body.classList.toggle("gated",!!st);var g=$("gate");g.setAttribute("data-s",st||"");if(!st)return;
+  var who=authUser?(authUser.email||authUser.displayName||""):"";
+  $("gateT").textContent={load:"Einen Moment …",out:"Willkommen, Trainer!",no:"Kein Zugang"}[st];
+  $("gateP").textContent={load:"Anmeldung wird geprüft.",out:"Dieses Dashboard gehört zum Soul Link von Hagenau, Weissi und Zinni. Meldet euch mit eurem Google-Konto an, um es zu sehen.",no:who+" ist nicht freigeschaltet. Melde dich mit dem Konto an, das Weissi eingetragen hat."}[st];
+  var b=$("gateBtn");b.hidden=st==="load";b.textContent=st==="no"?"Abmelden":"Mit Google anmelden";
+  if(st!=="load")setSync("warn",st==="out"?"Nicht angemeldet":"Kein Zugang");
+}
 function setCanWrite(v){
   if(canWrite===v)return;canWrite=v;document.body.classList.toggle("ro",!v);
   rowEls.forEach(function(row){row.remove()});rowEls.clear();   // Zeilen neu bauen, damit Felder (de)aktiviert werden
@@ -646,7 +677,7 @@ function renderAuth(){
   var box=$("auth"),t=$("authT"),b=$("authBtn");box.hidden=mode!=="firebase";if(box.hidden)return;
   if(!authKnown){t.textContent="";b.hidden=true;return}
   b.hidden=false;
-  if(!authUser){t.textContent="Zum Eintragen anmelden";b.textContent="Mit Google anmelden";box.removeAttribute("data-s");return}
+  if(!authUser){t.textContent="";b.textContent="Mit Google anmelden";box.removeAttribute("data-s");return}
   var who=authUser.displayName||authUser.email||"Angemeldet";
   b.textContent="Abmelden";
   if(canWrite){t.textContent=who+(isAdmin?" (Admin)":"");box.setAttribute("data-s","ok")}
@@ -666,7 +697,10 @@ async function onAuth(u){
   var ok=false;
   if(u&&isAdmin)ok=true;
   else if(u){try{await firebase.firestore().doc("access/main").get();ok=true}catch(e){ok=false}}   // lesbar nur für Freigeschaltete
+  if(!ok&&subscribed){location.reload();return}   // abgemeldet oder Zugang entzogen: Seite ohne geladene Daten neu aufbauen
   setCanWrite(ok);applyRole();renderAuth();watchAccess();
+  setGate(ok?"":(u?"no":"out"));
+  if(ok&&!subscribed)subscribe();
 }
 $("authBtn").addEventListener("click",function(){
   if(!auth)return;
@@ -678,6 +712,7 @@ $("authBtn").addEventListener("click",function(){
     else if(c!=="auth/popup-closed-by-user"&&c!=="auth/cancelled-popup-request")setSync("warn","Anmeldung fehlgeschlagen");
   });
 });
+$("gateBtn").addEventListener("click",function(){$("authBtn").click()});
 $("accSave").addEventListener("click",function(){
   var s=$("accS");s.classList.remove("err");
   var list=$("accEmails").value.split(/[\s,;]+/).map(function(x){return x.trim().toLowerCase()}).filter(Boolean);
@@ -713,6 +748,7 @@ function loadScript(src){return new Promise(function(res,rej){var s=document.cre
 var LIVE_LABEL="Live synchronisiert";
 function ready(fromCache){if(!fromCache){loaded=true;clearTimeout(tm);setSync(mode==="local"?"warn":"live",canWrite?LIVE_LABEL:"Nur Lesen");renderBk()}}
 function subscribe(){
+  subscribed=true;tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreichbar")},10000);
   var err=function(){setSync("warn","Verbindung getrennt")};
   store.watchDoc("meta/main",function(d,fc){
     if(d&&!metaPend&&!metaBusy){S.meta=dm(defMeta(),clone(d));renderAll()}
@@ -725,7 +761,7 @@ function subscribe(){
   store.watchCol("history",function(docs){S.history=docs.map(function(d){return {id:d.id,data:clone(d.data)}});renderAna()},err);
 }
 renderAll();
-var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreichbar")},10000);
+var tm=null;
 (async function(){
   var CFG=window.SOULLINK_CONFIG||null;
   try{
@@ -736,7 +772,7 @@ var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreich
       await loadScript("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js");
       firebase.initializeApp(CFG.firebase);store=makeFirebaseStore(firebase.firestore());
       $("bkDl").hidden=false;
-      setCanWrite(false);applyRole();renderAuth();   // bis die Anmeldung geklärt ist: nur lesen
+      setCanWrite(false);applyRole();renderAuth();setGate("load");   // bis die Anmeldung geklärt ist: Willkommensseite
       auth=firebase.auth();auth.onAuthStateChanged(onAuth);
       loadAutoBackup();
     }else if(window.claude&&window.claude.use){
@@ -751,7 +787,6 @@ var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreich
       mode="local";LIVE_LABEL="Nur auf diesem Gerät gespeichert";store=makeLocalStore();$("bkDl").hidden=false;
     }
   }catch(e){mode="local";LIVE_LABEL="Online-Speicher nicht erreichbar, nur lokal";store=makeLocalStore();$("bkDl").hidden=false;setCanWrite(true);applyRole();renderAuth()}
-  if(mode!=="firebase")applyThemeRole();   // lokal/Artifact: Umschalter sichtbar
-  subscribe();
+  if(mode!=="firebase"){applyThemeRole();setGate("");subscribe()}   // lokal/Artifact: keine Anmeldung; Firebase abonniert erst in onAuth()
 })();
 })();

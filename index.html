@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="pokedex" data-v="202611162338">
+<html lang="de" data-theme="pokedex" data-v="202611162354">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Soul Link Schwarz Weiß</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Crimson+Pro:wght@400;500;600;700&family=Tiny5&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611162338">
+<link rel="stylesheet" href="css/style.css?v=202611162354">
 <script>/* Theme vor dem ersten Zeichnen setzen (Standard Pokédex; andere Wahl nur für den Admin, prüft js/app.js nach der Anmeldung) */try{var t=localStorage.getItem("soullink-theme");if(t==="pastell"||t==="lovecraft")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
-<body>
+<body class="gated">
 <header class="top">
   <div class="wrap">
     <div class="brand">
@@ -30,6 +30,13 @@
 </header>
 
 <main class="wrap">
+
+<section class="card gate" id="gate" data-s="load" aria-live="polite">
+  <div class="gate-ball" aria-hidden="true"></div>
+  <h2 id="gateT">Einen Moment …</h2>
+  <p id="gateP">Anmeldung wird geprüft.</p>
+  <button type="button" class="btn solid" id="gateBtn" hidden>Mit Google anmelden</button>
+</section>
 
 <div class="card bkwarn" id="bkWarn" role="status" hidden>
   <span class="bkwarn-i" aria-hidden="true">!</span>
@@ -167,8 +174,8 @@
 <footer>✓ lebt, ✕ tot, ∅ nicht gefangen. Stirbt ein Pokémon, sterben die verbundenen mit und zählen als ein Encounter. Nicht gefangen (∅) zählt genauso: Der Link ist verloren, die verbundenen Pokémon sterben mit, und jeder, der nicht gefangen hat, bekommt einen Encounter. Der Spitzname gilt für alle drei Pokémon eines Links. Wer den Encounter getötet hat und bei wem das Pokémon im Kampf gefallen ist (Death), trägst du beim toten Link ein. Das Fossil zählt als Extra-Encounter, aber nur, wenn alle drei eins gefunden haben (｡•̀ᴗ-)✧</footer>
 </main>
 
-<script src="config.js?v=202611162338"></script>
-<script src="js/pokemon.js?v=202611162338"></script>
-<script src="js/app.js?v=202611162338"></script>
+<script src="config.js?v=202611162354"></script>
+<script src="js/pokemon.js?v=202611162354"></script>
+<script src="js/app.js?v=202611162354"></script>
 </body>
 </html>

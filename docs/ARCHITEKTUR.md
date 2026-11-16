@@ -37,7 +37,7 @@ cause
 
 Routen-Status (`status()`): `miss` vor `dead` vor `alive`/`part`/`open`. Verpasst (`miss`) heißt, der Encounter ist verloren: Klick auf ∅ setzt die lebenden Pokémon der anderen auf `dead`, Zurücknehmen belebt sie wieder (außer wer unter „Tod bei“ steht). `dead` und `miss` sind verlorene Links (`isLost()`), stehen im Friedhof und in `history.deadLinks` (bei `miss` mit `killer` = erster, der nicht gefangen hat, und `cause` „nicht gefangen“).
 
-**Run-Status (`runState()`)**: „Verloren“ setzt der Knopf „Run verloren“ (`run.status = "lost"`, „Doch nicht verloren“ setzt zurück). „Gewonnen“ setzt entweder der Admin per Knopf „Run gewonnen“ (`run.status = "won"`, sichtbar nur bei `backupAllowed()`, also Admin bzw. Lokal-/Artifact-Modus; „Doch nicht gewonnen“ setzt zurück), oder es ergibt sich ohne Speichern, sobald jede Route außer dem Fossil gespielt ist (`played()`: Status nicht `open` und nicht `part`). „Neuer Run starten“ erscheint nur bei verloren oder gewonnen und schreibt den abgeleiteten Status in `history`. Wechselt der Status während die Seite offen ist auf gewonnen, startet `fireworks()` (Canvas, Farben aus den Theme-Variablen, aus bei `prefers-reduced-motion`).
+**Run-Status (`runState()`)**: „Verloren“ setzt der Knopf „Run verloren“ (`run.status = "lost"`, „Doch nicht verloren“ setzt zurück). „Gewonnen“ setzt entweder der Admin per Knopf „Run gewonnen“ (`run.status = "won"`, sichtbar nur bei `backupAllowed()`, also Admin bzw. Lokal-/Artifact-Modus; „Doch nicht gewonnen“ setzt zurück), oder es ergibt sich ohne Speichern, sobald jede Route außer dem Fossil gespielt ist (`played()`: Status nicht `open` und nicht `part`). „Neuer Run starten“ erscheint nur bei verloren oder gewonnen und schreibt den abgeleiteten Status in `history`. Wechselt der Status während die Seite offen ist auf gewonnen, startet `fireworks()` (Canvas, ca. 9 s, Farben aus den Theme-Variablen, aus bei `prefers-reduced-motion`). Zwei Raketen zerplatzen zu Pixelbildern aus `FW_SHAPES` (Pokéball, Pikachu); die Buchstaben K/R/W/Y stehen für `--ink`, `--pink`, `--surface`, `--lemon`.
 
 **`history/<id>`** (eine pro abgeschlossenem Run, angelegt bei „Neuer Run starten“)
 ```
@@ -57,10 +57,10 @@ Drei Designs mit denselben Bausteinen: `pokedex` (Standard für alle), `pastell`
 
 ## Anmeldung und Rechte (nur Firebase-Modus)
 
-Lesen ist offen. Zum Schreiben meldet man sich oben rechts mit Google an (`signInWithPopup`, Rückfall auf Redirect).
+Zum Ansehen und Schreiben meldet man sich mit Google an (`signInWithPopup`, Rückfall auf Redirect). Bis die Anmeldung geklärt ist und für alle ohne Freigabe zeigt die Seite nur die Willkommensseite `#gate` (`setGate()`: `load`, `out` = nicht angemeldet, `no` = Konto nicht freigeschaltet; `body.gated` blendet den Rest aus). Erst nach der Freigabe abonniert `onAuth()` die Daten (`subscribe()`); wird jemand danach abgemeldet, lädt die Seite neu. Achtung: Die Firestore-Regeln erlauben das Lesen weiterhin jedem, die Sperre ist also ein Sichtschutz der Seite, kein Schutz der Daten (siehe Backlog T-015).
 - **Admin**: UID steht in `config.js` (`adminUid`) und in `firestore.rules` (`isAdmin`). Sieht zusätzlich Backup, Backup-Erinnerung und „Schreibrechte“.
 - **Freigeschaltet**: Google-E-Mail (kleingeschrieben, bestätigt) steht in `access/main.emails` (max. 10). Darf alles außer Backup.
-- **Sonst**: nur lesen (`body.ro`, Eingabefelder deaktiviert).
+- **Sonst**: Willkommensseite, kein Dashboard.
 
 Ob jemand freigeschaltet ist, erkennt die Seite daran, dass sie `access/main` lesen darf (`onAuth()`). Die Rolle setzt `setCanWrite()` / `applyRole()`; bei Wechsel werden die Routenzeilen neu gebaut. Im Artifact- und Lokal-Modus gibt es keine Anmeldung, dort bleibt alles wie zuvor.
 

@@ -221,6 +221,17 @@ details[open]>summary::before{content:"▾ "}
 .status{min-height:20px;font-weight:800;color:var(--live)}
 .status.err{color:var(--dead)}
 
+/* Willkommensseite: solange body.gated, nur sie zeigen */
+.gate{display:none;margin:48px auto;max-width:520px;padding:32px 28px;text-align:center;flex-direction:column;align-items:center;gap:14px}
+.gate h2{margin:0;font-family:var(--display);font-size:26px}
+.gate p{margin:0;color:var(--mute);font-weight:700}
+body.gated main>*:not(#gate),body.gated main~*{display:none}
+body.gated .gate{display:flex}
+.gate-ball{width:72px;height:72px;border-radius:50%;border:4px solid var(--ink);background:linear-gradient(var(--ball) 0 46%,var(--ink) 46% 54%,var(--surface) 54%);position:relative}
+.gate-ball::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--surface);border:4px solid var(--ink)}
+@media (prefers-reduced-motion:no-preference){.gate[data-s="load"] .gate-ball{animation:gate-wobble 1.2s ease-in-out infinite}}
+@keyframes gate-wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+body.ro #gate .btn{pointer-events:auto;opacity:1}
 footer{margin:30px 0 44px;color:var(--mute);font-size:13.5px;font-weight:700}
 body.ro input,body.ro select,body.ro .seg button,body.ro .btn,body.ro .chipb,body.ro .tick,body.ro .stp{pointer-events:none;opacity:.7}
 /* Lesen, Filtern, Suchen und Anmelden bleiben auch ohne Schreibrecht bedienbar */

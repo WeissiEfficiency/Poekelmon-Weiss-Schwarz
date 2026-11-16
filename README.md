@@ -17,6 +17,7 @@ Hagenau und Zinni brauchen keinen Account, sie öffnen nur den Link. Wer den Lin
 - Level-Caps aller Arenaleiter, Top Vier, N und G-Cis zum Abhaken
 - Gesamtliste, Friedhof, Auswertung mit Run-Verlauf
 - Backup als Text oder Datei, Umzug zwischen Speicherorten
+- Nur freigegebene Google-Konten sehen das Dashboard, alle anderen eine Willkommensseite
 - Design Pokédex für alle; der Admin kann zusätzlich Pastell oder Lovecraft wählen (gemerkt pro Gerät)
 
 ## Lokal starten
