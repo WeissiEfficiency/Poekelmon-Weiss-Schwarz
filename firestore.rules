@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Jeder mit dem Link darf lesen und schreiben, aber nur in den drei Sammlungen des Dashboards.
+    match /{col}/{doc} {
+      allow read, write: if col in ['meta', 'routes', 'history'];
+    }
+  }
+}

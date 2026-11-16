@@ -1,0 +1,59 @@
+# Architektur
+
+## Überblick
+
+Statische Seite ohne Build. `index.html` lädt `config.js`, `js/pokemon.js` und `js/app.js`. Beim Start wählt `app.js` einen Speicher-Adapter:
+
+| Modus | Bedingung | Speicher |
+|---|---|---|
+| Firebase | `config.js` enthält echte Werte (nicht `DEIN-PROJEKT`) | Firestore, live für alle |
+| Artifact | Seite läuft auf claude.ai (`window.claude` vorhanden) | Artifact-Datenbank |
+| Lokal | sonst, oder wenn Firebase nicht lädt | `localStorage` dieses Browsers |
+
+Alle Adapter bieten dieselben Funktionen: `watchDoc`, `watchCol`, `merge`, `set`, `del`. Der Rest der App kennt den Modus nicht.
+
+## Datenmodell
+
+Drei Sammlungen, Spieler-Schlüssel `p0` (Hagenau), `p1` (Weissi), `p2` (Zinni).
+
+**`meta/main`**
+```
+players: { p0: { name } , ... }
+run:     { no, status: "run"|"lost"|"won", enders: { p0: bool, ... }, where, cause }
+tally:   { p0: { run, death, enc }, ... }      // Basiswerte abgeschlossener Runs
+caps:    { beaten: { g1: bool, ... }, lv: { g1: Zahl, ... } }   // lv = manuelle Abweichung
+```
+
+**`routes/<id>`** (eine pro Route)
+```
+order, name, nick, extra?, hint?, custom?
+cells:  { p0: { sp, st: ""|"alive"|"dead"|"miss" }, ... }   // sp = Pokémon, optional
+killer: Spielerindex 0–2 oder -1                              // Encounter getötet von
+deaths: { p0: bool, ... }                                     // Tod bei
+cause
+```
+Ältere Routen haben den Spitznamen in `cells.pX.nick`; `nickOf()` liest ihn als Rückfall.
+
+**`history/<id>`** (eine pro abgeschlossenem Run, angelegt bei „Neuer Run starten“)
+```
+no, status, enders, where, cause, endedAt, badges, lastCap, links,
+deadLinks: [{ route, nick, mons[3], killer, deaths, cause }],
+perPlayer: { p0: { run, death, enc }, ... }
+```
+
+## Zählung
+
+Angezeigter Gesamtstand = `tally` (Basis) + Live-Werte des aktuellen Runs:
+- Run +1 für jeden markierten Run-Ender, wenn der Status „Verloren“ ist
+- Death +1 je toter Route, bei der der Spieler unter „Tod bei“ markiert ist
+- Encounter +1 je toter Route, bei der der Spieler „Encounter getötet von“ ist
+
+Manuelles Ändern schreibt `tally = gewünschter Wert − Live-Wert`. „Neuer Run starten“ addiert die Live-Werte in `tally`, legt `history` an und leert Routen und Caps.
+
+## Schreiben
+
+`patchRoute()` und `patchMeta()` sammeln Änderungen und schreiben nach 450 ms als Teil-Update (Merge). Während ein Schreibvorgang läuft, werden eingehende Snapshots für dieses Dokument ignoriert, damit Eingaben nicht überschrieben werden. Gleichzeitiges Bearbeiten verschiedener Felder durch mehrere Spieler funktioniert; beim selben Feld gewinnt der letzte.
+
+## Pokémon-Suche
+
+`search()` normalisiert Umlaute und Sonderzeichen und bewertet: exakter Treffer, Präfix, Teilstring, lautähnliche Schreibweise (ph/f, ck/k, z/s …), dann Tippfehler per Damerau-Levenshtein. Gen-5-Pokémon bekommen einen kleinen Bonus. Zahlen suchen nach Dex-Nummer.
