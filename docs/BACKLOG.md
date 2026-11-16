@@ -19,6 +19,7 @@ Seite ist fertig und als Repo angelegt. GitHub Pages ist aktiv (https://weissief
 | T-007 | Regelmäßiges Backup erinnern (z. B. Hinweis, wenn letzte Sicherung alt ist) | niedrig | erledigt | M2 |
 | T-008 | Firebase App Check (reCAPTCHA), damit nur die eigene Seite schreiben darf | niedrig | verworfen (durch Anmeldung erledigt) | M2 |
 | T-010 | Automatisches tägliches Backup per GitHub Action nach `backups/` | mittel | erledigt | M2 |
+| T-011 | Umschaltbare Designs: Pastell, Tsundere, Pokédex | niedrig | erledigt | M2 |
 | T-009 | Google-E-Mails von Hagenau und Zinni unter „Schreibrechte“ eintragen | hoch | offen | M1 |
 
 ## Erledigt

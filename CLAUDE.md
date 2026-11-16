@@ -13,7 +13,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 ## Dateien
 
 - `index.html`: Markup aller Bereiche
-- `css/style.css`: Design (Pastell-Sticker-Look, Tokens in `:root`)
+- `css/style.css`: Design (Tokens in `:root`, Themes Pastell/Tsundere/Pokédex als `:root[data-theme=…]` am Dateiende)
 - `js/app.js`: gesamte Logik (Speicher-Adapter, Rendering, Zähler, Suche)
 - `js/pokemon.js`: 649 deutsche Pokémon-Namen, Index + 1 = Dex-Nummer
 - `config.js`: Firebase-Werte; Platzhalter `DEIN-PROJEKT` = lokaler Modus
@@ -27,6 +27,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 - Datenmodell siehe `docs/ARCHITEKTUR.md`. Neue Felder immer mit Standardwert in `defMeta()` bzw. beim Anlegen von Routen ergänzen, alte Daten müssen weiter laden (z. B. `nickOf()` liest Spitznamen aus Altdaten). Neue Felder außerdem in `firestore.rules` erlauben und die Regeln in der Firebase-Konsole neu veröffentlichen, sonst lehnt Firestore jedes Speichern des Dokuments ab.
 - Schreibzugriffe nur über `patchRoute()` / `patchMeta()` (gebündelt, 450 ms Verzögerung), nie direkt aus Render-Funktionen.
 - Schreibrechte im Firebase-Modus: Google-Anmeldung, Admin-UID in `config.js` und `firestore.rules`, Freigaben in `access/main` (siehe `docs/ARCHITEKTUR.md`). Admin-only-Bereiche über `applyRole()` steuern.
+- Farben nur über CSS-Variablen, nie fest in Bausteinen, sonst bricht ein Theme. Sprüche je Theme in `THEME_TXT` (`js/app.js`).
 - Die gleiche Seite läuft auch als claude.ai-Artifact (Speicher-Adapter `makeArtifactStore`). Nichts einbauen, das nur mit Firebase funktioniert, ohne den Artifact- und Lokal-Modus zu bedenken.
 
 ## Nach Änderungen

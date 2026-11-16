@@ -40,6 +40,16 @@ function status(r){var s=P.map(function(_,i){return cellOf(r,i).st});
   if(s.indexOf("dead")>-1)return"dead";if(s.indexOf("miss")>-1)return"miss";
   if(s.every(function(x){return x==="alive"}))return"alive";if(s.indexOf("alive")>-1)return"part";return"open"}
 var STL={alive:"Lebendig ♡",dead:"Tot (×_×)",miss:"Verpasst",part:"Teilweise",open:"Offen"};
+
+/* ---------- Themes (Design pro Gerät, nicht in der Datenbank) ----------
+   Farben und Formen stehen in css/style.css unter :root[data-theme=…]; hier nur die Sprüche. */
+var THEMES=["pastell","tsundere","pokedex"];
+var THEME_TXT={
+  pastell:{tag:"Einall-Run zu dritt (◕‿◕)♡",run:"Run läuft (๑•̀ㅂ•́)و✧",won:"Run gewonnen ✧*。٩(ˊᗜˋ*)و✧*。",lost:"(×_×)",grave:"Noch kein Link gestorben. (◕‿◕)"},
+  tsundere:{tag:"N-nicht, dass mich euer Run interessiert! (￣^￣)",run:"Run läuft … streng dich ja an, Baka! (｀へ´)",won:"G-gewonnen?! War doch klar … hmpf. (〃＞＿＜;〃)",lost:"Hmpf. Selber schuld! (╬Ò﹏Ó)",grave:"Noch keiner tot. Nicht dass ich mir Sorgen gemacht hätte! (¬_¬)"},
+  pokedex:{tag:"Einall · Soul Link · 3 Trainer",run:"Run läuft. Viel Erfolg, Trainer!",won:"Glückwunsch! Ihr habt die Liga bezwungen!",lost:"… alle Pokémon kampfunfähig.",grave:"Noch kein Link gestorben."}};
+function themeName(){var t=document.documentElement.getAttribute("data-theme");return THEMES.indexOf(t)>-1?t:"pastell"}
+function tt(k){return THEME_TXT[themeName()][k]}
 var STC={alive:"Lebendig",dead:"Tot",miss:"Verpasst",part:"Teilweise",open:"Offen"};
 function sorted(){return Array.from(S.routes.entries()).sort(function(a,b){return (a[1].order||0)-(b[1].order||0)})}
 function killerName(r){return typeof r.killer==="number"&&r.killer>-1?pname(r.killer):""}
@@ -265,7 +275,7 @@ function renderStats(){
   }
   for(var g=0;g<3;g++)$("gh"+g).textContent=pname(g);
   var gb=$("grave");gb.textContent="";var deadRows=sorted().filter(function(e){return status(e[1])==="dead"});
-  if(!deadRows.length)gb.appendChild(el("tr",null,[el("td",{colspan:"8",class:"sm2",text:"Noch kein Link gestorben. (◕‿◕)"})]));
+  if(!deadRows.length)gb.appendChild(el("tr",null,[el("td",{colspan:"8",class:"sm2",text:tt("grave")})]));
   deadRows.forEach(function(e){var r=e[1];
     var tr=el("tr",null,[el("td",{class:"k",text:r.name||""}),el("td",{class:"k",text:nickOf(r)}),el("td",{text:killerName(r)||"offen"})]);
     for(var i=0;i<3;i++){tr.appendChild(el("td",{text:cellOf(r,i).sp||"–"}))}
@@ -324,9 +334,9 @@ function renderRun(){
   $("enders").querySelectorAll("button").forEach(function(b){var i=+b.getAttribute("data-p");b.querySelector(".en").textContent=pname(i);b.setAttribute("aria-pressed",String(!!(r.enders||{})[P[i]]))});
   fill($("runWhere"),r.where||"");fill($("runCause"),r.cause||"");
   var names=[0,1,2].filter(function(i){return (r.enders||{})[P[i]]}).map(pname).join(" und "),line=$("runLine");
-  if(lost)line.textContent=names?"Run beendet von "+names+" (×_×)":"Run verloren (×_×)";
-  else if(r.status==="won")line.textContent="Run gewonnen ✧*。٩(ˊᗜˋ*)و✧*。";
-  else line.textContent="Run läuft (๑•̀ㅂ•́)و✧";
+  if(lost)line.textContent=(names?"Run beendet von "+names:"Run verloren")+" "+tt("lost");
+  else if(r.status==="won")line.textContent=tt("won");
+  else line.textContent=tt("run");
 }
 
 /* ---------- Auswertung ---------- */
@@ -603,6 +613,18 @@ $("accSave").addEventListener("click",function(){
   firebase.firestore().doc("access/main").set({emails:list})   // eigenes Dokument, nicht Teil von meta/routes
     .then(function(){s.textContent="Gespeichert ✧ ("+list.length+" freigeschaltet)"},function(){s.textContent="Speichern fehlgeschlagen";s.classList.add("err")});
 });
+
+/* ---------- Theme-Umschalter ---------- */
+function setTheme(t,save){
+  if(THEMES.indexOf(t)<0)t="pastell";
+  document.documentElement.setAttribute("data-theme",t);
+  if(save){try{localStorage.setItem("soullink-theme",t)}catch(e){}}
+  $("themeSeg").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-t")===t))});
+  $("tagline").textContent=tt("tag");
+  renderAll();
+}
+$("themeSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setTheme(b.getAttribute("data-t"),true)});
+setTheme(themeName(),false);
 
 /* ---------- Start ---------- */
 function loadScript(src){return new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){rej(new Error("Script "+src))};document.head.appendChild(s)})}

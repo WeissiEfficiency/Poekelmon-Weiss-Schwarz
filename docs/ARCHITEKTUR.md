@@ -42,6 +42,13 @@ deadLinks: [{ route, nick, mons[3], killer, deaths, cause }],
 perPlayer: { p0: { run, death, enc }, ... }
 ```
 
+## Designs (Themes)
+
+Drei Designs mit denselben Bausteinen: `pastell` (Standard), `tsundere`, `pokedex`. Umschalter oben rechts (`#themeSeg`), gesetzt als `<html data-theme="…">`, gemerkt pro Gerät in `localStorage` (`soullink-theme`), nicht in der Datenbank. Ein kleines Skript im `<head>` setzt das Attribut vor dem ersten Zeichnen.
+- **Farben, Schriften, Formen**: nur über CSS-Variablen in `:root` (z. B. `--ink`, `--surface`, `--hdr`, `--mark`) und je Theme einen Block `:root[data-theme=…]` am Ende von `css/style.css`. Keine festen Farben in Bausteinen, neue Flächen bekommen eine Variable.
+- **Sprüche**: `THEME_TXT` in `js/app.js` (Untertitel, Run-Zeile, leerer Friedhof), abgerufen mit `tt(key)`.
+- Neues Theme: Eintrag in `THEMES` und `THEME_TXT`, Knopf in `#themeSeg`, CSS-Block. Schriften im Google-Fonts-Link in `index.html` (werden nur geladen, wenn sie genutzt werden).
+
 ## Anmeldung und Rechte (nur Firebase-Modus)
 
 Lesen ist offen. Zum Schreiben meldet man sich oben rechts mit Google an (`signInWithPopup`, Rückfall auf Redirect).

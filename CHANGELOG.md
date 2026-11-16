@@ -3,6 +3,10 @@
 ## 2026-11-16
 
 ### Hinzugefügt
+- Drei Designs zum Umschalten oben rechts: Pastell (wie bisher), Tsundere (Kirschrot, scharfe Kanten, Manga-Schrift, freche Sprüche) und Pokédex (Rot/Weiß, Pixelschrift, Textboxen, KP-Balken). Die Wahl merkt sich jedes Gerät.
+
+### Behoben
+- Handy: Der Run-Kasten war rechts abgeschnitten („Neuer Run starten“, „Gewonnen“).
 - Automatisches Backup: GitHub Action sichert täglich mit `tools/backup.py` nach `backups/` (nur bei Änderungen). Die Backup-Erinnerung berücksichtigt das automatische Backup.
 - Google-Anmeldung: Schreiben nur noch für den Admin und freigeschaltete Google-E-Mails, ohne Anmeldung nur lesen. Backup und neuer Bereich „Schreibrechte“ nur für den Admin.
 - Backup-Erinnerung: Hinweis oben auf der Seite, wenn die letzte Sicherung fehlt oder älter als 7 Tage ist; Datum der letzten Sicherung im Backup-Bereich (neues Feld `meta.backupAt`).
