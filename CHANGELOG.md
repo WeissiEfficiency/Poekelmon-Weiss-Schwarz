@@ -3,6 +3,7 @@
 ## 2026-11-16
 
 ### Hinzugefügt
+- Sieges-Feuerwerk zeigt die überlebenden Pokémon als Pixel-Explosion (Schwarz/Weiß-Sprites, je Spieler bis zu zwei), Pikachu nur noch als Ersatz.
 - Willkommensseite: Im Firebase-Modus sehen nur der Admin und die unter „Schreibrechte“ eingetragenen Google-Konten das Dashboard, alle anderen eine Willkommensseite mit Anmeldeknopf. Daten werden erst nach der Freigabe geladen.
 - Sieges-Feuerwerk länger und größer, mit einem Pokéball und einem Pikachu als Pixel-Explosion.
 - Run-Status ohne Umschalter: Knopf „Run verloren“ (mit „Doch nicht verloren“), „Gewonnen“ automatisch, sobald jede Route gespielt ist, oder per Knopf „Run gewonnen“ (nur Admin), mit kleinem Feuerwerk. „Neuer Run starten“ erscheint erst, wenn der Run verloren oder gewonnen ist.

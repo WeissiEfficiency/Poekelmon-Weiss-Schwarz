@@ -3,7 +3,7 @@
 "use strict";
 /* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
    APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
-var APP_V="202611162354";
+var APP_V="202611170004";
 var HTML_V=document.documentElement.getAttribute("data-v");
 if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
 var P=["p0","p1","p2"], MARK=["●","■","▲"], DEF=["Hagenau","Weissi","Zinni"];
@@ -552,41 +552,75 @@ $("runWon").addEventListener("click",function(){if(!canWrite||!backupAllowed())r
 $("runBack").addEventListener("click",function(){if(!canWrite)return;patchMeta({run:{status:"run"}});renderAll()});
 
 /* ---------- Feuerwerk beim Sieg (Farben aus dem aktiven Theme) ----------
-   Raketen mit Funkenregen, dazu zwei Explosionen als Pixelbild (Pokéball, Pikachu). */
+   Raketen mit Funkenregen, dazu Explosionen als Pixelbild: Pokéball, dann die überlebenden Pokémon (Pikachu als Ersatz). */
 var FW_SHAPES={
   ball:["....KKKKK....","..KKRRRRRKK..",".KRRRRRRRRRK.",".KRRRRRRRRRK.","KRRRRRRRRRRRK","KRRRRKKKRRRRK","KKKKKKWKKKKKK","KWWWWKKKWWWWK","KWWWWWWWWWWWK",".KWWWWWWWWWK.",".KWWWWWWWWWK.","..KKWWWWWKK..","....KKKKK...."],
   pika:["K.............K","KK...........KK",".KY.........YK.",".YY.........YY.","..YY.......YY..","..YYYYYYYYYYY..",".YYYYYYYYYYYYY.",".YYKKYYYYYKKYY.",".YYKKYYYYYKKYY.","YYYYYYYKYYYYYYY","YRRYYYYYYYYYRRY","YRRYYKYYYKYYRRY",".YYYYYKKKYYYYY.","..YYYYYYYYYYY..","....YYYYYYY...."]
 };
+/* Figuren der überlebenden Pokémon: Sprites aus Schwarz/Weiß (PokeAPI, #1–649), je Spieler bis zu zwei
+   zufällige Pokémon aus komplett lebenden Links. Fehlt ein Sprite, springt Pikachu ein. */
+var SPRITE_URL="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/";
+function dexOf(name){var i=name?NORM.indexOf(norm(name)):-1;return i>-1?i+1:0}
+function winDex(){
+  var per=[[],[],[]];
+  sorted().forEach(function(e){if(status(e[1])!=="alive")return;for(var i=0;i<3;i++){var d=dexOf(cellOf(e[1],i).sp);if(d)per[i].push(d)}});
+  var out=[];
+  for(var round=0;round<2;round++)for(var i=0;i<3;i++){var pool=per[i].filter(function(d){return out.indexOf(d)<0});if(pool.length)out.push(pool[Math.floor(Math.random()*pool.length)])}
+  return out;
+}
+function bitmapShape(name,pal){var m=FW_SHAPES[name],cells=[];
+  for(var r=0;r<m.length;r++)for(var c=0;c<m[r].length;c++)if(m[r][c]!==".")cells.push([c,r,pal[m[r][c]]]);
+  return {cols:m[0].length,rows:m.length,cells:cells}}
+function spriteShape(dex){return new Promise(function(res){
+  var im=new Image();im.crossOrigin="anonymous";
+  im.onload=function(){try{
+    var w=im.width,h=im.height,c=document.createElement("canvas");c.width=w;c.height=h;var x=c.getContext("2d");x.drawImage(im,0,0);
+    var d=x.getImageData(0,0,w,h).data,x0=w,y0=h,x1=-1,y1=-1,X,Y;
+    for(Y=0;Y<h;Y++)for(X=0;X<w;X++)if(d[(Y*w+X)*4+3]>127){if(X<x0)x0=X;if(X>x1)x1=X;if(Y<y0)y0=Y;if(Y>y1)y1=Y}
+    if(x1<0){res(null);return}
+    var st=Math.max(1,Math.ceil(Math.max(x1-x0+1,y1-y0+1)/44)),cols=Math.ceil((x1-x0+1)/st),rows=Math.ceil((y1-y0+1)/st),cells=[];
+    for(var r=0;r<rows;r++)for(var cc=0;cc<cols;cc++){var px=Math.min(x1,x0+cc*st+(st>>1)),py=Math.min(y1,y0+r*st+(st>>1)),i=(py*w+px)*4;
+      if(d[i+3]>=128)cells.push([cc,r,"rgb("+d[i]+","+d[i+1]+","+d[i+2]+")"])}
+    res({cols:cols,rows:rows,cells:cells});
+  }catch(e){res(null)}};
+  im.onerror=function(){res(null)};
+  im.src=SPRITE_URL+dex+".png";
+})}
 function fireworks(){
   try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return}catch(e){}
   var cs=getComputedStyle(document.documentElement),cv0=function(v,d){return cs.getPropertyValue(v).trim()||d};
   var cols=["--pink","--sky","--mint","--lemon","--lilac","--p0","--p1","--p2"].map(function(v){return cs.getPropertyValue(v).trim()}).filter(Boolean);
   if(!cols.length)return;
   var PAL={K:cv0("--ink","#1d1d2b"),R:cv0("--pink","#e3262a"),W:cv0("--surface","#fff"),Y:cv0("--lemon","#f8d030")};
+  // Figuren: erst der Pokéball, dann die Pokémon (Sprites laden schon, während die Raketen steigen)
+  var figs=[{shape:bitmapShape("ball",PAL)}],dexes=winDex();
+  if(!dexes.length)figs.push({shape:bitmapShape("pika",PAL)});
+  dexes.forEach(function(dx){var f={shape:undefined};figs.push(f);spriteShape(dx).then(function(sh){f.shape=sh})});
   var cv=document.createElement("canvas");cv.className="fw";cv.setAttribute("aria-hidden","true");document.body.appendChild(cv);
   var ctx=cv.getContext("2d"),W=innerWidth,H=innerHeight,dpr=window.devicePixelRatio||1;
   cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
-  var G=0.12,rockets=[],sparks=[],pix=[],t0=performance.now(),last=t0,plan=[];
-  for(var i=0;i<14;i++)plan.push({t:i*480+Math.random()*240,k:"r"});
-  plan.push({t:2000,k:"s",s:"ball",x:0.3},{t:4300,k:"s",s:"pika",x:0.7});
+  var G=0.12,rockets=[],sparks=[],pix=[],t0=performance.now(),last=t0,plan=[],XS=[0.5,0.27,0.73,0.38,0.62,0.3,0.7];
+  var span=1800+figs.length*1600;
+  for(var t=0;t<span;t+=420+Math.random()*200)plan.push({t:t,k:"r"});
+  figs.forEach(function(f,i){plan.push({t:1800+i*1600,k:"s",f:f,x:XS[i%XS.length]})});
   plan.sort(function(a,b){return a.t-b.t});
   function pick(){return cols[Math.floor(Math.random()*cols.length)]}
-  function rocket(x,h,c,shape){rockets.push({x:x,y:H,vx:shape?0:(Math.random()-0.5)*1.6,vy:-Math.sqrt(2*G*h),c:c,shape:shape})}
+  function rocket(x,h,c,fig){rockets.push({x:x,y:H,vx:fig?0:(Math.random()-0.5)*1.6,vy:-Math.sqrt(2*G*h),c:c,fig:fig})}
   function burst(x,y,c){var n=100+Math.floor(Math.random()*50),c2=pick();
     for(var k=0;k<n;k++){var a=Math.random()*Math.PI*2,sp=2+Math.random()*5;sparks.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,dec:0.008+Math.random()*0.008,c:k%3?c:c2})}}
-  function shapeBurst(x,y,name,now){var m=FW_SHAPES[name],rows=m.length,cl=m[0].length,cell=Math.max(8,Math.min(24,Math.min(W,H)/44));
-    for(var r=0;r<rows;r++)for(var c=0;c<cl;c++){var ch=m[r][c];if(ch===".")continue;
-      pix.push({x0:x,y0:y,tx:x+(c-cl/2+0.5)*cell,ty:y+(r-rows/2+0.5)*cell,sz:cell*0.86,c:PAL[ch],born:now,vy:0,dy:0,ph:Math.random()*6})}
+  function shapeBurst(x,y,sh,now){
+    var cell=Math.max(4,Math.min(24,Math.min(W,H)*0.4/Math.max(sh.cols,sh.rows)));
+    sh.cells.forEach(function(q){pix.push({x0:x,y0:y,tx:x+(q[0]-sh.cols/2+0.5)*cell,ty:y+(q[1]-sh.rows/2+0.5)*cell,sz:cell*0.9,c:q[2],born:now,vy:0,dy:0,ph:Math.random()*6})});
     burst(x,y,PAL.Y);}
   function frame(now){
     var f=Math.min(3,Math.max(0,(now-last)/16.7));last=now;
     while(plan.length&&now-t0>=plan[0].t){var p=plan.shift();
       if(p.k==="r")rocket(W*(0.12+Math.random()*0.76),H*(0.45+Math.random()*0.3),pick(),null);
-      else rocket(W*p.x,H*0.62,PAL.Y,p.s)}
+      else rocket(W*p.x,H*0.6,PAL.Y,p.f)}
     ctx.globalCompositeOperation="destination-out";ctx.fillStyle="rgba(0,0,0,"+Math.min(1,0.2*f)+")";ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation="source-over";
-    rockets=rockets.filter(function(r){r.x+=r.vx*f;r.y+=r.vy*f;r.vy+=G*f;ctx.globalAlpha=1;ctx.fillStyle=r.c;ctx.beginPath();ctx.arc(r.x,r.y,r.shape?4:3,0,7);ctx.fill();
-      if(r.vy>=-0.6){if(r.shape)shapeBurst(r.x,r.y,r.shape,now);else burst(r.x,r.y,r.c);return false}return true});
+    rockets=rockets.filter(function(r){r.x+=r.vx*f;r.y+=r.vy*f;r.vy+=G*f;ctx.globalAlpha=1;ctx.fillStyle=r.c;ctx.beginPath();ctx.arc(r.x,r.y,r.fig?4:3,0,7);ctx.fill();
+      if(r.vy>=-0.6){if(r.fig)shapeBurst(r.x,r.y,r.fig.shape||bitmapShape("pika",PAL),now);else burst(r.x,r.y,r.c);return false}return true});
     sparks=sparks.filter(function(s){s.vx*=Math.pow(0.985,f);s.vy=s.vy*Math.pow(0.985,f)+0.05*f;s.x+=s.vx*f;s.y+=s.vy*f;s.life-=s.dec*f;
       if(s.life<=0)return false;ctx.globalAlpha=s.life;ctx.fillStyle=s.c;ctx.beginPath();ctx.arc(s.x,s.y,3,0,7);ctx.fill();return true});
     pix=pix.filter(function(q){var age=(now-q.born)/1000,x,y,al=1;
@@ -598,7 +632,7 @@ function fireworks(){
     if(plan.length||rockets.length||sparks.length||pix.length)requestAnimationFrame(frame);else cv.remove();
   }
   requestAnimationFrame(frame);
-  setTimeout(function(){cv.remove()},20000);
+  setTimeout(function(){cv.remove()},40000);
 }
 $("enders").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var i=+b.getAttribute("data-p"),part={run:{enders:{}}};part.run.enders[P[i]]=!(S.meta.run.enders||{})[P[i]];patchMeta(part);renderAll()});
 $("runNoM").addEventListener("click",function(){setRunNo((+S.meta.run.no||1)-1)});
