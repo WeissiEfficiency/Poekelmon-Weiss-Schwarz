@@ -22,6 +22,7 @@ players: { p0: { name } , ... }
 run:     { no, status: "run"|"lost"|"won", enders: { p0: bool, ... }, where, cause }
 tally:   { p0: { run, death, enc }, ... }      // Basiswerte abgeschlossener Runs
 caps:    { beaten: { g1: bool, ... }, lv: { g1: Zahl, ... } }   // lv = manuelle Abweichung
+backupAt: ISO-Zeitpunkt der letzten Sicherung oder ""      // gesetzt von „Backup kopieren“ / „Als Datei speichern“
 ```
 
 **`routes/<id>`** (eine pro Route)
@@ -40,6 +41,14 @@ no, status, enders, where, cause, endedAt, badges, lastCap, links,
 deadLinks: [{ route, nick, mons[3], killer, deaths, cause }],
 perPlayer: { p0: { run, death, enc }, ... }
 ```
+
+## Firestore-Regeln
+
+`firestore.rules` prüft jedes Dokument gegen dieses Datenmodell: nur bekannte Felder, Textlängen begrenzt, Status-Werte aus festen Listen, Routen-IDs `r00`–`r99` oder `c…`, `meta` nur als `main`. `meta` und `history` sind nicht löschbar, `history` ist nach dem Anlegen unveränderlich (gleiche Daten erneut schreiben ist erlaubt, damit Backups eingespielt werden können). Ein neues Feld braucht deshalb drei Stellen: Standardwert in `defMeta()` bzw. beim Anlegen der Route, `firestore.rules`, und die Regeln neu in der Firebase-Konsole veröffentlichen.
+
+## Backup-Erinnerung
+
+`renderBk()` zeigt oben einen Hinweis, wenn Routen vorhanden sind und `backupAt` fehlt oder mindestens 7 Tage alt ist (`BK_DAYS`). Der Zeitpunkt gilt für alle Spieler gemeinsam.
 
 ## Zählung
 

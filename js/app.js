@@ -22,7 +22,7 @@ var NO_DEATHS=function(){return {p0:false,p1:false,p2:false}};
 function defMeta(){return {players:{p0:{name:DEF[0]},p1:{name:DEF[1]},p2:{name:DEF[2]}},
   run:{no:1,status:"run",enders:NO_DEATHS(),where:"",cause:""},
   tally:{p0:{run:0,death:0,enc:0},p1:{run:0,death:0,enc:0},p2:{run:0,death:0,enc:0}},
-  caps:{beaten:{},lv:{}}}}
+  caps:{beaten:{},lv:{}},backupAt:""}}
 var S={meta:defMeta(),routes:new Map(),history:[]};
 var store=null, mode="local", canWrite=true, loaded=false, routesLoaded=false;
 var pend=new Map(), busy=new Set(), metaPend=null, metaBusy=false, timers=new Map(), metaTimer=null;
@@ -359,7 +359,19 @@ function renderAna(){
     var dt=h.endedAt?new Date(h.endedAt).toLocaleDateString("de-DE"):"";
     hb.appendChild(el("tr",null,[el("td",{class:"k",text:"Run "+h.no}),el("td",null,[el("span",{class:"chip "+(h.status||"run"),text:res})]),el("td",{text:en}),el("td",{text:h.where||""}),el("td",{text:String(h.badges||0)}),el("td",{text:String(h.links||0)}),el("td",{text:String((h.deadLinks||[]).length)}),el("td",{text:dt})]))});
 }
-function renderAll(){renderRun();renderCaps();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna()}
+function renderAll(){renderRun();renderCaps();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna();renderBk()}
+
+/* ---------- Backup-Erinnerung ---------- */
+var BK_DAYS=7;
+function backupAge(){var t=Date.parse(S.meta.backupAt||"");return isNaN(t)?null:Math.floor((Date.now()-t)/864e5)}
+function renderBk(){
+  var age=backupAge(),last=$("bkLast"),warn=$("bkWarn");
+  last.textContent=age===null?"Noch keine Sicherung gemacht.":"Letzte Sicherung: "+new Date(S.meta.backupAt).toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"})+(age===0?" (heute)":age===1?" (gestern)":" (vor "+age+" Tagen)");
+  var show=loaded&&routesLoaded&&canWrite&&S.routes.size>0&&(age===null||age>=BK_DAYS);
+  warn.hidden=!show;
+  if(show)$("bkWarnT").textContent=age===null?"Es gibt noch keine Sicherung der Daten.":"Die letzte Sicherung ist "+age+" Tage alt.";
+}
+function markBackup(){patchMeta({backupAt:new Date().toISOString()});renderBk()}
 
 /* ---------- Neuer Run ---------- */
 function startNewRun(){
@@ -454,9 +466,9 @@ $("viewSeg").addEventListener("click",function(e){var b=e.target.closest("button
 $("filter").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;ui.filter=b.getAttribute("data-v");
   this.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});renderList();if(ui.view==="all")renderAllView()});
 $("q").addEventListener("input",function(){ui.q=this.value;renderList();if(ui.view==="all")renderAllView()});
-function copyText(txt,note){
+function copyText(txt,note,onOk){
   function fail(){note.textContent="Kopieren blockiert, bitte Text manuell markieren";note.classList.add("err")}
-  try{navigator.clipboard.writeText(txt).then(function(){note.classList.remove("err");note.textContent="Kopiert ✧"},fail)}catch(e){fail()}
+  try{navigator.clipboard.writeText(txt).then(function(){note.classList.remove("err");note.textContent="Kopiert ✧";if(onOk)onOk()},fail)}catch(e){fail()}
   setTimeout(function(){note.textContent=""},3500);
 }
 $("copyBtn").addEventListener("click",function(){copyText(allText(),$("copyNote"))});
@@ -497,8 +509,9 @@ async function importData(txt){
   var hs=Object.keys(o.history||{});for(var h=0;h<hs.length;h++){await store.set("history/"+hs[h],o.history[hs[h]]);await sleep(40)}
   return ids.length;
 }
-$("bkCopy").addEventListener("click",function(){copyText(exportData(),$("bkS1"))});
-$("bkDl").addEventListener("click",function(){var a=el("a",{href:URL.createObjectURL(new Blob([exportData()],{type:"application/json"})),download:"soullink-backup-run"+S.meta.run.no+".json"});document.body.appendChild(a);a.click();a.remove()});
+$("bkCopy").addEventListener("click",function(){copyText(exportData(),$("bkS1"),markBackup)});
+$("bkDl").addEventListener("click",function(){var a=el("a",{href:URL.createObjectURL(new Blob([exportData()],{type:"application/json"})),download:"soullink-backup-run"+S.meta.run.no+".json"});document.body.appendChild(a);a.click();a.remove();markBackup()});
+$("bkWarnGo").addEventListener("click",function(){var box=$("bkBox");box.open=true;box.scrollIntoView({behavior:"smooth",block:"start"});($("bkDl").hidden?$("bkCopy"):$("bkDl")).focus({preventScroll:true})});
 $("bkFile").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){$("bkIn").value=String(rd.result||"")};rd.readAsText(f)});
 var bkTimer;
 $("bkGo").addEventListener("click",async function(){
@@ -516,7 +529,7 @@ $("bkGo").addEventListener("click",async function(){
 /* ---------- Start ---------- */
 function loadScript(src){return new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){rej(new Error("Script "+src))};document.head.appendChild(s)})}
 var LIVE_LABEL="Live synchronisiert";
-function ready(fromCache){if(!fromCache){loaded=true;clearTimeout(tm);setSync(mode==="local"?"warn":"live",canWrite?LIVE_LABEL:"Nur Lesen")}}
+function ready(fromCache){if(!fromCache){loaded=true;clearTimeout(tm);setSync(mode==="local"?"warn":"live",canWrite?LIVE_LABEL:"Nur Lesen");renderBk()}}
 function subscribe(){
   var err=function(){setSync("warn","Verbindung getrennt")};
   store.watchDoc("meta/main",function(d,fc){

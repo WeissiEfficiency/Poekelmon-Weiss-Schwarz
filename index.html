@@ -24,6 +24,12 @@
 
 <main class="wrap">
 
+<div class="card bkwarn" id="bkWarn" role="status" hidden>
+  <span class="bkwarn-i" aria-hidden="true">!</span>
+  <p><b id="bkWarnT">Es gibt noch keine Sicherung der Daten.</b> Eine Sicherung als Datei schützt euren Run, falls online etwas verloren geht.</p>
+  <button type="button" class="btn solid" id="bkWarnGo">Jetzt sichern</button>
+</div>
+
 <section aria-labelledby="h-run">
   <div class="sec-h"><h2 id="h-run">Run</h2><small>Die Zahlen zählen automatisch mit und lassen sich von Hand ändern.</small></div>
   <div class="card run">
@@ -127,6 +133,7 @@
         <p class="note" style="margin:0">Sichert alles (Spieler, Zähler, Routen, Run-Verlauf) als Text. Damit ziehst du die Daten auch auf die GitHub-Seite um.</p>
         <div class="tools"><button type="button" class="btn" id="bkCopy">Backup kopieren</button><button type="button" class="btn" id="bkDl" hidden>Als Datei speichern</button></div>
         <div class="status" id="bkS1" role="status"></div>
+        <p class="note" id="bkLast" style="margin:0"></p>
       </div>
       <div class="col">
         <label for="bkIn">Backup einspielen (ersetzt die aktuellen Daten)</label>

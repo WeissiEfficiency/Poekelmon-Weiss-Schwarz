@@ -45,8 +45,10 @@ Im alten Dashboard auf claude.ai ganz unten **Daten sichern und umziehen > Backu
 
 ## Gut zu wissen
 
-- Die Firebase-Werte in `config.js` sind öffentlich, das ist bei Firebase-Webseiten normal. Die Regeln erlauben nur die drei Sammlungen `meta`, `routes` und `history`.
-- Ab und zu **Als Datei speichern** im Backup-Bereich, falls jemand aus Versehen etwas löscht.
+- Die Firebase-Werte in `config.js` sind öffentlich, das ist bei Firebase-Webseiten normal. Wer den Link oder das Repo kennt, kann ohne Anmeldung lesen und schreiben.
+- Die Regeln in `firestore.rules` lassen nur Daten in der Form des Dashboards zu (bekannte Felder, begrenzte Textlängen). Run-Daten und Run-Verlauf lassen sich nicht löschen, einzelne Routen schon. Neue Felder müssen auch in `firestore.rules` ergänzt und dort neu veröffentlicht werden, sonst schlägt Speichern fehl.
+- Kosten: Das Projekt läuft im kostenlosen Spark-Tarif ohne Zahlungsart. Beim Tageslimit stoppt das Speichern bis zum nächsten Tag, es entstehen keine Kosten. Nicht auf den Blaze-Tarif wechseln.
+- Firebase sichert im Spark-Tarif nicht automatisch. Die Seite erinnert oben, wenn die letzte Sicherung älter als 7 Tage ist. Dann **Als Datei speichern** im Backup-Bereich.
 - Der kostenlose Firebase-Tarif (Spark) reicht für drei Spieler.
 
 Mehr zum Aufbau: [docs/ARCHITEKTUR.md](docs/ARCHITEKTUR.md). Was als Nächstes kommt: [docs/BACKLOG.md](docs/BACKLOG.md).
