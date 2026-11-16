@@ -10,7 +10,7 @@
 
 ### Behoben
 - Seite lud nach einem Deploy manchmal nicht richtig, weil der Browser neue und alte Dateien mischte (GitHub Pages speichert 10 Minuten zwischen). CSS und Skripte haben jetzt eine Versionsnummer, und passt sie nicht zur Seite, lädt die Seite einmal neu (`tools/bump.py`).
-- Pokédex-Design: Schrift DotGothic16 statt Pixelify Sans, die 5 und das kleine e waren kaum lesbar.
+- Pokédex-Design: Schrift Tiny5 statt Pixelify Sans, die 5 und das kleine e waren kaum lesbar (ohne künstliches Fett, damit die Pixel scharf bleiben).
 - Handy: Der Run-Kasten war rechts abgeschnitten („Neuer Run starten“, „Gewonnen“).
 - Automatisches Backup: GitHub Action sichert täglich mit `tools/backup.py` nach `backups/` (nur bei Änderungen). Die Backup-Erinnerung berücksichtigt das automatische Backup.
 - Google-Anmeldung: Schreiben nur noch für den Admin und freigeschaltete Google-E-Mails, ohne Anmeldung nur lesen. Backup und neuer Bereich „Schreibrechte“ nur für den Admin.

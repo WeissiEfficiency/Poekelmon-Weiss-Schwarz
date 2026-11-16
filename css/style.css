@@ -262,12 +262,13 @@ body.ro #q,body.ro #filter button,body.ro #viewSeg button,body.ro #themeSeg butt
   --pink:#e3262a; --sky:#6890f0; --mint:#78c850; --lemon:#f8d030; --lilac:#b8c4d0;
   --dead:#c03028; --live:#2c7d36;
   --p0:#f7b48a; --p1:#a6bff5; --p2:#aedc96;
-  --display:"DotGothic16",ui-monospace,monospace;
+  --display:"Tiny5",ui-monospace,monospace;
   --r:10px; --sh:4px 4px 0 var(--ink);
   --surface:#fff; --tint:#f3f6f9; --deadbg:#fbe4e2; --extrabg:#fff7d6; --ph:#8c94a8;
   --bg:repeating-linear-gradient(0deg,rgba(29,29,43,.035) 0 2px,transparent 2px 4px),linear-gradient(180deg,#eef2f6,#dde4ea);
   --hdr:linear-gradient(180deg,#f0402a,#cc1f1f);
   --h1:#fff; --ball:#e3262a; --mark:"▶"; --markc:var(--pink);
+  font-synthesis:none;   /* Tiny5 hat nur einen Schnitt, künstliches Fett verschmiert die Pixel */
 }
 [data-theme="pokedex"] header.top{border-bottom:10px solid var(--ink)}
 /* Linse statt Ball: großes blaues Auge mit weißem Ring, darüber drei Lämpchen */
