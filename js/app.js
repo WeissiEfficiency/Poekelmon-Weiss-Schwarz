@@ -37,7 +37,7 @@ function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 function pname(i){var n=(S.meta.players[P[i]]||{}).name;return n&&n.trim()?n.trim():DEF[i]}
 function cellOf(r,i){var c=(r.cells||{})[P[i]]||{};return {sp:c.sp||"",nick:c.nick||"",st:c.st||""}}
 function status(r){var s=P.map(function(_,i){return cellOf(r,i).st});
-  if(s.indexOf("dead")>-1)return"dead";if(s.indexOf("miss")>-1)return"miss";
+  if(s.indexOf("miss")>-1)return"miss";if(s.indexOf("dead")>-1)return"dead";
   if(s.every(function(x){return x==="alive"}))return"alive";if(s.indexOf("alive")>-1)return"part";return"open"}
 var STL={alive:"Lebendig ♡",dead:"Tot (×_×)",miss:"Verpasst",part:"Teilweise",open:"Offen"};
 
@@ -55,6 +55,10 @@ function tt(k){return THEME_TXT[themeName()][k]}
 var STC={alive:"Lebendig",dead:"Tot",miss:"Verpasst",part:"Teilweise",open:"Offen"};
 function sorted(){return Array.from(S.routes.entries()).sort(function(a,b){return (a[1].order||0)-(b[1].order||0)})}
 function killerName(r){return typeof r.killer==="number"&&r.killer>-1?pname(r.killer):""}
+function missNames(r){return [0,1,2].filter(function(i){return cellOf(r,i).st==="miss"}).map(pname).join(", ")}
+function isLost(st){return st==="dead"||st==="miss"}
+function lossBy(r,st){return st==="miss"?missNames(r):(killerName(r)||"offen")}
+function lossCause(r,st){return r.cause||(st==="miss"?"nicht gefangen":"")}
 function deathNames(r){return [0,1,2].filter(function(i){return (r.deaths||{})[P[i]]}).map(pname).join(", ")}
 function nickOf(r){if(typeof r.nick==="string")return r.nick;for(var i=0;i<3;i++){var n=((r.cells||{})[P[i]]||{}).nick;if(n)return n}return ""}
 function spText(d){return d.st==="miss"?"nicht gefangen":(d.sp||(d.st?"gefangen":""))}
@@ -246,22 +250,22 @@ function renderAllView(){
   for(var g=0;g<3;g++)$("ah"+g).textContent=MARK[g]+" "+pname(g);
   var body=$("allBody");body.textContent="";
   sorted().forEach(function(e,idx){var r=e[1],st=status(r);if(!matches(r,st))return;
-    var tr=el("tr",{"data-st":st},[el("td",{class:"n",text:String(idx+1).padStart(2,"0")}),el("td",{class:"k",text:(r.name||"")+(r.extra?" ✦":"")}),el("td",null,[el("span",{class:"mon"+(st==="dead"?" d":""),text:nickOf(r)})])]);
+    var tr=el("tr",{"data-st":st},[el("td",{class:"n",text:String(idx+1).padStart(2,"0")}),el("td",{class:"k",text:(r.name||"")+(r.extra?" ✦":"")}),el("td",null,[el("span",{class:"mon"+(isLost(st)?" d":""),text:nickOf(r)})])]);
     for(var i=0;i<3;i++){var d=cellOf(r,i),td=el("td");
       if(d.st==="miss")td.appendChild(el("span",{class:"sm2",text:"∅ nicht gefangen"}));
       else if(d.st||d.sp)td.appendChild(el("span",{class:d.sp?"":"sm2",text:(d.st==="dead"?"✕ ":"")+(d.sp||"gefangen")}));
       tr.appendChild(td)}
     tr.appendChild(el("td",null,[el("span",{class:"chip "+st,text:STC[st]})]));
-    tr.appendChild(el("td",{text:st==="dead"?(killerName(r)||"offen"):""}));
+    tr.appendChild(el("td",{text:isLost(st)?lossBy(r,st):""}));
     tr.appendChild(el("td",{text:st==="dead"?deathNames(r):""}));
-    tr.appendChild(el("td",{text:st==="dead"?(r.cause||""):""}));
+    tr.appendChild(el("td",{text:isLost(st)?lossCause(r,st):""}));
     body.appendChild(tr)});
   if(!body.children.length)body.appendChild(el("tr",null,[el("td",{colspan:"10",text:"Keine Route passt zum Filter.",class:"sm2"})]));
 }
 function allText(){
   var lines=["Soul Link Run "+S.meta.run.no];sorted().forEach(function(e,idx){var r=e[1],st=status(r);if(!matches(r,st))return;
     var parts=[0,1,2].map(function(i){var d=cellOf(r,i);return pname(i)+": "+(spText(d)||"-")});
-    lines.push(String(idx+1).padStart(2,"0")+" "+(r.name||"")+(nickOf(r)?" – "+nickOf(r):"")+" | "+parts.join(" | ")+" | "+STC[st]+(st==="dead"?" (Encounter: "+(killerName(r)||"offen")+(deathNames(r)?"; Tod bei "+deathNames(r):"")+(r.cause?"; "+r.cause:"")+")":""))});
+    lines.push(String(idx+1).padStart(2,"0")+" "+(r.name||"")+(nickOf(r)?" – "+nickOf(r):"")+" | "+parts.join(" | ")+" | "+STC[st]+(isLost(st)?" (Encounter: "+lossBy(r,st)+(deathNames(r)?"; Tod bei "+deathNames(r):"")+(lossCause(r,st)?"; "+lossCause(r,st):"")+")":""))});
   return lines.join("\n");
 }
 
@@ -289,19 +293,21 @@ function renderStats(){
     [["Gefangen",got],["Leben",alive],["Tot",dead]].forEach(function(s){ps.appendChild(el("div",null,[el("b",{text:String(s[1])}),el("span",{text:s[0]})]))});
   }
   for(var g=0;g<3;g++)$("gh"+g).textContent=pname(g);
-  var gb=$("grave");gb.textContent="";var deadRows=sorted().filter(function(e){return status(e[1])==="dead"});
+  var gb=$("grave");gb.textContent="";var deadRows=sorted().filter(function(e){return isLost(status(e[1]))});
   if(!deadRows.length)gb.appendChild(el("tr",null,[el("td",{colspan:"8",class:"sm2",text:tt("grave")})]));
-  deadRows.forEach(function(e){var r=e[1];
-    var tr=el("tr",null,[el("td",{class:"k",text:r.name||""}),el("td",{class:"k",text:nickOf(r)}),el("td",{text:killerName(r)||"offen"})]);
-    for(var i=0;i<3;i++){tr.appendChild(el("td",{text:cellOf(r,i).sp||"–"}))}
-    tr.appendChild(el("td",{text:deathNames(r)}));tr.appendChild(el("td",{text:r.cause||""}));gb.appendChild(tr)});
+  deadRows.forEach(function(e){var r=e[1],st=status(r);
+    var tr=el("tr",null,[el("td",{class:"k",text:r.name||""}),el("td",{class:"k",text:nickOf(r)}),el("td",{text:lossBy(r,st)})]);
+    for(var i=0;i<3;i++){var d=cellOf(r,i);tr.appendChild(el("td",{text:d.st==="miss"?"∅":(d.sp||"–")}))}
+    tr.appendChild(el("td",{text:deathNames(r)}));tr.appendChild(el("td",{text:lossCause(r,st)}));gb.appendChild(tr)});
 }
 
 /* ---------- Run, Zähler, Level-Caps ---------- */
 var TK=[["run","Run"],["death","Death"],["enc","Encounter"]];
 function live(i){var o={run:0,death:0,enc:0},rn=S.meta.run;
   if(rn.status==="lost"&&(rn.enders||{})[P[i]])o.run=1;
-  S.routes.forEach(function(r){if(status(r)!=="dead")return;if((r.deaths||{})[P[i]])o.death++;if(r.killer===i)o.enc++});
+  S.routes.forEach(function(r){var st=status(r);
+    if(st==="dead"){if((r.deaths||{})[P[i]])o.death++;if(r.killer===i)o.enc++}
+    else if(st==="miss"&&cellOf(r,i).st==="miss")o.enc++});
   return o}
 function baseOf(i,k){var t=(S.meta.tally||{})[P[i]]||{};return +t[k]||0}
 function totalOf(i,k){return baseOf(i,k)+live(i)[k]}
@@ -341,16 +347,25 @@ function renderCaps(){
   $("capLv").textContent=nx?String(capLv(nx)):"✓";
   $("capWho").textContent=nx?"bis "+nx.name:"alle geschafft";
 }
+/* Run-Status: "Verloren" setzt man per Knopf, "Gewonnen" ergibt sich, sobald jede Route gespielt ist
+   (jeder hat gefangen oder verpasst, oder der Link ist tot). Das Fossil (extra) zählt nicht mit. */
+function played(r){var st=status(r);return st!=="open"&&st!=="part"}
+function routesLeft(){var n=0,any=false;S.routes.forEach(function(r){if(r.extra)return;any=true;if(!played(r))n++});return any?n:-1}
+function runState(){if(S.meta.run.status==="lost")return"lost";return routesLoaded&&routesLeft()===0?"won":"run"}
+var lastRunState=null;
 function renderRun(){
-  var r=S.meta.run;
+  var r=S.meta.run,state=runState();
   fill($("runNo"),String(r.no));
-  $("runSt").querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-v")===r.status))});
-  var lost=r.status==="lost";$("runEnd").hidden=!lost;
+  var chip=$("runChip");chip.className="chip "+state;chip.textContent={run:"Läuft",lost:"Verloren",won:"Gewonnen"}[state];
+  $("runLost").hidden=state!=="run";$("runBack").hidden=state!=="lost";$("newRun").hidden=state==="run";
+  var left=routesLeft();$("runHint").textContent=state==="run"&&left>0?"Gewonnen ist der Run automatisch, sobald jede Route gespielt ist (noch "+left+(left===1?" Route":" Routen")+").":"";
+  if(loaded&&routesLoaded){if(state==="won"&&lastRunState&&lastRunState!=="won")fireworks();lastRunState=state}
+  var lost=state==="lost";$("runEnd").hidden=!lost;
   $("enders").querySelectorAll("button").forEach(function(b){var i=+b.getAttribute("data-p");b.querySelector(".en").textContent=pname(i);b.setAttribute("aria-pressed",String(!!(r.enders||{})[P[i]]))});
   fill($("runWhere"),r.where||"");fill($("runCause"),r.cause||"");
   var names=[0,1,2].filter(function(i){return (r.enders||{})[P[i]]}).map(pname).join(" und "),line=$("runLine");
   if(lost)line.textContent=(names?"Run beendet von "+names:"Run verloren")+" "+tt("lost");
-  else if(r.status==="won")line.textContent=tt("won");
+  else if(state==="won")line.textContent=tt("won");
   else line.textContent=tt("run");
 }
 
@@ -418,18 +433,18 @@ function markBackup(){patchMeta({backupAt:new Date().toISOString()});renderBk()}
 function startNewRun(){
   if(!canWrite||!store)return;
   var r=S.meta.run,c={alive:0,dead:0};S.routes.forEach(function(x){var s=status(x);if(s in c)c[s]++});
-  var dead=sorted().filter(function(e){return status(e[1])==="dead"}).map(function(e){var x=e[1];
-    return {route:x.name||"",nick:nickOf(x),mons:[0,1,2].map(function(i){return cellOf(x,i).sp}),killer:typeof x.killer==="number"?x.killer:-1,deaths:clone(x.deaths||{}),cause:x.cause||""}});
+  var dead=sorted().filter(function(e){return isLost(status(e[1]))}).map(function(e){var x=e[1],st=status(x),mi=[0,1,2].filter(function(i){return cellOf(x,i).st==="miss"});
+    return {route:x.name||"",nick:nickOf(x),mons:[0,1,2].map(function(i){return cellOf(x,i).sp}),killer:st==="miss"?(mi.length?mi[0]:-1):(typeof x.killer==="number"?x.killer:-1),deaths:clone(x.deaths||{}),cause:lossCause(x,st)}});
   var per={},tally={};for(var i=0;i<3;i++){var lv=live(i);per[P[i]]=lv;tally[P[i]]={run:baseOf(i,"run")+lv.run,death:baseOf(i,"death")+lv.death,enc:baseOf(i,"enc")+lv.enc}}
   var nc=nextCap();
-  var hist={no:+r.no||0,status:r.status,enders:clone(r.enders||{}),where:r.where||"",cause:r.cause||"",endedAt:new Date().toISOString(),badges:badgeCount(),lastCap:nc?nc.name:"alle",links:c.alive+c.dead,deadLinks:dead,perPlayer:per};
+  var hist={no:+r.no||0,status:runState(),enders:clone(r.enders||{}),where:r.where||"",cause:r.cause||"",endedAt:new Date().toISOString(),badges:badgeCount(),lastCap:nc?nc.name:"alle",links:c.alive+c.dead,deadLinks:dead,perPlayer:per};
   var hid="run"+hist.no+"-"+Date.now().toString(36);
   S.history.push({id:hid,data:hist});
   store.set("history/"+hid,hist).catch(function(){setSync("warn","Run-Verlauf nicht gespeichert")});
   var n=0;S.routes.forEach(function(x,id){patchRoute(id,{nick:"",cells:EMPTY_CELLS(),killer:-1,cause:"",deaths:NO_DEATHS()},450+n*90);n++});
   var beat={};CAPS.forEach(function(cp){beat[cp.id]=false});
   patchMeta({tally:tally,caps:{beaten:beat},run:{no:(+r.no||0)+1,status:"run",enders:NO_DEATHS(),where:"",cause:""}});
-  renderAll();
+  ui.showAll=false;renderAll();
 }
 
 /* ---------- Eingaben ---------- */
@@ -439,13 +454,13 @@ function onCellInput(t){
   if(f==="name")patchRoute(id,{name:t.value});
   else if(f==="cause")patchRoute(id,{cause:t.value});
   else if(f==="rnick"){var nk=t.value.trim(),cs={};
-    for(var k=0;k<3;k++){var cc=cellOf(r,k);if(nk&&!cc.st)cs[P[k]]={st:"alive"};else if(!nk&&cc.st==="alive"&&!cc.sp)cs[P[k]]={st:""}}
+    for(var k=0;k<3;k++){var cc=cellOf(r,k);if(nk&&!cc.st&&status(r)!=="miss")cs[P[k]]={st:"alive"};else if(!nk&&cc.st==="alive"&&!cc.sp)cs[P[k]]={st:""}}
     patchRoute(id,{nick:t.value,cells:cs})}
   else if(cell){var pi=+cell.getAttribute("data-p"),p=P[pi],part={};part[p]={};part[p][f]=t.value;
     var cur=cellOf(r,pi),has=!!(t.value.trim()||nickOf(r).trim());
-    if(!cur.st&&has)part[p].st="alive";else if(cur.st==="alive"&&!has)part[p].st="";
+    if(!cur.st&&has)part[p].st=status(r)==="miss"?"dead":"alive";else if(cur.st==="alive"&&!has)part[p].st="";
     patchRoute(id,{cells:part})}
-  var row=t.closest(".row");updateRow(row,id,Array.from(listEl.children).indexOf(row));renderStats();
+  var row=t.closest(".row");updateRow(row,id,Array.from(listEl.children).indexOf(row));renderStats();renderRun();
 }
 listEl.addEventListener("input",function(e){var t=e.target;onCellInput(t);if(t.getAttribute("data-f")==="sp")showPk(t)});
 listEl.addEventListener("keydown",function(e){var t=e.target;if(t.getAttribute("data-f")!=="sp")return;
@@ -466,7 +481,12 @@ listEl.addEventListener("click",function(e){
       for(var i=0;i<3;i++)if(i!==ci&&cellOf(r,i).st==="alive"){cells[P[i]]={st:"dead"}}
       if(!(typeof r.killer==="number"&&r.killer>-1))extra.killer=ci;
       extra.deaths={};extra.deaths[P[ci]]=true;
-    }else{extra.deaths={};extra.deaths[P[ci]]=false}
+    }else if(next==="miss"){
+      for(var m=0;m<3;m++)if(m!==ci&&cellOf(r,m).st==="alive")cells[P[m]]={st:"dead"};
+    }else{extra.deaths={};extra.deaths[P[ci]]=false;
+      if(cur==="miss"&&![0,1,2].some(function(j){return j!==ci&&cellOf(r,j).st==="miss"}))
+        for(var a=0;a<3;a++)if(a!==ci&&cellOf(r,a).st==="dead"&&!(r.deaths||{})[P[a]])cells[P[a]]={st:"alive"};
+    }
     patchRoute(id,dm({cells:cells},extra));
     if(status(r)!=="dead"&&(r.killer>-1||r.cause||deathNames(r)))patchRoute(id,{killer:-1,cause:"",deaths:NO_DEATHS()});
   }else if(act==="death"){
@@ -521,7 +541,38 @@ $("players").addEventListener("input",function(e){var t=e.target,i=t.getAttribut
   if(ui.view==="all")renderAllView()});
 $("runWhere").addEventListener("input",function(){patchMeta({run:{where:this.value}})});
 $("runCause").addEventListener("input",function(){patchMeta({run:{cause:this.value}})});
-$("runSt").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;patchMeta({run:{status:b.getAttribute("data-v")}});renderAll()});
+$("runLost").addEventListener("click",function(){if(!canWrite)return;patchMeta({run:{status:"lost"}});renderAll()});
+$("runBack").addEventListener("click",function(){if(!canWrite)return;patchMeta({run:{status:"run"}});renderAll()});
+
+/* ---------- Feuerwerk beim Sieg (Farben aus dem aktiven Theme) ---------- */
+function fireworks(){
+  try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return}catch(e){}
+  var cs=getComputedStyle(document.documentElement),cols=["--pink","--sky","--mint","--lemon","--lilac","--p0","--p1","--p2"].map(function(v){return cs.getPropertyValue(v).trim()}).filter(Boolean);
+  if(!cols.length)return;
+  var cv=document.createElement("canvas");cv.className="fw";cv.setAttribute("aria-hidden","true");document.body.appendChild(cv);
+  var ctx=cv.getContext("2d"),W=innerWidth,H=innerHeight,dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
+  var rockets=[],sparks=[],plan=[],t0=performance.now(),last=t0,G=0.12;
+  for(var i=0;i<8;i++)plan.push(i*380+Math.random()*200);
+  function pick(){return cols[Math.floor(Math.random()*cols.length)]}
+  function launch(){var h=H*(0.45+Math.random()*0.3);rockets.push({x:W*(0.15+Math.random()*0.7),y:H,vx:(Math.random()-0.5)*1.5,vy:-Math.sqrt(2*G*h),c:pick()})}
+  function burst(x,y,c){var n=60+Math.floor(Math.random()*30),c2=pick();
+    for(var k=0;k<n;k++){var a=Math.random()*Math.PI*2,sp=1.5+Math.random()*4.5;sparks.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,dec:0.011+Math.random()*0.012,c:k%3?c:c2})}}
+  function frame(now){
+    var f=Math.min(3,Math.max(0,(now-last)/16.7));last=now;
+    while(plan.length&&now-t0>=plan[0]){plan.shift();launch()}
+    ctx.globalCompositeOperation="destination-out";ctx.fillStyle="rgba(0,0,0,"+Math.min(1,0.22*f)+")";ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation="source-over";
+    rockets=rockets.filter(function(r){r.x+=r.vx*f;r.y+=r.vy*f;r.vy+=G*f;ctx.globalAlpha=1;ctx.fillStyle=r.c;ctx.beginPath();ctx.arc(r.x,r.y,2.6,0,7);ctx.fill();
+      if(r.vy>=-0.6){burst(r.x,r.y,r.c);return false}return true});
+    sparks=sparks.filter(function(s){s.vx*=Math.pow(0.985,f);s.vy=s.vy*Math.pow(0.985,f)+0.05*f;s.x+=s.vx*f;s.y+=s.vy*f;s.life-=s.dec*f;
+      if(s.life<=0)return false;ctx.globalAlpha=s.life;ctx.fillStyle=s.c;ctx.beginPath();ctx.arc(s.x,s.y,2.8,0,7);ctx.fill();return true});
+    ctx.globalAlpha=1;
+    if(plan.length||rockets.length||sparks.length)requestAnimationFrame(frame);else cv.remove();
+  }
+  requestAnimationFrame(frame);
+  setTimeout(function(){cv.remove()},12000);
+}
 $("enders").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var i=+b.getAttribute("data-p"),part={run:{enders:{}}};part.run.enders[P[i]]=!(S.meta.run.enders||{})[P[i]];patchMeta(part);renderAll()});
 $("runNoM").addEventListener("click",function(){setRunNo((+S.meta.run.no||1)-1)});
 $("runNoP").addEventListener("click",function(){setRunNo((+S.meta.run.no||0)+1)});

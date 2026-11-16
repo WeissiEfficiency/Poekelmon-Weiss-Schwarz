@@ -19,7 +19,7 @@ Drei Sammlungen, Spieler-Schlüssel `p0` (Hagenau), `p1` (Weissi), `p2` (Zinni).
 **`meta/main`**
 ```
 players: { p0: { name } , ... }
-run:     { no, status: "run"|"lost"|"won", enders: { p0: bool, ... }, where, cause }
+run:     { no, status: "run"|"lost", enders: { p0: bool, ... }, where, cause }   // "won" nur noch in Altdaten, wird ignoriert
 tally:   { p0: { run, death, enc }, ... }      // Basiswerte abgeschlossener Runs
 caps:    { beaten: { g1: bool, ... }, lv: { g1: Zahl, ... } }   // lv = manuelle Abweichung
 backupAt: ISO-Zeitpunkt der letzten Sicherung oder ""      // gesetzt von „Backup kopieren“ / „Als Datei speichern“
@@ -34,6 +34,10 @@ deaths: { p0: bool, ... }                                     // Tod bei
 cause
 ```
 Ältere Routen haben den Spitznamen in `cells.pX.nick`; `nickOf()` liest ihn als Rückfall.
+
+Routen-Status (`status()`): `miss` vor `dead` vor `alive`/`part`/`open`. Verpasst (`miss`) heißt, der Encounter ist verloren: Klick auf ∅ setzt die lebenden Pokémon der anderen auf `dead`, Zurücknehmen belebt sie wieder (außer wer unter „Tod bei“ steht). `dead` und `miss` sind verlorene Links (`isLost()`), stehen im Friedhof und in `history.deadLinks` (bei `miss` mit `killer` = erster, der nicht gefangen hat, und `cause` „nicht gefangen“).
+
+**Run-Status (`runState()`)**: „Verloren“ setzt der Knopf „Run verloren“ (`run.status = "lost"`, „Doch nicht verloren“ setzt zurück). „Gewonnen“ wird nicht gespeichert, sondern ergibt sich, sobald jede Route außer dem Fossil gespielt ist (`played()`: Status nicht `open` und nicht `part`). „Neuer Run starten“ erscheint nur bei verloren oder gewonnen und schreibt den abgeleiteten Status in `history`. Wechselt der Status während die Seite offen ist auf gewonnen, startet `fireworks()` (Canvas, Farben aus den Theme-Variablen, aus bei `prefers-reduced-motion`).
 
 **`history/<id>`** (eine pro abgeschlossenem Run, angelegt bei „Neuer Run starten“)
 ```
@@ -80,7 +84,7 @@ emails: [ "name@gmail.com", ... ]   // nur Admin schreibt, lesbar für Freigesch
 Angezeigter Gesamtstand = `tally` (Basis) + Live-Werte des aktuellen Runs:
 - Run +1 für jeden markierten Run-Ender, wenn der Status „Verloren“ ist
 - Death +1 je toter Route, bei der der Spieler unter „Tod bei“ markiert ist
-- Encounter +1 je toter Route, bei der der Spieler „Encounter getötet von“ ist
+- Encounter +1 je toter Route, bei der der Spieler „Encounter getötet von“ ist, und je verpasster Route, bei der der Spieler ∅ hat (mehrere Spieler möglich)
 
 Manuelles Ändern schreibt `tally = gewünschter Wert − Live-Wert`. „Neuer Run starten“ addiert die Live-Werte in `tally`, legt `history` an und leert Routen und Caps.
 

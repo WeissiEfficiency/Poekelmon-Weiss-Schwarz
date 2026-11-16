@@ -10,7 +10,8 @@ Hagenau und Zinni brauchen keinen Account, sie öffnen nur den Link. Wer den Lin
 
 - Routen von Avenitia bis zur Höhle der Prüfung, eigene Routen ergänzbar, Fossil als Extra-Encounter; die Routen erscheinen nacheinander, sobald die vorige eingetragen ist („Alle Routen zeigen“ blendet den Rest ein)
 - Ein Spitzname pro Route (gilt für alle drei Pokémon des Links), Pokémon pro Spieler optional mit Suche über alle 649 deutschen Namen (tippfehlertolerant, auch per Dex-Nummer)
-- Zustand pro Spieler: lebt, tot, nicht gefangen; stirbt einer, sterben die verbundenen mit
+- Zustand pro Spieler: lebt, tot, nicht gefangen; stirbt einer oder fängt einer nicht, sterben die verbundenen mit
+- Run verloren per Knopf, gewonnen automatisch, sobald jede Route gespielt ist (mit Feuerwerk)
 - Beim toten Link: wer den Encounter getötet hat, bei wem das Pokémon im Kampf gefallen ist (Death), Ursache
 - Run-Nummer und Gesamtstand Run, Death, Encounter pro Spieler (zählt automatisch, von Hand änderbar)
 - Level-Caps aller Arenaleiter, Top Vier, N und G-Cis zum Abhaken

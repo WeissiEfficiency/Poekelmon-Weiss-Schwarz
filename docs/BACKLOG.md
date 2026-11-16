@@ -21,6 +21,7 @@ Seite ist fertig und als Repo angelegt. GitHub Pages ist aktiv (https://weissief
 | T-010 | Automatisches tägliches Backup per GitHub Action nach `backups/` | mittel | erledigt | M2 |
 | T-011 | Designs: Pokédex für alle, Pastell und Lovecraft zum Umschalten nur für den Admin | niedrig | erledigt | M2 |
 | T-012 | Routen nacheinander einblenden, „Route hinzufügen“ unter der Liste | mittel | erledigt | M2 |
+| T-013 | Run-Status automatisch (Verloren-Knopf, Sieg mit Feuerwerk), Verpasst wie Tod | mittel | erledigt | M2 |
 | T-009 | Google-E-Mails von Hagenau und Zinni unter „Schreibrechte“ eintragen | hoch | offen | M1 |
 
 ## Erledigt

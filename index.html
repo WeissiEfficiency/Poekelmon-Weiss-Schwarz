@@ -47,15 +47,14 @@
         <div class="capnow"><span>Level-Cap</span><b id="capLv">–</b><span id="capWho"></span></div>
       </div>
       <div class="field"><span class="lbl">Status</span>
-        <div class="seg" id="runSt" role="group" aria-label="Run-Status">
-          <button type="button" data-v="run">Läuft</button><button type="button" data-v="lost">Verloren</button><button type="button" data-v="won">Gewonnen</button>
-        </div></div>
-      <div class="runline" id="runLine"></div>
-      <button type="button" class="btn solid" id="newRun">Neuer Run starten</button>
+        <div class="runstat"><span class="chip run" id="runChip">Läuft</span><button type="button" class="btn" id="runLost">Run verloren</button><button type="button" class="btn" id="runBack" hidden>Doch nicht verloren</button></div>
+        <p class="note" id="runHint" style="margin:0"></p></div>
+      <div class="runline" id="runLine" aria-live="polite"></div>
+      <button type="button" class="btn solid" id="newRun" hidden>Neuer Run starten</button>
     </div>
     <div>
       <div class="tw0"><table class="tally"><thead><tr><th>Spieler</th><th>Run</th><th>Death</th><th>Encounter</th></tr></thead><tbody id="tally"></tbody></table></div>
-      <p class="note">Run = Run beendet. Death = Pokémon im Kampf gefallen. Encounter = Encounter getötet. Grüne Zahl: davon im aktuellen Run. „Neuer Run starten“ speichert den Run in der Auswertung, übernimmt die Zahlen und leert Routen und Level-Caps.</p>
+      <p class="note">Run = Run beendet. Death = Pokémon im Kampf gefallen. Encounter = Encounter getötet. Grüne Zahl: davon im aktuellen Run. Ist der Run verloren oder gewonnen, erscheint „Neuer Run starten“: speichert den Run in der Auswertung, übernimmt die Zahlen und leert Routen und Level-Caps.</p>
     </div>
   </div>
   <div class="card runend" id="runEnd" hidden>
@@ -165,7 +164,7 @@
   </details>
 </section>
 
-<footer>✓ lebt, ✕ tot, ∅ nicht gefangen. Stirbt ein Pokémon, sterben die verbundenen mit und zählen als ein Encounter. Der Spitzname gilt für alle drei Pokémon eines Links. Wer den Encounter getötet hat und bei wem das Pokémon im Kampf gefallen ist (Death), trägst du beim toten Link ein. Das Fossil zählt als Extra-Encounter, aber nur, wenn alle drei eins gefunden haben (｡•̀ᴗ-)✧</footer>
+<footer>✓ lebt, ✕ tot, ∅ nicht gefangen. Stirbt ein Pokémon, sterben die verbundenen mit und zählen als ein Encounter. Nicht gefangen (∅) zählt genauso: Der Link ist verloren, die verbundenen Pokémon sterben mit, und jeder, der nicht gefangen hat, bekommt einen Encounter. Der Spitzname gilt für alle drei Pokémon eines Links. Wer den Encounter getötet hat und bei wem das Pokémon im Kampf gefallen ist (Death), trägst du beim toten Link ein. Das Fossil zählt als Extra-Encounter, aber nur, wenn alle drei eins gefunden haben (｡•̀ᴗ-)✧</footer>
 </main>
 
 <script src="config.js"></script>
