@@ -8,6 +8,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 
 - Lokal starten: `python3 -m http.server 8000`, dann http://localhost:8000
 - Syntax prüfen: `node --check js/app.js && node --check js/pokemon.js`
+- Version setzen (vor jedem Commit mit Änderungen an `index.html`, `css/` oder `js/`): `python tools/bump.py`
 - Deploy: Push auf `main`, GitHub Pages veröffentlicht automatisch.
 
 ## Dateien
@@ -18,6 +19,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 - `js/pokemon.js`: 649 deutsche Pokémon-Namen, Index + 1 = Dex-Nummer
 - `config.js`: Firebase-Werte; Platzhalter `DEIN-PROJEKT` = lokaler Modus
 - `firestore.rules`: Firestore-Regeln, werden in der Firebase-Konsole eingefügt (nicht automatisch)
+- `tools/bump.py`: neue Versionsnummer in `index.html` (`data-v`, `?v=`) und `js/app.js` (`APP_V`), gegen gemischte Browser-Caches
 - `tools/backup.py` + `.github/workflows/backup.yml`: tägliches Auto-Backup nach `backups/` (nicht von Hand bearbeiten)
 
 ## Konventionen

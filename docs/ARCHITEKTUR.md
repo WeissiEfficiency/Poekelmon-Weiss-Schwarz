@@ -88,6 +88,10 @@ Angezeigter Gesamtstand = `tally` (Basis) + Live-Werte des aktuellen Runs:
 
 Manuelles Ändern schreibt `tally = gewünschter Wert − Live-Wert`. „Neuer Run starten“ addiert die Live-Werte in `tally`, legt `history` an und leert Routen und Caps.
 
+## Versionen und Browser-Cache
+
+GitHub Pages schickt `Cache-Control: max-age=600`. Damit ein Browser nach einem Deploy keine neue `index.html` mit einer alten `js/app.js` kombiniert, tragen CSS und Skripte in `index.html` `?v=<Version>`, `<html>` trägt `data-v`, und `js/app.js` hat `APP_V`. Weichen `data-v` und `APP_V` ab, lädt `app.js` die Seite einmal neu (Merker in `sessionStorage`). Alle drei Stellen setzt `python tools/bump.py`. Fehlt `data-v` (z. B. als Artifact), passiert nichts.
+
 ## Schreiben
 
 `patchRoute()` und `patchMeta()` sammeln Änderungen und schreiben nach 450 ms als Teil-Update (Merge). Während ein Schreibvorgang läuft, werden eingehende Snapshots für dieses Dokument ignoriert, damit Eingaben nicht überschrieben werden. Gleichzeitiges Bearbeiten verschiedener Felder durch mehrere Spieler funktioniert; beim selben Feld gewinnt der letzte.

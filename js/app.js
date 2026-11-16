@@ -1,6 +1,11 @@
 // Soul-Link-Dashboard: Logik. Pokémon-Namen kommen aus js/pokemon.js, Firebase-Daten aus config.js.
 (function(){
 "use strict";
+/* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
+   APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
+var APP_V="202611162332";
+var HTML_V=document.documentElement.getAttribute("data-v");
+if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
 var P=["p0","p1","p2"], MARK=["●","■","▲"], DEF=["Hagenau","Weissi","Zinni"];
 var CAPS=[
  {id:"g1",name:"Benny / Maik / Colin",place:"Orion City",lv:14,gym:true},
