@@ -18,7 +18,10 @@
         <p>Einall-Run zu dritt (◕‿◕)♡</p>
       </div>
     </div>
-    <div class="sync" id="sync" data-s="load" role="status"><i></i><span id="syncT">Lädt …</span></div>
+    <div class="topr">
+      <div class="sync" id="sync" data-s="load" role="status"><i></i><span id="syncT">Lädt …</span></div>
+      <div class="auth" id="auth" hidden><span id="authT"></span><button type="button" class="btn authbtn" id="authBtn" hidden>Mit Google anmelden</button></div>
+    </div>
   </div>
 </header>
 
@@ -125,7 +128,20 @@
     <tbody id="histBody"></tbody></table></div>
 </section>
 
-<section aria-labelledby="h-bk">
+<section aria-labelledby="h-acc" id="accSec" hidden>
+  <details class="card">
+    <summary id="h-acc">Schreibrechte (nur für dich sichtbar)</summary>
+    <div class="acc">
+      <label for="accEmails">Google-E-Mails, die eintragen dürfen (eine pro Zeile)</label>
+      <textarea id="accEmails" placeholder="name@gmail.com"></textarea>
+      <p class="note" style="margin:0">Du selbst darfst immer schreiben. Wer hier steht, kann nach der Anmeldung alles außer Backup bearbeiten. Ohne Anmeldung kann man nur lesen.</p>
+      <div class="tools"><button type="button" class="btn solid" id="accSave">Speichern</button></div>
+      <div class="status" id="accS" role="status"></div>
+    </div>
+  </details>
+</section>
+
+<section aria-labelledby="h-bk" id="bkSec">
   <details class="card" id="bkBox">
     <summary id="h-bk">Daten sichern und umziehen</summary>
     <div class="bk">

@@ -42,9 +42,23 @@ deadLinks: [{ route, nick, mons[3], killer, deaths, cause }],
 perPlayer: { p0: { run, death, enc }, ... }
 ```
 
+## Anmeldung und Rechte (nur Firebase-Modus)
+
+Lesen ist offen. Zum Schreiben meldet man sich oben rechts mit Google an (`signInWithPopup`, Rückfall auf Redirect).
+- **Admin**: UID steht in `config.js` (`adminUid`) und in `firestore.rules` (`isAdmin`). Sieht zusätzlich Backup, Backup-Erinnerung und „Schreibrechte“.
+- **Freigeschaltet**: Google-E-Mail (kleingeschrieben, bestätigt) steht in `access/main.emails` (max. 10). Darf alles außer Backup.
+- **Sonst**: nur lesen (`body.ro`, Eingabefelder deaktiviert).
+
+Ob jemand freigeschaltet ist, erkennt die Seite daran, dass sie `access/main` lesen darf (`onAuth()`). Die Rolle setzt `setCanWrite()` / `applyRole()`; bei Wechsel werden die Routenzeilen neu gebaut. Im Artifact- und Lokal-Modus gibt es keine Anmeldung, dort bleibt alles wie zuvor.
+
+**`access/main`**
+```
+emails: [ "name@gmail.com", ... ]   // nur Admin schreibt, lesbar für Freigeschaltete
+```
+
 ## Firestore-Regeln
 
-`firestore.rules` prüft jedes Dokument gegen dieses Datenmodell: nur bekannte Felder, Textlängen begrenzt, Status-Werte aus festen Listen, Routen-IDs `r00`–`r99` oder `c…`, `meta` nur als `main`. `meta` und `history` sind nicht löschbar, `history` ist nach dem Anlegen unveränderlich (gleiche Daten erneut schreiben ist erlaubt, damit Backups eingespielt werden können). Ein neues Feld braucht deshalb drei Stellen: Standardwert in `defMeta()` bzw. beim Anlegen der Route, `firestore.rules`, und die Regeln neu in der Firebase-Konsole veröffentlichen.
+`firestore.rules` prüft bei jedem Schreiben zuerst `isWriter()` (siehe oben) und dann jedes Dokument gegen dieses Datenmodell: nur bekannte Felder, Textlängen begrenzt, Status-Werte aus festen Listen, Routen-IDs `r00`–`r99` oder `c…`, `meta` nur als `main`. `meta` und `history` sind nicht löschbar, `history` ist nach dem Anlegen unveränderlich (gleiche Daten erneut schreiben ist erlaubt, damit Backups eingespielt werden können). Ein neues Feld braucht deshalb drei Stellen: Standardwert in `defMeta()` bzw. beim Anlegen der Route, `firestore.rules`, und die Regeln neu in der Firebase-Konsole veröffentlichen.
 
 ## Backup-Erinnerung
 

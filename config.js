@@ -10,5 +10,8 @@ window.SOULLINK_CONFIG = {
     storageBucket: "soul-link-weiss-schwarz.firebasestorage.app",
     messagingSenderId: "468534676112",
     appId: "1:468534676112:web:e354cb4035288e9bc9a615"
-  }
+  },
+  // Firebase-Kennung (UID) des Admins: darf Backups machen und andere freischalten.
+  // Muss mit der UID in firestore.rules (isAdmin) übereinstimmen. Die UID ist keine E-Mail und nicht geheim.
+  adminUid: "3jGRsgfX3DcYPwOTzzTWJBm8EJF2"
 };

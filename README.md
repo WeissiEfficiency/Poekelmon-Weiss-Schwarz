@@ -35,6 +35,13 @@ Dann <http://localhost:8000> öffnen. Ohne ausgefüllte `config.js` speichert di
 4. **Zahnrad > Projekteinstellungen > Deine Apps > `</>`** (Web-App), Name eingeben, **App registrieren** (ohne Hosting).
 5. Die Werte aus `firebaseConfig` in `config.js` eintragen und committen.
 
+### 1b. Google-Anmeldung (Schreibrechte)
+
+1. **Authentication > Anmeldemethode > Google** aktivieren, Support-E-Mail wählen.
+2. **Authentication > Einstellungen > Autorisierte Domains**: `weissiefficiency.github.io` hinzufügen.
+3. Auf der Seite einmal als Admin anmelden. Die Firebase-UID (Konsole: **Authentication > Nutzer**) in `config.js` (`adminUid`) und in `firestore.rules` (`isAdmin`) eintragen, Regeln neu veröffentlichen.
+4. Im Dashboard unter **Schreibrechte** die Google-E-Mails der Mitspieler eintragen und speichern.
+
 ### 2. GitHub Pages
 
 Im Repo **Settings > Pages**: Source **Deploy from a branch**, Branch **main**, Ordner **/ (root)**, **Save**. Nach 1 bis 2 Minuten ist die Seite unter der Adresse oben erreichbar.
@@ -45,7 +52,8 @@ Im alten Dashboard auf claude.ai ganz unten **Daten sichern und umziehen > Backu
 
 ## Gut zu wissen
 
-- Die Firebase-Werte in `config.js` sind öffentlich, das ist bei Firebase-Webseiten normal. Wer den Link oder das Repo kennt, kann ohne Anmeldung lesen und schreiben.
+- Die Firebase-Werte und die Admin-UID in `config.js` sind öffentlich, das ist bei Firebase-Webseiten normal.
+- Lesen kann jeder mit dem Link. Schreiben kann nur, wer mit Google angemeldet ist und freigeschaltet ist (Admin oder E-Mail unter **Schreibrechte**). Backup und Schreibrechte sieht nur der Admin. Die E-Mails stehen in Firestore (`access/main`), nicht im Repo.
 - Die Regeln in `firestore.rules` lassen nur Daten in der Form des Dashboards zu (bekannte Felder, begrenzte Textlängen). Run-Daten und Run-Verlauf lassen sich nicht löschen, einzelne Routen schon. Neue Felder müssen auch in `firestore.rules` ergänzt und dort neu veröffentlicht werden, sonst schlägt Speichern fehl.
 - Kosten: Das Projekt läuft im kostenlosen Spark-Tarif ohne Zahlungsart. Beim Tageslimit stoppt das Speichern bis zum nächsten Tag, es entstehen keine Kosten. Nicht auf den Blaze-Tarif wechseln.
 - Firebase sichert im Spark-Tarif nicht automatisch. Die Seite erinnert oben, wenn die letzte Sicherung älter als 7 Tage ist. Dann **Als Datei speichern** im Backup-Bereich.

@@ -3,13 +3,27 @@ rules_version = '2';
 // Firestore-Regeln für das Soul-Link-Dashboard.
 // Einfügen in der Firebase-Konsole: Firestore > Regeln > alles ersetzen > Veröffentlichen.
 //
-// Jeder mit dem Link darf lesen und schreiben (keine Anmeldung). Die Regeln lassen aber nur
-// Daten in der Form des Dashboards zu: bekannte Felder, begrenzte Textlängen, keine fremden
+// Lesen darf jeder mit dem Link. Schreiben darf nur, wer mit Google angemeldet ist und
+// entweder Admin ist (UID unten, gleiche UID in config.js) oder dessen E-Mail in access/main steht.
+// access/main pflegt der Admin im Dashboard unter „Schreibrechte“.
+// Außerdem nur Daten in der Form des Dashboards: bekannte Felder, begrenzte Textlängen, keine fremden
 // Sammlungen. Run-Daten (meta) und Run-Verlauf (history) können nicht gelöscht werden.
 // Datenmodell: docs/ARCHITEKTUR.md. Neue Felder dort UND hier ergänzen, sonst schlägt Speichern fehl.
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ---------- Wer darf schreiben ----------
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == '3jGRsgfX3DcYPwOTzzTWJBm8EJF2';
+    }
+    function isWriter() {
+      return isAdmin() || (
+        request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in get(/databases/$(database)/documents/access/main).data.get('emails', [])
+      );
+    }
 
     function str(v, max) { return v is string && v.size() <= max; }
     function players(m) { return m is map && m.keys().hasOnly(['p0', 'p1', 'p2']); }
@@ -48,7 +62,7 @@ service cloud.firestore {
 
     match /meta/{doc} {
       allow read: if true;
-      allow create, update: if doc == 'main' && validMeta(request.resource.data);
+      allow create, update: if isWriter() && doc == 'main' && validMeta(request.resource.data);
       allow delete: if false;
     }
 
@@ -85,8 +99,8 @@ service cloud.firestore {
     match /routes/{id} {
       allow read: if true;
       // r01 … r43 sind Standardrouten, c… sind selbst angelegte Routen.
-      allow create, update: if id.matches('r[0-9]{2}|c[a-z0-9]{1,12}') && validRoute(request.resource.data);
-      allow delete: if true;
+      allow create, update: if isWriter() && id.matches('r[0-9]{2}|c[a-z0-9]{1,12}') && validRoute(request.resource.data);
+      allow delete: if isWriter();
     }
 
     // ---------- history/<id>: ein abgeschlossener Run ----------
@@ -103,10 +117,20 @@ service cloud.firestore {
 
     match /history/{id} {
       allow read: if true;
-      allow create: if id.matches('run[0-9]+-[a-z0-9]+') && validHistory(request.resource.data);
+      allow create: if isWriter() && id.matches('run[0-9]+-[a-z0-9]+') && validHistory(request.resource.data);
       // Abgeschlossene Runs ändern sich nicht. Gleiche Daten erneut schreiben (Backup einspielen) ist erlaubt.
-      allow update: if request.resource.data == resource.data;
+      allow update: if isWriter() && request.resource.data == resource.data;
       allow delete: if false;
+    }
+
+    // ---------- access/main: Liste der freigeschalteten Google-E-Mails ----------
+    // Lesbar für Freigeschaltete (so erkennt die Seite, ob jemand schreiben darf), ändern nur der Admin.
+    match /access/{doc} {
+      allow read: if isWriter();
+      allow write: if isAdmin() && doc == 'main'
+        && request.resource.data.keys().hasOnly(['emails'])
+        && request.resource.data.emails is list
+        && request.resource.data.emails.size() <= 10;
     }
   }
 }

@@ -214,6 +214,16 @@ details[open]>summary::before{content:"▾ "}
 
 footer{margin:30px 0 44px;color:var(--mute);font-size:13.5px;font-weight:700}
 body.ro input,body.ro select,body.ro .seg button,body.ro .btn,body.ro .chipb,body.ro .tick,body.ro .stp{pointer-events:none;opacity:.7}
+/* Lesen, Filtern, Suchen und Anmelden bleiben auch ohne Schreibrecht bedienbar */
+body.ro #q,body.ro #filter button,body.ro #viewSeg button,body.ro .btn.authbtn,body.ro #copyBtn{pointer-events:auto;opacity:1}
+
+/* Anmeldung */
+.topr{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.auth{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-weight:800;font-size:13px}
+.auth[data-s="no"] #authT{color:var(--dead)}
+.authbtn{min-height:34px;padding:3px 12px;font-size:13px}
+.acc{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.topr{align-items:flex-start}.auth{justify-content:flex-start}}
 
 @media (max-width:900px){
   .run{grid-template-columns:1fr}.run .l{border-right:0;border-bottom:3px solid var(--ink)}

@@ -25,6 +25,7 @@ Soul-Link-Dashboard für Pokémon Schwarz/Weiß (deutsch) mit drei Spielern (Hag
 - UI-Texte und Doku auf Deutsch, Spielbegriffe mit deutschen Namen (Orte, Pokémon, Trainer). Code-Bezeichner englisch.
 - Datenmodell siehe `docs/ARCHITEKTUR.md`. Neue Felder immer mit Standardwert in `defMeta()` bzw. beim Anlegen von Routen ergänzen, alte Daten müssen weiter laden (z. B. `nickOf()` liest Spitznamen aus Altdaten). Neue Felder außerdem in `firestore.rules` erlauben und die Regeln in der Firebase-Konsole neu veröffentlichen, sonst lehnt Firestore jedes Speichern des Dokuments ab.
 - Schreibzugriffe nur über `patchRoute()` / `patchMeta()` (gebündelt, 450 ms Verzögerung), nie direkt aus Render-Funktionen.
+- Schreibrechte im Firebase-Modus: Google-Anmeldung, Admin-UID in `config.js` und `firestore.rules`, Freigaben in `access/main` (siehe `docs/ARCHITEKTUR.md`). Admin-only-Bereiche über `applyRole()` steuern.
 - Die gleiche Seite läuft auch als claude.ai-Artifact (Speicher-Adapter `makeArtifactStore`). Nichts einbauen, das nur mit Firebase funktioniert, ohne den Artifact- und Lokal-Modus zu bedenken.
 
 ## Nach Änderungen

@@ -25,6 +25,7 @@ function defMeta(){return {players:{p0:{name:DEF[0]},p1:{name:DEF[1]},p2:{name:D
   caps:{beaten:{},lv:{}},backupAt:""}}
 var S={meta:defMeta(),routes:new Map(),history:[]};
 var store=null, mode="local", canWrite=true, loaded=false, routesLoaded=false;
+var auth=null, authUser=null, isAdmin=false, authKnown=false;   // nur im Firebase-Modus
 var pend=new Map(), busy=new Set(), metaPend=null, metaBusy=false, timers=new Map(), metaTimer=null;
 var ui={filter:"all",q:"",view:"edit"};
 var $=function(id){return document.getElementById(id)};
@@ -367,7 +368,7 @@ function backupAge(){var t=Date.parse(S.meta.backupAt||"");return isNaN(t)?null:
 function renderBk(){
   var age=backupAge(),last=$("bkLast"),warn=$("bkWarn");
   last.textContent=age===null?"Noch keine Sicherung gemacht.":"Letzte Sicherung: "+new Date(S.meta.backupAt).toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"})+(age===0?" (heute)":age===1?" (gestern)":" (vor "+age+" Tagen)");
-  var show=loaded&&routesLoaded&&canWrite&&S.routes.size>0&&(age===null||age>=BK_DAYS);
+  var show=loaded&&routesLoaded&&canWrite&&backupAllowed()&&S.routes.size>0&&(age===null||age>=BK_DAYS);
   warn.hidden=!show;
   if(show)$("bkWarnT").textContent=age===null?"Es gibt noch keine Sicherung der Daten.":"Die letzte Sicherung ist "+age+" Tage alt.";
 }
@@ -526,6 +527,68 @@ $("bkGo").addEventListener("click",async function(){
   b.disabled=false;
 });
 
+/* ---------- Anmeldung und Rechte (nur Firebase-Modus) ----------
+   Lesen darf jeder. Schreiben darf, wer mit Google angemeldet ist und entweder Admin ist
+   (config.js adminUid) oder dessen E-Mail in access/main steht. Backup und Freischaltung nur für den Admin.
+   Die echte Prüfung machen die Firestore-Regeln; die Seite blendet nur passend ein und aus. */
+function backupAllowed(){return mode!=="firebase"||isAdmin}
+function setCanWrite(v){
+  if(canWrite===v)return;canWrite=v;document.body.classList.toggle("ro",!v);
+  rowEls.forEach(function(row){row.remove()});rowEls.clear();   // Zeilen neu bauen, damit Felder (de)aktiviert werden
+  renderAll();if(loaded)setSync("live",v?LIVE_LABEL:"Nur Lesen");
+}
+function applyRole(){
+  $("bkSec").hidden=!backupAllowed();
+  $("accSec").hidden=!(mode==="firebase"&&isAdmin);
+  renderBk();
+}
+function renderAuth(){
+  var box=$("auth"),t=$("authT"),b=$("authBtn");box.hidden=mode!=="firebase";if(box.hidden)return;
+  if(!authKnown){t.textContent="";b.hidden=true;return}
+  b.hidden=false;
+  if(!authUser){t.textContent="Zum Eintragen anmelden";b.textContent="Mit Google anmelden";box.removeAttribute("data-s");return}
+  var who=authUser.displayName||authUser.email||"Angemeldet";
+  b.textContent="Abmelden";
+  if(canWrite){t.textContent=who+(isAdmin?" (Admin)":"");box.setAttribute("data-s","ok")}
+  else{t.textContent=(authUser.email||who)+" ist nicht freigeschaltet";box.setAttribute("data-s","no")}
+}
+var accUnsub=null;
+function watchAccess(){
+  if(accUnsub){accUnsub();accUnsub=null}
+  if(!isAdmin)return;
+  accUnsub=firebase.firestore().doc("access/main").onSnapshot(function(s){
+    var ta=$("accEmails");if(document.activeElement!==ta)ta.value=((s.exists&&s.data().emails)||[]).join("\n");
+  },function(){$("accS").textContent="Freischaltungen konnten nicht geladen werden.";$("accS").classList.add("err")});
+}
+async function onAuth(u){
+  authUser=u;authKnown=true;var adminUid=(window.SOULLINK_CONFIG||{}).adminUid||"";
+  isAdmin=!!(u&&adminUid&&u.uid===adminUid);
+  var ok=false;
+  if(u&&isAdmin)ok=true;
+  else if(u){try{await firebase.firestore().doc("access/main").get();ok=true}catch(e){ok=false}}   // lesbar nur für Freigeschaltete
+  setCanWrite(ok);applyRole();renderAuth();watchAccess();
+}
+$("authBtn").addEventListener("click",function(){
+  if(!auth)return;
+  if(authUser){auth.signOut();return}
+  var p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
+  auth.signInWithPopup(p).catch(function(e){
+    var c=e&&e.code||"";
+    if(c==="auth/popup-blocked"||c==="auth/operation-not-supported-in-this-environment")auth.signInWithRedirect(p);
+    else if(c!=="auth/popup-closed-by-user"&&c!=="auth/cancelled-popup-request")setSync("warn","Anmeldung fehlgeschlagen");
+  });
+});
+$("accSave").addEventListener("click",function(){
+  var s=$("accS");s.classList.remove("err");
+  var list=$("accEmails").value.split(/[\s,;]+/).map(function(x){return x.trim().toLowerCase()}).filter(Boolean);
+  var bad=list.filter(function(x){return !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)});
+  if(bad.length){s.textContent="Keine gültige E-Mail: "+bad.join(", ");s.classList.add("err");return}
+  list=list.filter(function(x,i){return list.indexOf(x)===i});
+  if(list.length>10){s.textContent="Höchstens 10 Adressen.";s.classList.add("err");return}
+  firebase.firestore().doc("access/main").set({emails:list})   // eigenes Dokument, nicht Teil von meta/routes
+    .then(function(){s.textContent="Gespeichert ✧ ("+list.length+" freigeschaltet)"},function(){s.textContent="Speichern fehlgeschlagen";s.classList.add("err")});
+});
+
 /* ---------- Start ---------- */
 function loadScript(src){return new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){rej(new Error("Script "+src))};document.head.appendChild(s)})}
 var LIVE_LABEL="Live synchronisiert";
@@ -551,8 +614,11 @@ var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreich
       mode="firebase";LIVE_LABEL="Live synchronisiert";
       await loadScript("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
       await loadScript("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js");
+      await loadScript("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js");
       firebase.initializeApp(CFG.firebase);store=makeFirebaseStore(firebase.firestore());
       $("bkDl").hidden=false;
+      setCanWrite(false);applyRole();renderAuth();   // bis die Anmeldung geklärt ist: nur lesen
+      auth=firebase.auth();auth.onAuthStateChanged(onAuth);
     }else if(window.claude&&window.claude.use){
       mode="artifact";
       var user=await claude.use("user");
@@ -564,7 +630,7 @@ var tm=setTimeout(function(){if(!loaded)setSync("warn","Daten noch nicht erreich
     }else{
       mode="local";LIVE_LABEL="Nur auf diesem Gerät gespeichert";store=makeLocalStore();$("bkDl").hidden=false;
     }
-  }catch(e){mode="local";LIVE_LABEL="Online-Speicher nicht erreichbar, nur lokal";store=makeLocalStore();$("bkDl").hidden=false}
+  }catch(e){mode="local";LIVE_LABEL="Online-Speicher nicht erreichbar, nur lokal";store=makeLocalStore();$("bkDl").hidden=false;setCanWrite(true);applyRole();renderAuth()}
   subscribe();
 })();
 })();
