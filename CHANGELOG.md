@@ -9,6 +9,8 @@
 - Level-Caps aller Arenaleiter, Top Vier, N und G-Cis mit änderbaren Werten; aktueller Cap im Run-Bereich.
 - Auswertung: Gesamtstand pro Spieler, Run-Verlauf, häufigste Run-Enden, gefährlichste Routen.
 - Backup kopieren, als Datei speichern und einspielen.
+- GitHub Pages aktiviert (Branch `main`, Ordner `/`).
+- Firebase-Projekt `soul-link-weiss-schwarz` angelegt (Firestore in Frankfurt, Regeln gesetzt), Werte in `config.js` eingetragen.
 
 ### Geändert
 - Ein Spitzname pro Route statt pro Spieler; Pokémon pro Spieler ist optional. Alte Einträge werden übernommen.
