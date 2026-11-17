@@ -3,10 +3,15 @@
 "use strict";
 /* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
    APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
-var APP_V="202611170004";
+var APP_V="202611171132";
 var HTML_V=document.documentElement.getAttribute("data-v");
 if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
-var P=["p0","p1","p2"], MARK=["●","■","▲"], DEF=["Hagenau","Weissi","Zinni"];
+/* Spieler: Anzahl aus config.js (playerCount, 2 bis 6, Standard 3). Schlüssel p0 … p5, Namen stehen in meta.players. */
+var CFG0=window.SOULLINK_CONFIG||{};
+var NP=Math.max(2,Math.min(6,parseInt(CFG0.playerCount,10)||3));
+var P=[],IDX=[],DEF=[],MARK=["●","■","▲","◆","★","✚"].slice(0,NP);
+for(var pi=0;pi<NP;pi++){P.push("p"+pi);IDX.push(pi);DEF.push("Spieler "+(pi+1))}
+var NUMW=["","","zweit","dritt","viert","fünft","sechst"][NP], NUMC=["","","Zwei","Drei","Vier","Fünf","Sechs"][NP];
 var CAPS=[
  {id:"g1",name:"Benny / Maik / Colin",place:"Orion City",lv:14,gym:true},
  {id:"g2",name:"Aloe",place:"Septerna City",lv:20,gym:true},
@@ -20,13 +25,14 @@ var CAPS=[
  {id:"n",name:"N",place:"Schloss von N",lv:52},
  {id:"gc",name:"G-Cis",place:"Schloss von N",lv:54}];
 var DEFAULT_ROUTES=[["r01",1,"Starter (Avenitia)"],["r02",2,"Route 1"],["r03",3,"Route 2"],["r04",4,"Orion City (Geschenk)"],["r05",5,"Traumbrache"],["r06",6,"Route 3"],["r07",7,"Grundwassersenke"],["r08",8,"Ewigenwald"],["r09",9,"Stratos City"],["r10",10,"Route 4"],["r11",11,"Wüstenresort"],["r42",11.2,"Alter Palast"],["r43",11.4,"Fossil (Extra-Encounter)",true],["r13",13,"Route 16"],["r14",14,"Hain der Täuschung"],["r15",15,"Route 5"],["r16",16,"Marea City"],["r17",17,"Route 6"],["r18",18,"Elektrolithhöhle"],["r19",19,"Panaero-Höhle"],["r20",20,"Route 7"],["r21",21,"Turm des Himmels"],["r22",22,"Wendelberg"],["r23",23,"Route 8"],["r24",24,"Moor von Nevaio"],["r25",25,"Drachenstiege"],["r26",26,"Route 9"],["r27",27,"Route 10"],["r28",28,"Siegesstraße"],["r29",29,"Route 11"],["r30",30,"Route 12"],["r31",31,"Dorfbrücke"],["r32",32,"Route 13"],["r33",33,"Ondula"],["r34",34,"Bucht von Ondula"],["r35",35,"Route 14"],["r36",36,"Schrein der Ernte"],["r37",37,"Route 15"],["r38",38,"Route 17"],["r39",39,"Route 18"],["r40",40,"Riesengrotte"],["r41",41,"Höhle der Prüfung"]];
-var FOSSIL_HINT="Zählt nur, wenn alle drei ein Fossil finden. Schild- oder Federfossil, wiederbelebt im Museum von Septerna City.";
-var EMPTY_CELLS=function(){return {p0:{sp:"",nick:"",st:""},p1:{sp:"",nick:"",st:""},p2:{sp:"",nick:"",st:""}}};
-var NO_DEATHS=function(){return {p0:false,p1:false,p2:false}};
+var FOSSIL_HINT="Zählt nur, wenn alle ein Fossil finden. Schild- oder Federfossil, wiederbelebt im Museum von Septerna City.";
+function perPlayer(f){var o={};P.forEach(function(p,i){o[p]=f(i)});return o}
+var EMPTY_CELLS=function(){return perPlayer(function(){return {sp:"",nick:"",st:""}})};
+var NO_DEATHS=function(){return perPlayer(function(){return false})};
 
-function defMeta(){return {players:{p0:{name:DEF[0]},p1:{name:DEF[1]},p2:{name:DEF[2]}},
+function defMeta(){return {players:perPlayer(function(){return {name:""}}),
   run:{no:1,status:"run",enders:NO_DEATHS(),where:"",cause:""},
-  tally:{p0:{run:0,death:0,enc:0},p1:{run:0,death:0,enc:0},p2:{run:0,death:0,enc:0}},
+  tally:perPlayer(function(){return {run:0,death:0,enc:0}}),
   caps:{beaten:{},lv:{}},backupAt:""}}
 var S={meta:defMeta(),routes:new Map(),history:[]};
 var store=null, mode="local", canWrite=true, loaded=false, routesLoaded=false;
@@ -52,21 +58,30 @@ var STL={alive:"Lebendig ♡",dead:"Tot (×_×)",miss:"Verpasst",part:"Teilweise
    Farben und Formen stehen in css/style.css unter :root[data-theme=…]; hier nur die Sprüche. */
 var THEMES=["pokedex","pastell","lovecraft"], DEFAULT_THEME="pokedex";
 var THEME_TXT={
-  pokedex:{tag:"Einall · Soul Link · 3 Trainer",run:"Run läuft. Viel Erfolg, Trainer!",won:"Glückwunsch! Ihr habt die Liga bezwungen!",lost:"… alle Pokémon kampfunfähig.",grave:"Noch kein Link gestorben."},
-  pastell:{tag:"Einall-Run zu dritt (◕‿◕)♡",run:"Run läuft (๑•̀ㅂ•́)و✧",won:"Run gewonnen ✧*。٩(ˊᗜˋ*)و✧*。",lost:"(×_×)",grave:"Noch kein Link gestorben. (◕‿◕)"},
-  lovecraft:{tag:"Drei Seelen, ein Bund – und etwas, das unter Einall schläft",run:"Der Run währt fort. Etwas beobachtet euch aus der Tiefe.",won:"Bezwungen … vorerst. Die Sterne stehen noch nicht richtig.",lost:"– verschlungen von namenlosem Grauen.",grave:"Noch ruht kein Link in der Tiefe."}};
+  pokedex:{tag:"Einall · Soul Link · "+NP+" Trainer",run:"Run läuft. Viel Erfolg, Trainer!",won:"Glückwunsch! Ihr habt die Liga bezwungen!",lost:"… alle Pokémon kampfunfähig.",grave:"Noch kein Link gestorben."},
+  pastell:{tag:"Einall-Run zu "+NUMW+" (◕‿◕)♡",run:"Run läuft (๑•̀ㅂ•́)و✧",won:"Run gewonnen ✧*。٩(ˊᗜˋ*)و✧*。",lost:"(×_×)",grave:"Noch kein Link gestorben. (◕‿◕)"},
+  lovecraft:{tag:NUMC+" Seelen, ein Bund – und etwas, das unter Einall schläft",run:"Der Run währt fort. Etwas beobachtet euch aus der Tiefe.",won:"Bezwungen … vorerst. Die Sterne stehen noch nicht richtig.",lost:"– verschlungen von namenlosem Grauen.",grave:"Noch ruht kein Link in der Tiefe."}};
 function themeName(){var t=document.documentElement.getAttribute("data-theme");return THEMES.indexOf(t)>-1?t:DEFAULT_THEME}
 function tt(k){return THEME_TXT[themeName()][k]}
 var STC={alive:"Lebendig",dead:"Tot",miss:"Verpasst",part:"Teilweise",open:"Offen"};
 function sorted(){return Array.from(S.routes.entries()).sort(function(a,b){return (a[1].order||0)-(b[1].order||0)})}
 function killerName(r){return typeof r.killer==="number"&&r.killer>-1?pname(r.killer):""}
-function missNames(r){return [0,1,2].filter(function(i){return cellOf(r,i).st==="miss"}).map(pname).join(", ")}
+function missNames(r){return IDX.filter(function(i){return cellOf(r,i).st==="miss"}).map(pname).join(", ")}
 function isLost(st){return st==="dead"||st==="miss"}
 function lossBy(r,st){return st==="miss"?missNames(r):(killerName(r)||"offen")}
 function lossCause(r,st){return r.cause||(st==="miss"?"nicht gefangen":"")}
-function deathNames(r){return [0,1,2].filter(function(i){return (r.deaths||{})[P[i]]}).map(pname).join(", ")}
-function nickOf(r){if(typeof r.nick==="string")return r.nick;for(var i=0;i<3;i++){var n=((r.cells||{})[P[i]]||{}).nick;if(n)return n}return ""}
+function deathNames(r){return IDX.filter(function(i){return (r.deaths||{})[P[i]]}).map(pname).join(", ")}
+function nickOf(r){if(typeof r.nick==="string")return r.nick;for(var i=0;i<NP;i++){var n=((r.cells||{})[P[i]]||{}).nick;if(n)return n}return ""}
 function spText(d){return d.st==="miss"?"nicht gefangen":(d.sp||(d.st?"gefangen":""))}
+
+/* Spielerabhängiges Markup: Tabellenköpfe (Platzhalter #allHead, #graveHead), Run-Ender-Knöpfe, Spaltenzahl */
+function buildPlayerUI(){
+  document.documentElement.style.setProperty("--np-cols",String(NP<=4?NP:3));
+  [["allHead","ah",true],["graveHead","gh",false]].forEach(function(x){var mk=$(x[0]);if(!mk)return;
+    IDX.forEach(function(i){var th=el("th",{id:x[1]+i});if(x[2])th.className="pk"+i;mk.parentNode.insertBefore(th,mk)});mk.remove()});
+  var en=$("enders");IDX.forEach(function(i){en.appendChild(el("button",{type:"button",class:"chipb","data-p":String(i),"aria-pressed":"false"},[el("span",{text:MARK[i]}),document.createTextNode(" "),el("span",{class:"en"})]))});
+}
+buildPlayerUI();
 
 /* ---------- Pokémon-Suche ---------- */
 function norm(s){return String(s).toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/♀/g,"w").replace(/♂/g,"m").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]/g,"")}
@@ -164,11 +179,11 @@ function buildRow(id){
   var info=el("div",{class:"rinfo"});
   info.appendChild(el("div",{class:"rtop"},[el("span",{class:"no"}),el("span",{class:"pill"}),el("span",{class:"tag",text:"Extra"})]));
   info.appendChild(el("input",{type:"text",class:"rn","aria-label":"Routenname","data-f":"name"}));
-  info.appendChild(el("input",{type:"text",class:"rnk",placeholder:"Spitzname","aria-label":"Spitzname (gilt für alle drei)","data-f":"rnick"}));
+  info.appendChild(el("input",{type:"text",class:"rnk",placeholder:"Spitzname","aria-label":"Spitzname (gilt für alle)","data-f":"rnick"}));
   info.appendChild(el("p",{class:"hint"}));
   info.appendChild(el("button",{type:"button",class:"rm","data-act":"rm",text:"Route entfernen"}));
   var cells=el("div",{class:"cells"});
-  for(var i=0;i<3;i++){
+  for(var i=0;i<NP;i++){
     var c=el("div",{class:"cell","data-p":i});
     c.appendChild(el("div",{class:"who"},[el("span",{text:MARK[i]}),el("span",{class:"wn"})]));
     c.appendChild(el("input",{type:"text",class:"sp",placeholder:"Pokémon (optional)","aria-label":"Pokémon, optional","data-f":"sp",role:"combobox","aria-autocomplete":"list","aria-controls":"pk","aria-expanded":"false",autocomplete:"off"}));
@@ -180,7 +195,7 @@ function buildRow(id){
   var foot=el("div",{class:"foot",hidden:""});
   foot.appendChild(el("div",{class:"field"},[el("label",{text:"Encounter getötet von"}),el("select",{"data-f":"killer","aria-label":"Encounter getötet von"})]));
   var dch=el("div",{class:"chips",role:"group","aria-label":"Tod bei"});
-  for(var q=0;q<3;q++)dch.appendChild(el("button",{type:"button",class:"chipb","data-act":"death","data-p":q,"aria-pressed":"false"},[el("span",{text:MARK[q]+" "}),el("span",{class:"dn"})]));
+  for(var q=0;q<NP;q++)dch.appendChild(el("button",{type:"button",class:"chipb","data-act":"death","data-p":q,"aria-pressed":"false"},[el("span",{text:MARK[q]+" "}),el("span",{class:"dn"})]));
   foot.appendChild(el("div",{class:"field"},[el("span",{class:"lbl",text:"Tod bei (im Kampf gefallen)"}),dch]));
   foot.appendChild(el("div",{class:"field"},[el("label",{text:"Ursache"}),el("input",{type:"text","data-f":"cause",placeholder:"z. B. Trainer, Crit, Fehlklick","aria-label":"Ursache"})]));
   foot.appendChild(el("button",{type:"button",class:"btn","data-act":"revive",text:"Link wiederbeleben"}));
@@ -189,8 +204,8 @@ function buildRow(id){
 }
 function fill(inp,val){if(document.activeElement!==inp&&inp.value!==val)inp.value=val}
 function fillSelect(sel){
-  if(sel.options.length!==4){sel.textContent="";[["-1","Nicht festgelegt"]].concat([0,1,2].map(function(i){return[String(i),pname(i)]})).forEach(function(o){sel.appendChild(el("option",{value:o[0],text:o[1]}))})}
-  else{for(var j=0;j<3;j++)sel.options[j+1].textContent=pname(j)}
+  if(sel.options.length!==NP+1){sel.textContent="";[["-1","Nicht festgelegt"]].concat(IDX.map(function(i){return[String(i),pname(i)]})).forEach(function(o){sel.appendChild(el("option",{value:o[0],text:o[1]}))})}
+  else{for(var j=0;j<NP;j++)sel.options[j+1].textContent=pname(j)}
 }
 function updateRow(row,id,idx){
   var r=S.routes.get(id);if(!r)return;var st=status(r);
@@ -202,7 +217,7 @@ function updateRow(row,id,idx){
   fill(row.querySelector('[data-f="name"]'),r.name||"");
   fill(row.querySelector('[data-f="rnick"]'),nickOf(r));
   row.querySelector(".rm").hidden=!r.custom;
-  for(var i=0;i<3;i++){
+  for(var i=0;i<NP;i++){
     var c=row.querySelector('.cell[data-p="'+i+'"]'),d=cellOf(r,i);
     c.setAttribute("data-v",d.st);
     c.querySelector(".wn").textContent=pname(i);
@@ -217,7 +232,7 @@ function updateRow(row,id,idx){
 function matches(r,st){
   if(ui.filter!=="all"&&st!==ui.filter)return false;
   var q=ui.q.trim().toLowerCase();if(!q)return true;
-  var hay=[r.name||"",nickOf(r)];for(var i=0;i<3;i++){hay.push(cellOf(r,i).sp)}
+  var hay=[r.name||"",nickOf(r)];for(var i=0;i<NP;i++){hay.push(cellOf(r,i).sp)}
   return hay.join(" ").toLowerCase().indexOf(q)>-1;
 }
 /* Routen erscheinen nacheinander: alles bis zur ersten noch offenen Standard-Route nach der letzten
@@ -252,11 +267,11 @@ function renderList(){
 
 /* ---------- Gesamtliste ---------- */
 function renderAllView(){
-  for(var g=0;g<3;g++)$("ah"+g).textContent=MARK[g]+" "+pname(g);
+  for(var g=0;g<NP;g++)$("ah"+g).textContent=MARK[g]+" "+pname(g);
   var body=$("allBody");body.textContent="";
   sorted().forEach(function(e,idx){var r=e[1],st=status(r);if(!matches(r,st))return;
     var tr=el("tr",{"data-st":st},[el("td",{class:"n",text:String(idx+1).padStart(2,"0")}),el("td",{class:"k",text:(r.name||"")+(r.extra?" ✦":"")}),el("td",null,[el("span",{class:"mon"+(isLost(st)?" d":""),text:nickOf(r)})])]);
-    for(var i=0;i<3;i++){var d=cellOf(r,i),td=el("td");
+    for(var i=0;i<NP;i++){var d=cellOf(r,i),td=el("td");
       if(d.st==="miss")td.appendChild(el("span",{class:"sm2",text:"∅ nicht gefangen"}));
       else if(d.st||d.sp)td.appendChild(el("span",{class:d.sp?"":"sm2",text:(d.st==="dead"?"✕ ":"")+(d.sp||"gefangen")}));
       tr.appendChild(td)}
@@ -265,11 +280,11 @@ function renderAllView(){
     tr.appendChild(el("td",{text:st==="dead"?deathNames(r):""}));
     tr.appendChild(el("td",{text:isLost(st)?lossCause(r,st):""}));
     body.appendChild(tr)});
-  if(!body.children.length)body.appendChild(el("tr",null,[el("td",{colspan:"10",text:"Keine Route passt zum Filter.",class:"sm2"})]));
+  if(!body.children.length)body.appendChild(el("tr",null,[el("td",{colspan:String(7+NP),text:"Keine Route passt zum Filter.",class:"sm2"})]));
 }
 function allText(){
   var lines=["Soul Link Run "+S.meta.run.no];sorted().forEach(function(e,idx){var r=e[1],st=status(r);if(!matches(r,st))return;
-    var parts=[0,1,2].map(function(i){var d=cellOf(r,i);return pname(i)+": "+(spText(d)||"-")});
+    var parts=IDX.map(function(i){var d=cellOf(r,i);return pname(i)+": "+(spText(d)||"-")});
     lines.push(String(idx+1).padStart(2,"0")+" "+(r.name||"")+(nickOf(r)?" – "+nickOf(r):"")+" | "+parts.join(" | ")+" | "+STC[st]+(isLost(st)?" (Encounter: "+lossBy(r,st)+(deathNames(r)?"; Tod bei "+deathNames(r):"")+(lossCause(r,st)?"; "+lossCause(r,st):"")+")":""))});
   return lines.join("\n");
 }
@@ -283,11 +298,11 @@ function renderStats(){
   items.forEach(function(it){k.appendChild(el("div",{class:"card kpi"},[el("b",{text:String(it[1])}),el("span",{text:it[0]})]))});
   $("kpiNote").textContent=(c.alive+c.dead)+" komplette Links gefangen";
   var pl=$("players");
-  if(!pl.children.length){for(var i=0;i<3;i++){
+  if(!pl.children.length){for(var i=0;i<NP;i++){
     pl.appendChild(el("div",{class:"card pc","data-i":i},[
       el("div",{class:"nm"},[el("span",{class:"mk",text:MARK[i],"aria-hidden":"true"}),el("input",{type:"text","aria-label":"Name Spieler "+(i+1),"data-i":i})]),
       el("div",{class:"badgeline"}),el("div",{class:"pstats"})]))}}
-  for(var i2=0;i2<3;i2++){
+  for(var i2=0;i2<NP;i2++){
     var card2=pl.children[i2],inp2=card2.querySelector("input");
     fill(inp2,(S.meta.players[P[i2]]||{}).name||"");inp2.placeholder=DEF[i2];
     var alive=0,dead=0,got=0;
@@ -297,12 +312,12 @@ function renderStats(){
     var ps=card2.querySelector(".pstats");ps.textContent="";
     [["Gefangen",got],["Leben",alive],["Tot",dead]].forEach(function(s){ps.appendChild(el("div",null,[el("b",{text:String(s[1])}),el("span",{text:s[0]})]))});
   }
-  for(var g=0;g<3;g++)$("gh"+g).textContent=pname(g);
+  for(var g=0;g<NP;g++)$("gh"+g).textContent=pname(g);
   var gb=$("grave");gb.textContent="";var deadRows=sorted().filter(function(e){return isLost(status(e[1]))});
-  if(!deadRows.length)gb.appendChild(el("tr",null,[el("td",{colspan:"8",class:"sm2",text:tt("grave")})]));
+  if(!deadRows.length)gb.appendChild(el("tr",null,[el("td",{colspan:String(5+NP),class:"sm2",text:tt("grave")})]));
   deadRows.forEach(function(e){var r=e[1],st=status(r);
     var tr=el("tr",null,[el("td",{class:"k",text:r.name||""}),el("td",{class:"k",text:nickOf(r)}),el("td",{text:lossBy(r,st)})]);
-    for(var i=0;i<3;i++){var d=cellOf(r,i);tr.appendChild(el("td",{text:d.st==="miss"?"∅":(d.sp||"–")}))}
+    for(var i=0;i<NP;i++){var d=cellOf(r,i);tr.appendChild(el("td",{text:d.st==="miss"?"∅":(d.sp||"–")}))}
     tr.appendChild(el("td",{text:deathNames(r)}));tr.appendChild(el("td",{text:lossCause(r,st)}));gb.appendChild(tr)});
 }
 
@@ -318,7 +333,7 @@ function baseOf(i,k){var t=(S.meta.tally||{})[P[i]]||{};return +t[k]||0}
 function totalOf(i,k){return baseOf(i,k)+live(i)[k]}
 function renderTally(){
   var tb=$("tally");
-  if(!tb.children.length){for(var i=0;i<3;i++){var tr=el("tr");
+  if(!tb.children.length){for(var i=0;i<NP;i++){var tr=el("tr");
     tr.appendChild(el("td",{class:"k"},[el("span",{class:"mk sm",text:MARK[i],"aria-hidden":"true"}),el("span",{class:"tn"})]));
     TK.forEach(function(k){var td=el("td");td.appendChild(el("div",{class:"stepper"},[
       el("button",{type:"button",class:"stp","data-t":k[0],"data-p":i,"data-d":"-1","aria-label":k[1]+" verringern",text:"−"}),
@@ -326,7 +341,7 @@ function renderTally(){
       el("button",{type:"button",class:"stp","data-t":k[0],"data-p":i,"data-d":"1","aria-label":k[1]+" erhöhen",text:"+"})]));
       td.appendChild(el("small",{class:"lv"}));tr.appendChild(td)});
     tb.appendChild(tr)}}
-  for(var j=0;j<3;j++){var row=tb.children[j],lv=live(j);
+  for(var j=0;j<NP;j++){var row=tb.children[j],lv=live(j);
     row.querySelector(".tn").textContent=pname(j);
     TK.forEach(function(k,ki){var td=row.children[ki+1],inp=td.querySelector("input");
       inp.setAttribute("aria-label",k[1]+" "+pname(j));fill(inp,String(baseOf(j,k[0])+lv[k[0]]));
@@ -369,7 +384,7 @@ function renderRun(){
   var lost=state==="lost";$("runEnd").hidden=!lost;
   $("enders").querySelectorAll("button").forEach(function(b){var i=+b.getAttribute("data-p");b.querySelector(".en").textContent=pname(i);b.setAttribute("aria-pressed",String(!!(r.enders||{})[P[i]]))});
   fill($("runWhere"),r.where||"");fill($("runCause"),r.cause||"");
-  var names=[0,1,2].filter(function(i){return (r.enders||{})[P[i]]}).map(pname).join(" und "),line=$("runLine");
+  var names=IDX.filter(function(i){return (r.enders||{})[P[i]]}).map(pname).join(" und "),line=$("runLine");
   if(lost)line.textContent=(names?"Run beendet von "+names:"Run verloren")+" "+tt("lost");
   else if(state==="won")line.textContent=tt("won");
   else line.textContent=tt("run");
@@ -381,7 +396,7 @@ function barRow(label,p,val,max,extra){var w=max>0?Math.round(val/max*100):0;
 function topList(map,n){return Object.keys(map).map(function(k){return [k,map[k]]}).sort(function(a,b){return b[1].n-a[1].n}).slice(0,n)}
 function renderAna(){
   var tot=$("anaTotals");tot.textContent="";
-  TK.forEach(function(k){var vals=[0,1,2].map(function(i){return totalOf(i,k[0])}),sum=vals.reduce(function(a,b){return a+b},0),max=Math.max.apply(null,vals);
+  TK.forEach(function(k){var vals=IDX.map(function(i){return totalOf(i,k[0])}),sum=vals.reduce(function(a,b){return a+b},0),max=Math.max.apply(null,vals);
     var box=el("div",{class:"card box"},[el("h3",{text:k[1]+" gesamt: "+sum})]);
     vals.forEach(function(v,i){box.appendChild(barRow(pname(i),i,v,max,sum?Math.round(v/sum*100)+" %":""))});
     tot.appendChild(box)});
@@ -402,7 +417,7 @@ function renderAna(){
   var hb=$("histBody");hb.textContent="";
   if(!H.length)hb.appendChild(el("tr",null,[el("td",{colspan:"8",class:"sm2",text:"Noch kein Run gespeichert. Ältere Runs stecken nur in den Gesamtzahlen oben."})]));
   H.slice().reverse().forEach(function(h){var res={lost:"Verloren",won:"Gewonnen",run:"Abgebrochen"}[h.status]||"–";
-    var en=[0,1,2].filter(function(i){return (h.enders||{})[P[i]]}).map(pname).join(", ");
+    var en=IDX.filter(function(i){return (h.enders||{})[P[i]]}).map(pname).join(", ");
     var dt=h.endedAt?new Date(h.endedAt).toLocaleDateString("de-DE"):"";
     hb.appendChild(el("tr",null,[el("td",{class:"k",text:"Run "+h.no}),el("td",null,[el("span",{class:"chip "+(h.status||"run"),text:res})]),el("td",{text:en}),el("td",{text:h.where||""}),el("td",{text:String(h.badges||0)}),el("td",{text:String(h.links||0)}),el("td",{text:String((h.deadLinks||[]).length)}),el("td",{text:dt})]))});
 }
@@ -439,9 +454,9 @@ function markBackup(){patchMeta({backupAt:new Date().toISOString()});renderBk()}
 function startNewRun(){
   if(!canWrite||!store)return;
   var r=S.meta.run,c={alive:0,dead:0};S.routes.forEach(function(x){var s=status(x);if(s in c)c[s]++});
-  var dead=sorted().filter(function(e){return isLost(status(e[1]))}).map(function(e){var x=e[1],st=status(x),mi=[0,1,2].filter(function(i){return cellOf(x,i).st==="miss"});
-    return {route:x.name||"",nick:nickOf(x),mons:[0,1,2].map(function(i){return cellOf(x,i).sp}),killer:st==="miss"?(mi.length?mi[0]:-1):(typeof x.killer==="number"?x.killer:-1),deaths:clone(x.deaths||{}),cause:lossCause(x,st)}});
-  var per={},tally={};for(var i=0;i<3;i++){var lv=live(i);per[P[i]]=lv;tally[P[i]]={run:baseOf(i,"run")+lv.run,death:baseOf(i,"death")+lv.death,enc:baseOf(i,"enc")+lv.enc}}
+  var dead=sorted().filter(function(e){return isLost(status(e[1]))}).map(function(e){var x=e[1],st=status(x),mi=IDX.filter(function(i){return cellOf(x,i).st==="miss"});
+    return {route:x.name||"",nick:nickOf(x),mons:IDX.map(function(i){return cellOf(x,i).sp}),killer:st==="miss"?(mi.length?mi[0]:-1):(typeof x.killer==="number"?x.killer:-1),deaths:clone(x.deaths||{}),cause:lossCause(x,st)}});
+  var per={},tally={};for(var i=0;i<NP;i++){var lv=live(i);per[P[i]]=lv;tally[P[i]]={run:baseOf(i,"run")+lv.run,death:baseOf(i,"death")+lv.death,enc:baseOf(i,"enc")+lv.enc}}
   var nc=nextCap();
   var hist={no:+r.no||0,status:runState(),enders:clone(r.enders||{}),where:r.where||"",cause:r.cause||"",endedAt:new Date().toISOString(),badges:badgeCount(),lastCap:nc?nc.name:"alle",links:c.alive+c.dead,deadLinks:dead,perPlayer:per};
   var hid="run"+hist.no+"-"+Date.now().toString(36);
@@ -460,7 +475,7 @@ function onCellInput(t){
   if(f==="name")patchRoute(id,{name:t.value});
   else if(f==="cause")patchRoute(id,{cause:t.value});
   else if(f==="rnick"){var nk=t.value.trim(),cs={};
-    for(var k=0;k<3;k++){var cc=cellOf(r,k);if(nk&&!cc.st&&status(r)!=="miss")cs[P[k]]={st:"alive"};else if(!nk&&cc.st==="alive"&&!cc.sp)cs[P[k]]={st:""}}
+    for(var k=0;k<NP;k++){var cc=cellOf(r,k);if(nk&&!cc.st&&status(r)!=="miss")cs[P[k]]={st:"alive"};else if(!nk&&cc.st==="alive"&&!cc.sp)cs[P[k]]={st:""}}
     patchRoute(id,{nick:t.value,cells:cs})}
   else if(cell){var pi=+cell.getAttribute("data-p"),p=P[pi],part={};part[p]={};part[p][f]=t.value;
     var cur=cellOf(r,pi),has=!!(t.value.trim()||nickOf(r).trim());
@@ -484,14 +499,14 @@ listEl.addEventListener("click",function(e){
     var ci=+b.closest(".cell").getAttribute("data-p"),v=b.getAttribute("data-v"),cur=cellOf(r,ci).st,cells={},extra={};
     var next=cur===v?"":v;cells[P[ci]]={st:next};
     if(next==="dead"){
-      for(var i=0;i<3;i++)if(i!==ci&&cellOf(r,i).st==="alive"){cells[P[i]]={st:"dead"}}
+      for(var i=0;i<NP;i++)if(i!==ci&&cellOf(r,i).st==="alive"){cells[P[i]]={st:"dead"}}
       if(!(typeof r.killer==="number"&&r.killer>-1))extra.killer=ci;
       extra.deaths={};extra.deaths[P[ci]]=true;
     }else if(next==="miss"){
-      for(var m=0;m<3;m++)if(m!==ci&&cellOf(r,m).st==="alive")cells[P[m]]={st:"dead"};
+      for(var m=0;m<NP;m++)if(m!==ci&&cellOf(r,m).st==="alive")cells[P[m]]={st:"dead"};
     }else{extra.deaths={};extra.deaths[P[ci]]=false;
-      if(cur==="miss"&&![0,1,2].some(function(j){return j!==ci&&cellOf(r,j).st==="miss"}))
-        for(var a=0;a<3;a++)if(a!==ci&&cellOf(r,a).st==="dead"&&!(r.deaths||{})[P[a]])cells[P[a]]={st:"alive"};
+      if(cur==="miss"&&!IDX.some(function(j){return j!==ci&&cellOf(r,j).st==="miss"}))
+        for(var a=0;a<NP;a++)if(a!==ci&&cellOf(r,a).st==="dead"&&!(r.deaths||{})[P[a]])cells[P[a]]={st:"alive"};
     }
     patchRoute(id,dm({cells:cells},extra));
     if(status(r)!=="dead"&&(r.killer>-1||r.cause||deathNames(r)))patchRoute(id,{killer:-1,cause:"",deaths:NO_DEATHS()});
@@ -500,7 +515,7 @@ listEl.addEventListener("click",function(e){
     var pp={deaths:dd};if(dd[P[di]]&&!(typeof r.killer==="number"&&r.killer>-1))pp.killer=di;
     patchRoute(id,pp);
   }else if(act==="revive"){
-    var c2={};for(var k=0;k<3;k++)if(cellOf(r,k).st==="dead")c2[P[k]]={st:"alive"};
+    var c2={};for(var k=0;k<NP;k++)if(cellOf(r,k).st==="dead")c2[P[k]]={st:"alive"};
     patchRoute(id,{cells:c2,killer:-1,cause:"",deaths:NO_DEATHS()});
   }else if(act==="rm"){
     if(b.getAttribute("data-sure")!=="1"){b.setAttribute("data-sure","1");b.textContent="Wirklich entfernen?";return}
@@ -542,7 +557,7 @@ function copyText(txt,note,onOk){
 $("copyBtn").addEventListener("click",function(){copyText(allText(),$("copyNote"))});
 $("players").addEventListener("input",function(e){var t=e.target,i=t.getAttribute("data-i");if(i===null)return;
   var part={players:{}};part.players[P[+i]]={name:t.value};patchMeta(part);
-  renderRun();renderTally();renderAna();for(var g=0;g<3;g++)$("gh"+g).textContent=pname(g);
+  renderRun();renderTally();renderAna();for(var g=0;g<NP;g++)$("gh"+g).textContent=pname(g);
   rowEls.forEach(function(row,id){updateRow(row,id,Array.from(listEl.children).indexOf(row))});
   if(ui.view==="all")renderAllView()});
 $("runWhere").addEventListener("input",function(){patchMeta({run:{where:this.value}})});
@@ -558,14 +573,14 @@ var FW_SHAPES={
   pika:["K.............K","KK...........KK",".KY.........YK.",".YY.........YY.","..YY.......YY..","..YYYYYYYYYYY..",".YYYYYYYYYYYYY.",".YYKKYYYYYKKYY.",".YYKKYYYYYKKYY.","YYYYYYYKYYYYYYY","YRRYYYYYYYYYRRY","YRRYYKYYYKYYRRY",".YYYYYKKKYYYYY.","..YYYYYYYYYYY..","....YYYYYYY...."]
 };
 /* Figuren der überlebenden Pokémon: Sprites aus Schwarz/Weiß (PokeAPI, #1–649), je Spieler bis zu zwei
-   zufällige Pokémon aus komplett lebenden Links. Fehlt ein Sprite, springt Pikachu ein. */
+   zufällige Pokémon aus komplett lebenden Links, höchstens sechs. Fehlt ein Sprite, springt Pikachu ein. */
 var SPRITE_URL="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/";
 function dexOf(name){var i=name?NORM.indexOf(norm(name)):-1;return i>-1?i+1:0}
 function winDex(){
-  var per=[[],[],[]];
-  sorted().forEach(function(e){if(status(e[1])!=="alive")return;for(var i=0;i<3;i++){var d=dexOf(cellOf(e[1],i).sp);if(d)per[i].push(d)}});
+  var per=IDX.map(function(){return []});
+  sorted().forEach(function(e){if(status(e[1])!=="alive")return;for(var i=0;i<NP;i++){var d=dexOf(cellOf(e[1],i).sp);if(d)per[i].push(d)}});
   var out=[];
-  for(var round=0;round<2;round++)for(var i=0;i<3;i++){var pool=per[i].filter(function(d){return out.indexOf(d)<0});if(pool.length)out.push(pool[Math.floor(Math.random()*pool.length)])}
+  for(var round=0;round<2;round++)for(var i=0;i<NP;i++){var pool=per[i].filter(function(d){return out.indexOf(d)<0});if(pool.length&&out.length<6)out.push(pool[Math.floor(Math.random()*pool.length)])}
   return out;
 }
 function bitmapShape(name,pal){var m=FW_SHAPES[name],cells=[];
@@ -692,7 +707,8 @@ function setGate(st){   // st: "" = Dashboard zeigen, sonst "load" | "out" | "no
   document.body.classList.toggle("gated",!!st);var g=$("gate");g.setAttribute("data-s",st||"");if(!st)return;
   var who=authUser?(authUser.email||authUser.displayName||""):"";
   $("gateT").textContent={load:"Einen Moment …",out:"Willkommen, Trainer!",no:"Kein Zugang"}[st];
-  $("gateP").textContent={load:"Anmeldung wird geprüft.",out:"Dieses Dashboard gehört zum Soul Link von Hagenau, Weissi und Zinni. Meldet euch mit eurem Google-Konto an, um es zu sehen.",no:who+" ist nicht freigeschaltet. Melde dich mit dem Konto an, das Weissi eingetragen hat."}[st];
+  $("gateP").textContent={load:"Anmeldung wird geprüft.",out:"Dieses Dashboard ist nur für die Mitspieler dieses Soul Links. Meldet euch mit eurem Google-Konto an, um es zu sehen.",no:who+" ist nicht freigeschaltet. Melde dich mit dem Konto an, das der Admin eingetragen hat."}[st];
+  if(st==="no"&&authUser&&!CFG0.adminUid)$("gateP").textContent="Noch kein Admin eingerichtet. Deine Firebase-UID: "+authUser.uid+" – trage sie mit „python tools/setup.py --admin "+authUser.uid+"“ ein und lade die Regeln neu hoch (siehe docs/INSTALLATION.md).";
   var b=$("gateBtn");b.hidden=st==="load";b.textContent=st==="no"?"Abmelden":"Mit Google anmelden";
   if(st!=="load")setSync("warn",st==="out"?"Nicht angemeldet":"Kein Zugang");
 }

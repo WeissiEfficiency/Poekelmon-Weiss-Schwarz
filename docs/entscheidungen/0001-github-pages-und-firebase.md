@@ -5,11 +5,11 @@
 
 ## Kontext
 
-Das Dashboard entstand als claude.ai-Artifact. Dort brauchen alle Mitspieler einen claude.ai-Account, um einzutragen. Hagenau und Zinni sollen die Seite ohne Account öffnen und bearbeiten können, und sie soll genauso aussehen wie bisher.
+Das Dashboard entstand als claude.ai-Artifact. Dort brauchen alle Mitspieler einen claude.ai-Account, um einzutragen. Die Mitspieler sollen die Seite ohne claude.ai-Account öffnen und bearbeiten können, und sie soll genauso aussehen wie bisher.
 
 ## Entscheidung
 
-Statische Seite auf GitHub Pages, gemeinsamer Speicher in Firebase Firestore mit offenen Regeln, beschränkt auf die drei Sammlungen des Dashboards. Nur Weissi braucht Accounts (GitHub, Google).
+Statische Seite auf GitHub Pages, gemeinsamer Speicher in Firebase Firestore mit offenen Regeln, beschränkt auf die drei Sammlungen des Dashboards. Nur der Admin braucht Accounts (GitHub, Google).
 
 ## Verworfene Optionen
 

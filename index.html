@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="pokedex" data-v="202611170004">
+<html lang="de" data-theme="pokedex" data-v="202611171132">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Soul Link Schwarz Weiß</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Crimson+Pro:wght@400;500;600;700&family=Tiny5&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611170004">
+<link rel="stylesheet" href="css/style.css?v=202611171132">
 <script>/* Theme vor dem ersten Zeichnen setzen (Standard Pokédex; andere Wahl nur für den Admin, prüft js/app.js nach der Anmeldung) */try{var t=localStorage.getItem("soullink-theme");if(t==="pastell"||t==="lovecraft")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
 <body class="gated">
@@ -66,11 +66,7 @@
   </div>
   <div class="card runend" id="runEnd" hidden>
     <div class="field"><span class="lbl">Run beendet von</span>
-      <div class="chips" id="enders" role="group" aria-label="Run beendet von">
-        <button type="button" class="chipb" data-p="0" aria-pressed="false"><span>●</span> <span class="en"></span></button>
-        <button type="button" class="chipb" data-p="1" aria-pressed="false"><span>■</span> <span class="en"></span></button>
-        <button type="button" class="chipb" data-p="2" aria-pressed="false"><span>▲</span> <span class="en"></span></button>
-      </div></div>
+      <div class="chips" id="enders" role="group" aria-label="Run beendet von"></div></div>
     <div class="field"><label for="runWhere">Wo / gegen wen</label><input type="text" id="runWhere" placeholder="z. B. Turner, Route 6"></div>
     <div class="field"><label for="runCause">Ursache</label><input type="text" id="runCause" placeholder="z. B. Crit, Fehlklick"></div>
   </div>
@@ -112,7 +108,7 @@
   <div id="viewAll" hidden>
     <div class="tools" style="margin-top:14px"><button type="button" class="btn" id="copyBtn">Gesamtliste als Text kopieren</button><span id="copyNote" class="lbl" role="status"></span></div>
     <div class="card tw"><table>
-      <thead><tr><th>Nr.</th><th>Route</th><th>Spitzname</th><th class="pk0" id="ah0"></th><th class="pk1" id="ah1"></th><th class="pk2" id="ah2"></th><th>Status</th><th>Encounter getötet von</th><th>Tod bei</th><th>Ursache</th></tr></thead>
+      <thead><tr><th>Nr.</th><th>Route</th><th>Spitzname</th><th id="allHead"></th><th>Status</th><th>Encounter getötet von</th><th>Tod bei</th><th>Ursache</th></tr></thead>
       <tbody id="allBody"></tbody></table></div>
   </div>
   <div class="card empty" id="empty" hidden><span id="emptyT"></span><button type="button" class="btn solid" id="seedBtn" hidden>Standard-Routen anlegen</button></div>
@@ -121,7 +117,7 @@
 <section aria-labelledby="h-gr">
   <div class="sec-h"><h2 id="h-gr">Friedhof</h2><small>Alle gestorbenen Links in diesem Run</small></div>
   <div class="card tw" style="margin-top:0"><table>
-    <thead><tr><th>Route</th><th>Spitzname</th><th>Encounter getötet von</th><th id="gh0"></th><th id="gh1"></th><th id="gh2"></th><th>Tod bei</th><th>Ursache</th></tr></thead>
+    <thead><tr><th>Route</th><th>Spitzname</th><th>Encounter getötet von</th><th id="graveHead"></th><th>Tod bei</th><th>Ursache</th></tr></thead>
     <tbody id="grave"></tbody></table></div>
 </section>
 
@@ -171,11 +167,11 @@
   </details>
 </section>
 
-<footer>✓ lebt, ✕ tot, ∅ nicht gefangen. Stirbt ein Pokémon, sterben die verbundenen mit und zählen als ein Encounter. Nicht gefangen (∅) zählt genauso: Der Link ist verloren, die verbundenen Pokémon sterben mit, und jeder, der nicht gefangen hat, bekommt einen Encounter. Der Spitzname gilt für alle drei Pokémon eines Links. Wer den Encounter getötet hat und bei wem das Pokémon im Kampf gefallen ist (Death), trägst du beim toten Link ein. Das Fossil zählt als Extra-Encounter, aber nur, wenn alle drei eins gefunden haben (｡•̀ᴗ-)✧</footer>
+<footer>✓ lebt, ✕ tot, ∅ nicht gefangen. Stirbt ein Pokémon, sterben die verbundenen mit und zählen als ein Encounter. Nicht gefangen (∅) zählt genauso: Der Link ist verloren, die verbundenen Pokémon sterben mit, und jeder, der nicht gefangen hat, bekommt einen Encounter. Der Spitzname gilt für alle Pokémon eines Links. Wer den Encounter getötet hat und bei wem das Pokémon im Kampf gefallen ist (Death), trägst du beim toten Link ein. Das Fossil zählt als Extra-Encounter, aber nur, wenn alle eins gefunden haben (｡•̀ᴗ-)✧</footer>
 </main>
 
-<script src="config.js?v=202611170004"></script>
-<script src="js/pokemon.js?v=202611170004"></script>
-<script src="js/app.js?v=202611170004"></script>
+<script src="config.js?v=202611171132"></script>
+<script src="js/pokemon.js?v=202611171132"></script>
+<script src="js/app.js?v=202611171132"></script>
 </body>
 </html>

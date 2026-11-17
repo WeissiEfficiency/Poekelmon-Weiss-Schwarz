@@ -5,11 +5,11 @@
 
 ## Kontext
 
-Die drei verlinkten Pokémon einer Route tragen bei uns denselben Spitznamen. Drei Spitznamen-Felder pro Route waren unnötige Tipparbeit. Das Pokémon selbst einzutragen ist zu viel Aufwand, um es zur Pflicht zu machen.
+Die verlinkten Pokémon einer Route tragen bei uns denselben Spitznamen. Ein Spitznamen-Feld pro Spieler und Route waren unnötige Tipparbeit. Das Pokémon selbst einzutragen ist zu viel Aufwand, um es zur Pflicht zu machen.
 
 ## Entscheidung
 
-Ein gemeinsames Feld `nick` pro Route. Das Pokémon (`sp`) bleibt pro Spieler, ist aber optional. Spitzname eintragen setzt alle drei noch leeren Zellen auf „lebt“.
+Ein gemeinsames Feld `nick` pro Route. Das Pokémon (`sp`) bleibt pro Spieler, ist aber optional. Spitzname eintragen setzt alle noch leeren Zellen auf „lebt“.
 
 ## Folgen
 

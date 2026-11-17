@@ -1,6 +1,7 @@
 rules_version = '2';
 
 // Firestore-Regeln für das Soul-Link-Dashboard.
+// Erzeugt von tools/setup.py aus firestore.rules.template, nicht von Hand ändern.
 // Einfügen in der Firebase-Konsole: Firestore > Regeln > alles ersetzen > Veröffentlichen.
 //
 // Lesen darf jeder mit dem Link. Schreiben darf nur, wer mit Google angemeldet ist und
@@ -26,7 +27,8 @@ service cloud.firestore {
     }
 
     function str(v, max) { return v is string && v.size() <= max; }
-    function players(m) { return m is map && m.keys().hasOnly(['p0', 'p1', 'p2']); }
+    // Bis zu sechs Spieler (p0 … p5), wie viele es sind, steht in config.js (playerCount).
+    function players(m) { return m is map && m.keys().hasOnly(['p0', 'p1', 'p2', 'p3', 'p4', 'p5']); }
     function smallMap(m, max) { return m is map && m.size() <= max; }
 
     // ---------- meta/main: Spieler, aktueller Run, Zähler, Level-Caps ----------
@@ -43,7 +45,10 @@ service cloud.firestore {
       return players(p)
         && str(p.get('p0', {}).get('name', ''), 40)
         && str(p.get('p1', {}).get('name', ''), 40)
-        && str(p.get('p2', {}).get('name', ''), 40);
+        && str(p.get('p2', {}).get('name', ''), 40)
+        && str(p.get('p3', {}).get('name', ''), 40)
+        && str(p.get('p4', {}).get('name', ''), 40)
+        && str(p.get('p5', {}).get('name', ''), 40);
     }
     function validCaps(c) {
       return c is map
@@ -78,7 +83,10 @@ service cloud.firestore {
       return players(c)
         && validCell(c.get('p0', {}))
         && validCell(c.get('p1', {}))
-        && validCell(c.get('p2', {}));
+        && validCell(c.get('p2', {}))
+        && validCell(c.get('p3', {}))
+        && validCell(c.get('p4', {}))
+        && validCell(c.get('p5', {}));
     }
     function validRoute(d) {
       return d.keys().hasOnly(['order', 'name', 'nick', 'extra', 'hint', 'custom', 'cells', 'killer', 'deaths', 'cause'])
@@ -91,7 +99,7 @@ service cloud.firestore {
         && d.get('custom', false) is bool
         && d.get('killer', -1) is int
         && d.get('killer', -1) >= -1
-        && d.get('killer', -1) <= 2
+        && d.get('killer', -1) <= 5
         && players(d.get('deaths', {}))
         && validCells(d.get('cells', {}));
     }

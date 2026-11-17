@@ -32,7 +32,10 @@ def read_config():
     text = (ROOT / "config.js").read_text(encoding="utf-8")
     project = re.search(r'projectId:\s*"([^"]+)"', text)
     key = re.search(r'apiKey:\s*"([^"]+)"', text)
-    if not project or not key or project.group(1).startswith("DEIN"):
+    if project and project.group(1).startswith("DEIN"):
+        print("config.js ohne Firebase (lokaler Modus), nichts zu sichern.")
+        sys.exit(0)
+    if not project or not key:
         sys.exit("config.js enthält keine Firebase-Werte, nichts zu sichern.")
     return project.group(1), key.group(1)
 

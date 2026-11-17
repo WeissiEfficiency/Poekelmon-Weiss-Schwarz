@@ -2,6 +2,9 @@
 
 ## Überblick
 
+Einrichtung für eine neue Gruppe: `docs/INSTALLATION.md` und `tools/setup.py` (schreibt `config.js`, erzeugt `firestore.rules`, setzt Admin-UID und Spieleranzahl, leert `backups/`).
+
+
 Statische Seite ohne Build. `index.html` lädt `config.js`, `js/pokemon.js` und `js/app.js`. Beim Start wählt `app.js` einen Speicher-Adapter:
 
 | Modus | Bedingung | Speicher |
@@ -14,7 +17,7 @@ Alle Adapter bieten dieselben Funktionen: `watchDoc`, `watchCol`, `merge`, `set`
 
 ## Datenmodell
 
-Drei Sammlungen, Spieler-Schlüssel `p0` (Hagenau), `p1` (Weissi), `p2` (Zinni).
+Drei Sammlungen. Spieler-Schlüssel `p0` … `p5`; wie viele es sind, steht in `config.js` (`playerCount`, 2 bis 6, Standard 3). In `app.js` stehen sie in `P`, die Indizes in `IDX`, die Anzahl in `NP`; `perPlayer()` baut Standardwerte, `buildPlayerUI()` die spielerabhängigen Tabellenköpfe und Run-Ender-Knöpfe. Ab 5 Spielern brechen Routenzellen und Spielerkarten in Zeilen zu drei um (`--np-cols`). Spielernamen stehen nur in `meta.players`, ohne Namen zeigt die Seite „Spieler 1“ usw.
 
 **`meta/main`**
 ```
@@ -29,7 +32,7 @@ backupAt: ISO-Zeitpunkt der letzten Sicherung oder ""      // gesetzt von „Bac
 ```
 order, name, nick, extra?, hint?, custom?
 cells:  { p0: { sp, st: ""|"alive"|"dead"|"miss" }, ... }   // sp = Pokémon, optional
-killer: Spielerindex 0–2 oder -1                              // Encounter getötet von
+killer: Spielerindex 0–5 oder -1                              // Encounter getötet von
 deaths: { p0: bool, ... }                                     // Tod bei
 cause
 ```
@@ -42,7 +45,7 @@ Routen-Status (`status()`): `miss` vor `dead` vor `alive`/`part`/`open`. Verpass
 **`history/<id>`** (eine pro abgeschlossenem Run, angelegt bei „Neuer Run starten“)
 ```
 no, status, enders, where, cause, endedAt, badges, lastCap, links,
-deadLinks: [{ route, nick, mons[3], killer, deaths, cause }],
+deadLinks: [{ route, nick, mons[Spieleranzahl], killer, deaths, cause }],
 perPlayer: { p0: { run, death, enc }, ... }
 ```
 
@@ -58,7 +61,7 @@ Drei Designs mit denselben Bausteinen: `pokedex` (Standard für alle), `pastell`
 ## Anmeldung und Rechte (nur Firebase-Modus)
 
 Zum Ansehen und Schreiben meldet man sich mit Google an (`signInWithPopup`, Rückfall auf Redirect). Bis die Anmeldung geklärt ist und für alle ohne Freigabe zeigt die Seite nur die Willkommensseite `#gate` (`setGate()`: `load`, `out` = nicht angemeldet, `no` = Konto nicht freigeschaltet; `body.gated` blendet den Rest aus). Erst nach der Freigabe abonniert `onAuth()` die Daten (`subscribe()`); wird jemand danach abgemeldet, lädt die Seite neu. Achtung: Die Firestore-Regeln erlauben das Lesen weiterhin jedem, die Sperre ist also ein Sichtschutz der Seite, kein Schutz der Daten (siehe Backlog T-015).
-- **Admin**: UID steht in `config.js` (`adminUid`) und in `firestore.rules` (`isAdmin`). Sieht zusätzlich Backup, Backup-Erinnerung und „Schreibrechte“.
+- **Admin**: UID steht in `config.js` (`adminUid`) und in `firestore.rules` (`isAdmin`), beide gesetzt von `python tools/setup.py --admin`. Sieht zusätzlich Backup, Backup-Erinnerung, „Run gewonnen“ und „Schreibrechte“. Ist noch kein Admin eingetragen, zeigt die Willkommensseite angemeldeten Nutzern ihre UID und den passenden Befehl.
 - **Freigeschaltet**: Google-E-Mail (kleingeschrieben, bestätigt) steht in `access/main.emails` (max. 10). Darf alles außer Backup.
 - **Sonst**: Willkommensseite, kein Dashboard.
 
@@ -71,7 +74,7 @@ emails: [ "name@gmail.com", ... ]   // nur Admin schreibt, lesbar für Freigesch
 
 ## Firestore-Regeln
 
-`firestore.rules` prüft bei jedem Schreiben zuerst `isWriter()` (siehe oben) und dann jedes Dokument gegen dieses Datenmodell: nur bekannte Felder, Textlängen begrenzt, Status-Werte aus festen Listen, Routen-IDs `r00`–`r99` oder `c…`, `meta` nur als `main`. `meta` und `history` sind nicht löschbar, `history` ist nach dem Anlegen unveränderlich (gleiche Daten erneut schreiben ist erlaubt, damit Backups eingespielt werden können). Ein neues Feld braucht deshalb drei Stellen: Standardwert in `defMeta()` bzw. beim Anlegen der Route, `firestore.rules`, und die Regeln neu in der Firebase-Konsole veröffentlichen.
+Quelle ist `firestore.rules.template` (Platzhalter `__ADMIN_UID__`); `python tools/setup.py --rules` erzeugt daraus `firestore.rules` mit der UID aus `config.js`. Die Regeln erlauben immer bis zu sechs Spieler (`p0` … `p5`, `killer` bis 5), eine andere Spieleranzahl braucht also keine neuen Regeln. `firestore.rules` prüft bei jedem Schreiben zuerst `isWriter()` (siehe oben) und dann jedes Dokument gegen dieses Datenmodell: nur bekannte Felder, Textlängen begrenzt, Status-Werte aus festen Listen, Routen-IDs `r00`–`r99` oder `c…`, `meta` nur als `main`. `meta` und `history` sind nicht löschbar, `history` ist nach dem Anlegen unveränderlich (gleiche Daten erneut schreiben ist erlaubt, damit Backups eingespielt werden können). Ein neues Feld braucht deshalb vier Schritte: Standardwert in `defMeta()` bzw. beim Anlegen der Route, `firestore.rules.template`, `python tools/setup.py --rules`, und die Regeln neu in der Firebase-Konsole veröffentlichen.
 
 ## Backups
 
