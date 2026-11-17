@@ -1,0 +1,1075 @@
+{
+ "app": "soullink-bw",
+ "exportedAt": "2026-11-17T11:54:54.718Z",
+ "history": {},
+ "meta": {
+  "backupAt": "2026-11-16T21:20:25.121Z",
+  "caps": {
+   "beaten": {
+    "g1": true,
+    "g2": true,
+    "g3": true
+   },
+   "lv": {}
+  },
+  "players": {
+   "p0": {
+    "name": "Hagenau"
+   },
+   "p1": {
+    "name": "Weissi"
+   },
+   "p2": {
+    "name": "Zinni"
+   }
+  },
+  "run": {
+   "cause": "",
+   "enders": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "no": 40,
+   "status": "run",
+   "where": ""
+  },
+  "tally": {
+   "p0": {
+    "death": 49,
+    "enc": 10,
+    "run": 21
+   },
+   "p1": {
+    "death": 35,
+    "enc": 11,
+    "run": 11
+   },
+   "p2": {
+    "death": 22,
+    "enc": 11,
+    "run": 9
+   }
+  }
+ },
+ "routes": {
+  "r01": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Starter (Avenitia)",
+   "nick": "",
+   "order": 1
+  },
+  "r02": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 1",
+   "order": 2
+  },
+  "r03": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 2",
+   "order": 3
+  },
+  "r04": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Orion City (Geschenk)",
+   "order": 4
+  },
+  "r05": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Traumbrache",
+   "order": 5
+  },
+  "r06": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 3",
+   "order": 6
+  },
+  "r07": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Grundwassersenke",
+   "order": 7
+  },
+  "r08": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Ewigenwald",
+   "order": 8
+  },
+  "r09": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Stratos City",
+   "order": 9
+  },
+  "r10": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 4",
+   "order": 10
+  },
+  "r11": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Wüstenresort",
+   "order": 11
+  },
+  "r13": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 16",
+   "order": 13
+  },
+  "r14": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Hain der Täuschung",
+   "order": 14
+  },
+  "r15": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 5",
+   "order": 15
+  },
+  "r16": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Marea City",
+   "order": 16
+  },
+  "r17": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 6",
+   "order": 17
+  },
+  "r18": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Elektrolithhöhle",
+   "order": 18
+  },
+  "r19": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Panaero-Höhle",
+   "order": 19
+  },
+  "r20": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 7",
+   "order": 20
+  },
+  "r21": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Turm des Himmels",
+   "order": 21
+  },
+  "r22": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Wendelberg",
+   "order": 22
+  },
+  "r23": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 8",
+   "order": 23
+  },
+  "r24": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Moor von Nevaio",
+   "order": 24
+  },
+  "r25": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Drachenstiege",
+   "order": 25
+  },
+  "r26": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 9",
+   "order": 26
+  },
+  "r27": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 10",
+   "order": 27
+  },
+  "r28": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Siegesstraße",
+   "order": 28
+  },
+  "r29": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 11",
+   "order": 29
+  },
+  "r30": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 12",
+   "order": 30
+  },
+  "r31": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Dorfbrücke",
+   "order": 31
+  },
+  "r32": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 13",
+   "order": 32
+  },
+  "r33": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Ondula",
+   "order": 33
+  },
+  "r34": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Bucht von Ondula",
+   "order": 34
+  },
+  "r35": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 14",
+   "order": 35
+  },
+  "r36": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Schrein der Ernte",
+   "order": 36
+  },
+  "r37": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 15",
+   "order": 37
+  },
+  "r38": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 17",
+   "order": 38
+  },
+  "r39": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Route 18",
+   "order": 39
+  },
+  "r40": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Riesengrotte",
+   "order": 40
+  },
+  "r41": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Höhle der Prüfung",
+   "order": 41
+  },
+  "r42": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "killer": -1,
+   "name": "Alter Palast",
+   "order": 11.2
+  },
+  "r43": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "extra": true,
+   "hint": "Zählt nur, wenn alle drei ein Fossil finden. Schild- oder Federfossil, wiederbelebt im Museum von Septerna City.",
+   "killer": -1,
+   "name": "Fossil (Extra-Encounter)",
+   "order": 11.4
+  }
+ },
+ "source": "auto",
+ "version": 2
+}

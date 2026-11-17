@@ -1,12 +1,14 @@
 {
  "app": "soullink-bw",
- "exportedAt": "2026-11-16T21:29:28.842Z",
+ "exportedAt": "2026-11-17T11:54:54.718Z",
  "history": {},
  "meta": {
   "backupAt": "2026-11-16T21:20:25.121Z",
   "caps": {
    "beaten": {
-    "g1": false
+    "g1": true,
+    "g2": true,
+    "g3": true
    },
    "lv": {}
   },
@@ -57,20 +59,25 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Starter (Avenitia)",
    "nick": "",
