@@ -8,3 +8,5 @@ node_modules/
 .env.*
 # lokale Backups nicht versehentlich committen
 soullink-backup-*.json
+__pycache__/
+*.pyc
