@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-17
+
+### Hinzugefügt
+- Spiele-Schalter für den Admin (im Run-Kasten): alle Hauptspiele von Rot/Blau bis Karmesin/Purpur samt Remakes und Let's Go, je mit Standard-Routen, Level-Caps und Region im Untertitel. Der Wechsel gilt sofort, solange im Run nichts eingetragen ist, sonst ab „Neuer Run starten“. Laufende Runs bleiben unberührt, die Auswertung zeigt das Spiel pro Run.
+- Pokémon-Suche kennt alle 1025 deutschen Namen und schlägt nur Pokémon des gewählten Spiels vor; das Feuerwerk zeigt auch Pokémon ab Gen 6.
+
+### Geändert
+- Firestore-Regeln erlauben `meta.game`, `meta.nextGame` und `history.game` (neu veröffentlichen).
+
 ## 2026-11-16
 
 ### Hinzugefügt
