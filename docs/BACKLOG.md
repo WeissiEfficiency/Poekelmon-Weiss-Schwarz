@@ -25,7 +25,7 @@ Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus
 | T-014 | Willkommensseite statt Dashboard für nicht freigegebene Konten | mittel | erledigt | M2 |
 | T-015 | Firestore-Lesen auf freigegebene Konten beschränken (Backup-Action braucht dann eigenen Zugang, öffentliche Backups im Repo bedenken) | mittel | offen | M2 |
 | T-016 | Anonymisiert, Spieleranzahl 2 bis 6, Einrichtungsskript und Installationsanleitung für andere Gruppen | mittel | erledigt | M2 |
-| T-017 | Saubere Vorlage ohne eigene Daten und Git-Verlauf (eigenes Template-Repo) | niedrig | Idee | M2 |
+| T-017 | Saubere Vorlage ohne eigene Daten und Git-Verlauf (Template-Repo `soul-link-dashboard`); Änderungen am Code dort nachziehen | niedrig | erledigt | M2 |
 | T-009 | Google-E-Mails der Mitspieler unter „Schreibrechte“ eintragen | hoch | offen | M1 |
 
 ## Erledigt
