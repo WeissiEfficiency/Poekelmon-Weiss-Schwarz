@@ -1,17 +1,96 @@
 {
  "app": "soullink-bw",
- "exportedAt": "2026-11-17T11:54:54.718Z",
- "history": {},
+ "exportedAt": "2026-11-18T11:45:25.198Z",
+ "history": {
+  "run39-mwl21hc2": {
+   "badges": 0,
+   "cause": "",
+   "deadLinks": [],
+   "endedAt": "2026-11-17T18:57:42.914Z",
+   "enders": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "game": "bw",
+   "lastCap": "Benny / Maik / Colin",
+   "links": 0,
+   "no": 39,
+   "perPlayer": {
+    "p0": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p1": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p2": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    }
+   },
+   "status": "lost",
+   "where": ""
+  },
+  "run40-mwl1xo0q": {
+   "badges": 3,
+   "cause": "",
+   "deadLinks": [],
+   "endedAt": "2026-11-17T18:54:44.954Z",
+   "enders": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "lastCap": "Kamilla",
+   "links": 6,
+   "no": 40,
+   "perPlayer": {
+    "p0": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p1": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p2": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    }
+   },
+   "status": "lost",
+   "where": ""
+  }
+ },
  "meta": {
   "backupAt": "2026-11-16T21:20:25.121Z",
   "caps": {
    "beaten": {
+    "ch": false,
+    "e4": false,
     "g1": true,
     "g2": true,
-    "g3": true
+    "g3": true,
+    "g4": false,
+    "g5": false,
+    "g6": false,
+    "g7": false,
+    "g8": false,
+    "gc": false,
+    "n": false
    },
    "lv": {}
   },
+  "game": "bw",
+  "nextGame": "",
   "players": {
    "p0": {
     "name": "Hagenau"
@@ -89,22 +168,28 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 1",
+   "nick": "",
    "order": 2
   },
   "r03": {
@@ -113,22 +198,28 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 2",
+   "nick": "",
    "order": 3
   },
   "r04": {
@@ -137,22 +228,28 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Orion City (Geschenk)",
+   "nick": "",
    "order": 4
   },
   "r05": {
@@ -161,22 +258,28 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Traumbrache",
+   "nick": "",
    "order": 5
   },
   "r06": {
@@ -185,22 +288,28 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 3",
+   "nick": "",
    "order": 6
   },
   "r07": {
@@ -223,8 +332,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Grundwassersenke",
+   "nick": "",
    "order": 7
   },
   "r08": {
@@ -247,8 +362,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Ewigenwald",
+   "nick": "",
    "order": 8
   },
   "r09": {
@@ -271,8 +392,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Stratos City",
+   "nick": "",
    "order": 9
   },
   "r10": {
@@ -295,8 +422,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 4",
+   "nick": "",
    "order": 10
   },
   "r11": {
@@ -319,8 +452,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Wüstenresort",
+   "nick": "",
    "order": 11
   },
   "r13": {
@@ -343,8 +482,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 16",
+   "nick": "",
    "order": 13
   },
   "r14": {
@@ -367,8 +512,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Hain der Täuschung",
+   "nick": "",
    "order": 14
   },
   "r15": {
@@ -391,8 +542,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 5",
+   "nick": "",
    "order": 15
   },
   "r16": {
@@ -415,8 +572,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Marea City",
+   "nick": "",
    "order": 16
   },
   "r17": {
@@ -439,8 +602,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 6",
+   "nick": "",
    "order": 17
   },
   "r18": {
@@ -463,8 +632,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Elektrolithhöhle",
+   "nick": "",
    "order": 18
   },
   "r19": {
@@ -487,8 +662,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Panaero-Höhle",
+   "nick": "",
    "order": 19
   },
   "r20": {
@@ -511,8 +692,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 7",
+   "nick": "",
    "order": 20
   },
   "r21": {
@@ -535,8 +722,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Turm des Himmels",
+   "nick": "",
    "order": 21
   },
   "r22": {
@@ -559,8 +752,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Wendelberg",
+   "nick": "",
    "order": 22
   },
   "r23": {
@@ -583,8 +782,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 8",
+   "nick": "",
    "order": 23
   },
   "r24": {
@@ -607,8 +812,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Moor von Nevaio",
+   "nick": "",
    "order": 24
   },
   "r25": {
@@ -631,8 +842,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Drachenstiege",
+   "nick": "",
    "order": 25
   },
   "r26": {
@@ -655,8 +872,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 9",
+   "nick": "",
    "order": 26
   },
   "r27": {
@@ -679,8 +902,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 10",
+   "nick": "",
    "order": 27
   },
   "r28": {
@@ -703,8 +932,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Siegesstraße",
+   "nick": "",
    "order": 28
   },
   "r29": {
@@ -727,8 +962,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 11",
+   "nick": "",
    "order": 29
   },
   "r30": {
@@ -751,8 +992,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 12",
+   "nick": "",
    "order": 30
   },
   "r31": {
@@ -775,8 +1022,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Dorfbrücke",
+   "nick": "",
    "order": 31
   },
   "r32": {
@@ -799,8 +1052,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 13",
+   "nick": "",
    "order": 32
   },
   "r33": {
@@ -823,8 +1082,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Ondula",
+   "nick": "",
    "order": 33
   },
   "r34": {
@@ -847,8 +1112,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Bucht von Ondula",
+   "nick": "",
    "order": 34
   },
   "r35": {
@@ -871,8 +1142,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 14",
+   "nick": "",
    "order": 35
   },
   "r36": {
@@ -895,8 +1172,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Schrein der Ernte",
+   "nick": "",
    "order": 36
   },
   "r37": {
@@ -919,8 +1202,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 15",
+   "nick": "",
    "order": 37
   },
   "r38": {
@@ -943,8 +1232,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 17",
+   "nick": "",
    "order": 38
   },
   "r39": {
@@ -967,8 +1262,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Route 18",
+   "nick": "",
    "order": 39
   },
   "r40": {
@@ -991,8 +1292,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Riesengrotte",
+   "nick": "",
    "order": 40
   },
   "r41": {
@@ -1015,8 +1322,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Höhle der Prüfung",
+   "nick": "",
    "order": 41
   },
   "r42": {
@@ -1039,8 +1352,14 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "killer": -1,
    "name": "Alter Palast",
+   "nick": "",
    "order": 11.2
   },
   "r43": {
@@ -1063,10 +1382,16 @@
     }
    },
    "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
    "extra": true,
-   "hint": "Zählt nur, wenn alle drei ein Fossil finden. Schild- oder Federfossil, wiederbelebt im Museum von Septerna City.",
+   "hint": "Zählt nur, wenn alle ein Fossil finden. Schild- oder Federfossil, wiederbelebt im Museum von Septerna City.",
    "killer": -1,
    "name": "Fossil (Extra-Encounter)",
+   "nick": "",
    "order": 11.4
   }
  },
