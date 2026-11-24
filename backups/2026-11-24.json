@@ -1,0 +1,1392 @@
+{
+ "app": "soullink-bw",
+ "exportedAt": "2026-11-24T13:46:02.631Z",
+ "history": {
+  "run39-mwl21hc2": {
+   "badges": 0,
+   "cause": "",
+   "deadLinks": [],
+   "endedAt": "2026-11-17T18:57:42.914Z",
+   "enders": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "game": "bw",
+   "lastCap": "Benny / Maik / Colin",
+   "links": 0,
+   "no": 39,
+   "perPlayer": {
+    "p0": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p1": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p2": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    }
+   },
+   "status": "lost",
+   "where": ""
+  },
+  "run40-mwl1xo0q": {
+   "badges": 3,
+   "cause": "",
+   "deadLinks": [],
+   "endedAt": "2026-11-17T18:54:44.954Z",
+   "enders": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "lastCap": "Kamilla",
+   "links": 6,
+   "no": 40,
+   "perPlayer": {
+    "p0": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p1": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    },
+    "p2": {
+     "death": 0,
+     "enc": 0,
+     "run": 0
+    }
+   },
+   "status": "lost",
+   "where": ""
+  }
+ },
+ "meta": {
+  "backupAt": "2026-11-16T21:20:25.121Z",
+  "caps": {
+   "beaten": {
+    "ch": false,
+    "e4": false,
+    "g1": true,
+    "g2": true,
+    "g3": true,
+    "g4": true,
+    "g5": false,
+    "g6": false,
+    "g7": false,
+    "g8": false,
+    "gc": false,
+    "n": false
+   },
+   "lv": {}
+  },
+  "game": "bw",
+  "nextGame": "",
+  "players": {
+   "p0": {
+    "name": "Hagenau"
+   },
+   "p1": {
+    "name": "Weissi"
+   },
+   "p2": {
+    "name": "Zinni"
+   }
+  },
+  "run": {
+   "cause": "",
+   "enders": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "no": 40,
+   "status": "run",
+   "where": ""
+  },
+  "tally": {
+   "p0": {
+    "death": 49,
+    "enc": 10,
+    "run": 21
+   },
+   "p1": {
+    "death": 35,
+    "enc": 11,
+    "run": 11
+   },
+   "p2": {
+    "death": 22,
+    "enc": 11,
+    "run": 9
+   }
+  }
+ },
+ "routes": {
+  "cmwtitqy7": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": true,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Neue Route",
+   "nick": "",
+   "order": 42
+  },
+  "cmwtlm9vt": {
+   "cause": "",
+   "cells": {},
+   "custom": true,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Fossil 2",
+   "nick": "ALT-Protein",
+   "order": 43
+  },
+  "r01": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "alive"
+    },
+    "p1": {
+     "st": "alive"
+    },
+    "p2": {
+     "st": "alive"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Starter (Avenitia)",
+   "nick": "Hotdog",
+   "order": 1
+  },
+  "r02": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "dead"
+    },
+    "p1": {
+     "st": "dead"
+    },
+    "p2": {
+     "st": "dead"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": true
+   },
+   "killer": 0,
+   "name": "Route 1",
+   "nick": "Hanssarpai",
+   "order": 2
+  },
+  "r03": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "dead"
+    },
+    "p1": {
+     "st": "dead"
+    },
+    "p2": {
+     "st": "dead"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": true,
+    "p2": false
+   },
+   "killer": 1,
+   "name": "Route 2",
+   "nick": "Rin DA",
+   "order": 3
+  },
+  "r04": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "alive"
+    },
+    "p1": {
+     "st": "alive"
+    },
+    "p2": {
+     "st": "alive"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Orion City (Geschenk)",
+   "nick": "Porygon-Z",
+   "order": 4
+  },
+  "r05": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "dead"
+    },
+    "p1": {
+     "st": "dead"
+    },
+    "p2": {
+     "st": "dead"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": true,
+    "p2": false
+   },
+   "killer": 1,
+   "name": "Traumbrache",
+   "nick": "DJ Ledwa",
+   "order": 5
+  },
+  "r06": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "alive"
+    },
+    "p1": {
+     "st": "alive"
+    },
+    "p2": {
+     "st": "alive"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 3",
+   "nick": "Omlett",
+   "order": 6
+  },
+  "r07": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Grundwassersenke",
+   "nick": "",
+   "order": 7
+  },
+  "r08": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Ewigenwald",
+   "nick": "",
+   "order": 8
+  },
+  "r09": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Stratos City",
+   "nick": "",
+   "order": 9
+  },
+  "r10": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 4",
+   "nick": "",
+   "order": 10
+  },
+  "r11": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Wüstenresort",
+   "nick": "",
+   "order": 11
+  },
+  "r13": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 16",
+   "nick": "",
+   "order": 13
+  },
+  "r14": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Hain der Täuschung",
+   "nick": "",
+   "order": 14
+  },
+  "r15": {
+   "cause": "",
+   "cells": {},
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 5",
+   "nick": "Sanrakun",
+   "order": 15
+  },
+  "r16": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Marea City",
+   "nick": "",
+   "order": 16
+  },
+  "r17": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 6",
+   "nick": "",
+   "order": 17
+  },
+  "r18": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Elektrolithhöhle",
+   "nick": "",
+   "order": 18
+  },
+  "r19": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Panaero-Höhle",
+   "nick": "",
+   "order": 19
+  },
+  "r20": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 7",
+   "nick": "",
+   "order": 20
+  },
+  "r21": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Turm des Himmels",
+   "nick": "",
+   "order": 21
+  },
+  "r22": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Wendelberg",
+   "nick": "",
+   "order": 22
+  },
+  "r23": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 8",
+   "nick": "",
+   "order": 23
+  },
+  "r24": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Moor von Nevaio",
+   "nick": "",
+   "order": 24
+  },
+  "r25": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Drachenstiege",
+   "nick": "",
+   "order": 25
+  },
+  "r26": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 9",
+   "nick": "",
+   "order": 26
+  },
+  "r27": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 10",
+   "nick": "",
+   "order": 27
+  },
+  "r28": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Siegesstraße",
+   "nick": "",
+   "order": 28
+  },
+  "r29": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 11",
+   "nick": "",
+   "order": 29
+  },
+  "r30": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 12",
+   "nick": "",
+   "order": 30
+  },
+  "r31": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Dorfbrücke",
+   "nick": "",
+   "order": 31
+  },
+  "r32": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 13",
+   "nick": "",
+   "order": 32
+  },
+  "r33": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Ondula",
+   "nick": "",
+   "order": 33
+  },
+  "r34": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Bucht von Ondula",
+   "nick": "",
+   "order": 34
+  },
+  "r35": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 14",
+   "nick": "",
+   "order": 35
+  },
+  "r36": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Schrein der Ernte",
+   "nick": "",
+   "order": 36
+  },
+  "r37": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 15",
+   "nick": "",
+   "order": 37
+  },
+  "r38": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 17",
+   "nick": "",
+   "order": 38
+  },
+  "r39": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Route 18",
+   "nick": "",
+   "order": 39
+  },
+  "r40": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Riesengrotte",
+   "nick": "",
+   "order": 40
+  },
+  "r41": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Höhle der Prüfung",
+   "nick": "",
+   "order": 41
+  },
+  "r42": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Alter Palast",
+   "nick": "",
+   "order": 11.2
+  },
+  "r43": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "Schilterus",
+     "st": "alive"
+    },
+    "p1": {
+     "nick": "",
+     "sp": "Zurrokex",
+     "st": "alive"
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": "alive"
+    }
+   },
+   "custom": false,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "extra": true,
+   "hint": "Zählt nur, wenn alle ein Fossil finden. Schild- oder Federfossil, wiederbelebt im Museum von Septerna City.",
+   "killer": -1,
+   "name": "Fossil (Extra-Encounter)",
+   "nick": "",
+   "order": 11.4
+  }
+ },
+ "source": "auto",
+ "version": 2
+}

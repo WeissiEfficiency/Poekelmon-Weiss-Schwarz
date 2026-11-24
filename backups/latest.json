@@ -1,6 +1,6 @@
 {
  "app": "soullink-bw",
- "exportedAt": "2026-11-18T11:45:25.198Z",
+ "exportedAt": "2026-11-24T13:46:02.631Z",
  "history": {
   "run39-mwl21hc2": {
    "badges": 0,
@@ -79,7 +79,7 @@
     "g1": true,
     "g2": true,
     "g3": true,
-    "g4": false,
+    "g4": true,
     "g5": false,
     "g6": false,
     "g7": false,
@@ -132,22 +132,60 @@
   }
  },
  "routes": {
-  "r01": {
+  "cmwtitqy7": {
    "cause": "",
    "cells": {
     "p0": {
      "nick": "",
      "sp": "",
-     "st": "alive"
+     "st": ""
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": "alive"
+     "st": ""
     },
     "p2": {
      "nick": "",
      "sp": "",
+     "st": ""
+    }
+   },
+   "custom": true,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Neue Route",
+   "nick": "",
+   "order": 42
+  },
+  "cmwtlm9vt": {
+   "cause": "",
+   "cells": {},
+   "custom": true,
+   "deaths": {
+    "p0": false,
+    "p1": false,
+    "p2": false
+   },
+   "killer": -1,
+   "name": "Fossil 2",
+   "nick": "ALT-Protein",
+   "order": 43
+  },
+  "r01": {
+   "cause": "",
+   "cells": {
+    "p0": {
+     "st": "alive"
+    },
+    "p1": {
+     "st": "alive"
+    },
+    "p2": {
      "st": "alive"
     }
    },
@@ -159,85 +197,67 @@
    },
    "killer": -1,
    "name": "Starter (Avenitia)",
-   "nick": "",
+   "nick": "Hotdog",
    "order": 1
   },
   "r02": {
    "cause": "",
    "cells": {
     "p0": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     },
     "p1": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     },
     "p2": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
     "p1": false,
-    "p2": false
+    "p2": true
    },
-   "killer": -1,
+   "killer": 0,
    "name": "Route 1",
-   "nick": "",
+   "nick": "Hanssarpai",
    "order": 2
   },
   "r03": {
    "cause": "",
    "cells": {
     "p0": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     },
     "p1": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     },
     "p2": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
-    "p1": false,
+    "p1": true,
     "p2": false
    },
-   "killer": -1,
+   "killer": 1,
    "name": "Route 2",
-   "nick": "",
+   "nick": "Rin DA",
    "order": 3
   },
   "r04": {
    "cause": "",
    "cells": {
     "p0": {
-     "nick": "",
-     "sp": "",
      "st": "alive"
     },
     "p1": {
-     "nick": "",
-     "sp": "",
      "st": "alive"
     },
     "p2": {
-     "nick": "",
-     "sp": "",
      "st": "alive"
     }
    },
@@ -249,55 +269,43 @@
    },
    "killer": -1,
    "name": "Orion City (Geschenk)",
-   "nick": "",
+   "nick": "Porygon-Z",
    "order": 4
   },
   "r05": {
    "cause": "",
    "cells": {
     "p0": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     },
     "p1": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     },
     "p2": {
-     "nick": "",
-     "sp": "",
-     "st": "alive"
+     "st": "dead"
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
-    "p1": false,
+    "p1": true,
     "p2": false
    },
-   "killer": -1,
+   "killer": 1,
    "name": "Traumbrache",
-   "nick": "",
+   "nick": "DJ Ledwa",
    "order": 5
   },
   "r06": {
    "cause": "",
    "cells": {
     "p0": {
-     "nick": "",
-     "sp": "",
      "st": "alive"
     },
     "p1": {
-     "nick": "",
-     "sp": "",
      "st": "alive"
     },
     "p2": {
-     "nick": "",
-     "sp": "",
      "st": "alive"
     }
    },
@@ -309,7 +317,7 @@
    },
    "killer": -1,
    "name": "Route 3",
-   "nick": "",
+   "nick": "Omlett",
    "order": 6
   },
   "r07": {
@@ -524,23 +532,7 @@
   },
   "r15": {
    "cause": "",
-   "cells": {
-    "p0": {
-     "nick": "",
-     "sp": "",
-     "st": ""
-    },
-    "p1": {
-     "nick": "",
-     "sp": "",
-     "st": ""
-    },
-    "p2": {
-     "nick": "",
-     "sp": "",
-     "st": ""
-    }
-   },
+   "cells": {},
    "custom": false,
    "deaths": {
     "p0": false,
@@ -549,7 +541,7 @@
    },
    "killer": -1,
    "name": "Route 5",
-   "nick": "",
+   "nick": "Sanrakun",
    "order": 15
   },
   "r16": {
@@ -558,17 +550,17 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
@@ -1367,18 +1359,18 @@
    "cells": {
     "p0": {
      "nick": "",
-     "sp": "",
-     "st": ""
+     "sp": "Schilterus",
+     "st": "alive"
     },
     "p1": {
      "nick": "",
-     "sp": "",
-     "st": ""
+     "sp": "Zurrokex",
+     "st": "alive"
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "alive"
     }
    },
    "custom": false,
