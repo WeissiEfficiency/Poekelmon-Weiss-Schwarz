@@ -1,6 +1,6 @@
 {
  "app": "soullink-bw",
- "exportedAt": "2026-11-24T13:46:02.631Z",
+ "exportedAt": "2026-11-25T12:58:44.313Z",
  "history": {
   "run39-mwl21hc2": {
    "badges": 0,
@@ -300,22 +300,22 @@
    "cause": "",
    "cells": {
     "p0": {
-     "st": "alive"
+     "st": "dead"
     },
     "p1": {
-     "st": "alive"
+     "st": "dead"
     },
     "p2": {
-     "st": "alive"
+     "st": "dead"
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
-    "p1": false,
+    "p1": true,
     "p2": false
    },
-   "killer": -1,
+   "killer": 1,
    "name": "Route 3",
    "nick": "Omlett",
    "order": 6
@@ -590,16 +590,16 @@
     "p2": {
      "nick": "",
      "sp": "",
-     "st": ""
+     "st": "dead"
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
     "p1": false,
-    "p2": false
+    "p2": true
    },
-   "killer": -1,
+   "killer": 2,
    "name": "Route 6",
    "nick": "",
    "order": 17
