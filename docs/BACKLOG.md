@@ -28,6 +28,7 @@ Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus
 | T-017 | Saubere Vorlage ohne eigene Daten und Git-Verlauf (Template-Repo `soul-link-dashboard`); Änderungen am Code dort nachziehen | niedrig | erledigt | M2 |
 | T-018 | Spiele-Schalter für den Admin: alle Hauptspiele Gen 1 bis 9 mit Routen, Level-Caps, 1025 Pokémon; gilt ab dem nächsten Run | mittel | erledigt (Regeln veröffentlichen) | M2 |
 | T-019 | Routen und Level-Caps der neuen Spiele beim Spielen prüfen und in `js/games.js` korrigieren (v. a. Alola, Galar, Paldea, Let's Go) | niedrig | offen | M2 |
+| T-020 | Schwächen-Karte: Gegner-Pokémon oder Typen wählen, Angriffstypen, Gefahren und passende Pokémon des Teams, Typentabelle je Generation | mittel | erledigt | M2 |
 | T-009 | Google-E-Mails der Mitspieler unter „Schreibrechte“ eintragen | hoch | offen | M1 |
 
 ## Erledigt
