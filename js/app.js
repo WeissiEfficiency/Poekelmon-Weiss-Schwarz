@@ -3,7 +3,7 @@
 "use strict";
 /* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
    APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
-var APP_V="202611262200";
+var APP_V="202611262332";
 var HTML_V=document.documentElement.getAttribute("data-v");
 if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
 /* Spieler: Anzahl aus config.js (playerCount, 2 bis 6, Standard 3). Schlüssel p0 … p5, Namen stehen in meta.players. */
@@ -79,6 +79,14 @@ buildPlayerUI();
 function norm(s){return String(s).toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/♀/g,"w").replace(/♂/g,"m").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]/g,"")}
 function simp(s){return s.replace(/ph/g,"f").replace(/th/g,"t").replace(/ck/g,"k").replace(/c/g,"k").replace(/qu/g,"kw").replace(/y/g,"i").replace(/v/g,"f").replace(/z/g,"s").replace(/x/g,"ks").replace(/h/g,"").replace(/(.)\1+/g,"$1")}
 var NORM=POKE.map(norm), SIMP=NORM.map(simp);
+/* Entwicklungsreihen aus js/evo.js (Dupe-Hinweis); Typen kommen über typesOfName() der Schwächen-Karte (js/types.js). */
+var EVO=typeof POKE_CHAIN!=="undefined"?POKE_CHAIN:null;
+var SPRITE_URL="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/";
+var SPRITE_URL_NEW="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+function dexOf(name){var n=norm(name||"");if(!n)return 0;var i=NORM.indexOf(n);if(i>-1)return i+1;   // Regionalformen (z. B. Alola-Vulpix) zählen als Grundform
+  var f=FORMS.filter(function(x){return x.n1===n||x.n2===n})[0];return f?f.dex:0}
+function spriteUrl(d){return (d<=649?SPRITE_URL:SPRITE_URL_NEW)+d+".png"}   // Schwarz/Weiß bis #649, danach Standard-Sprites
+function famOf(d){return EVO&&d?EVO[d-1]:0}
 function osa(a,b){var m=a.length,n=b.length;if(!m)return n;if(!n)return m;var d=[];for(var i=0;i<=m;i++){d[i]=[i]}for(var j=1;j<=n;j++)d[0][j]=j;
   for(i=1;i<=m;i++)for(j=1;j<=n;j++){var c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);
     if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}return d[m][n]}
@@ -177,7 +185,8 @@ var listEl=$("list"), rowEls=new Map();
 function buildRow(id){
   var row=el("article",{class:"row","data-id":id});
   var info=el("div",{class:"rinfo"});
-  info.appendChild(el("div",{class:"rtop"},[el("span",{class:"no"}),el("span",{class:"pill"}),el("span",{class:"tag",text:"Extra"})]));
+  info.appendChild(el("div",{class:"rtop"},[el("span",{class:"no"}),el("span",{class:"pill"}),el("span",{class:"tag",text:"Extra"}),
+    el("button",{type:"button",class:"teamb","data-act":"team","aria-pressed":"false"})]));
   info.appendChild(el("input",{type:"text",class:"rn","aria-label":"Routenname","data-f":"name"}));
   info.appendChild(el("input",{type:"text",class:"rnk",placeholder:"Spitzname","aria-label":"Spitzname (gilt für alle)","data-f":"rnick"}));
   info.appendChild(el("p",{class:"hint"}));
@@ -186,7 +195,9 @@ function buildRow(id){
   for(var i=0;i<NP;i++){
     var c=el("div",{class:"cell","data-p":i});
     c.appendChild(el("div",{class:"who"},[el("span",{text:MARK[i]}),el("span",{class:"wn"})]));
-    c.appendChild(el("input",{type:"text",class:"sp",placeholder:"Pokémon (optional)","aria-label":"Pokémon, optional","data-f":"sp",role:"combobox","aria-autocomplete":"list","aria-controls":"pk","aria-expanded":"false",autocomplete:"off"}));
+    c.appendChild(el("div",{class:"spw"},[el("img",{class:"spi",alt:"",loading:"lazy",hidden:""}),
+      el("input",{type:"text",class:"sp",placeholder:"Pokémon (optional)","aria-label":"Pokémon, optional","data-f":"sp",role:"combobox","aria-autocomplete":"list","aria-controls":"pk","aria-expanded":"false",autocomplete:"off"})]));
+    c.appendChild(el("div",{class:"tyl"}));
     var seg=el("div",{class:"seg",role:"group","aria-label":"Zustand"});
     [["alive","✓","Lebt"],["dead","✕","Tot"],["miss","∅","Nicht gefangen"]].forEach(function(b){
       seg.appendChild(el("button",{type:"button","data-act":"st","data-v":b[0],title:b[2],"aria-label":b[2],"aria-pressed":"false",text:b[1]}))});
@@ -217,17 +228,62 @@ function updateRow(row,id,idx){
   fill(row.querySelector('[data-f="name"]'),r.name||"");
   fill(row.querySelector('[data-f="rnick"]'),nickOf(r));
   row.querySelector(".rm").hidden=!r.custom;
+  var tb=row.querySelector(".teamb"),inT=onTeam(r),full=!inT&&teamIds().length>=6;
+  tb.hidden=!(inT||st==="alive");tb.setAttribute("aria-pressed",String(inT));tb.textContent=inT?"★ Im Team":"☆ Ins Team";
+  tb.disabled=!canWrite||full;tb.title=full?"Das Team ist voll (6 Links)":"";
   for(var i=0;i<NP;i++){
     var c=row.querySelector('.cell[data-p="'+i+'"]'),d=cellOf(r,i);
     c.setAttribute("data-v",d.st);
     c.querySelector(".wn").textContent=pname(i);
-    fill(c.querySelector('[data-f="sp"]'),d.sp);
+    fill(c.querySelector('[data-f="sp"]'),d.sp);cellExtras(c,r,id,i,d);
     c.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-v")===d.st))});
   }
   row.querySelector(".foot").hidden=st!=="dead";
   var sel=row.querySelector("select");fillSelect(sel);sel.value=String(typeof r.killer==="number"?r.killer:-1);
   fill(row.querySelector('[data-f="cause"]'),r.cause||"");
   row.querySelectorAll(".chipb").forEach(function(cb){var qi=+cb.getAttribute("data-p");cb.querySelector(".dn").textContent=pname(qi);cb.setAttribute("aria-pressed",String(!!(r.deaths||{})[P[qi]]))});
+}
+/* ---------- Team, Typen, Dupes ----------
+   Team: Haken pro Route (routes/<id>.team), zählt nur bei komplett lebenden Links, höchstens sechs.
+   Typ-Hinweis: pro Spieler zwei Team-Pokémon mit gleichem Primärtyp. Dupe-Hinweis: Familie (Entwicklungsreihe)
+   hat dieser Spieler in einer früheren Route schon gefangen. Beides nur Hinweise, nichts wird gesperrt. */
+function onTeam(r){return !!r.team&&status(r)==="alive"}
+function teamIds(){return sorted().filter(function(e){return onTeam(e[1])}).map(function(e){return e[0]})}
+function earlierCatch(i,fam,id){var r0=S.routes.get(id),o0=r0?r0.order||0:0,hit=null;
+  if(!fam)return null;
+  sorted().forEach(function(e){if(hit||e[0]===id||(e[1].order||0)>=o0)return;var d=cellOf(e[1],i);
+    if((d.st==="alive"||d.st==="dead")&&famOf(dexOf(d.sp))===fam)hit=e[1]});
+  return hit}
+function cellExtras(c,r,id,i,d){
+  var dx=dexOf(d.sp),img=c.querySelector(".spi"),ty=c.querySelector(".tyl");
+  if(dx){var u=spriteUrl(dx);if(img.getAttribute("src")!==u)img.src=u;img.hidden=false}else{img.hidden=true;img.removeAttribute("src")}
+  ty.textContent="";
+  var tys=dx?typesOfName(d.sp)||[]:[];if(tys.length)ty.appendChild(tyList(tys,true));
+  var hit=dx&&d.st!=="miss"?earlierCatch(i,famOf(dx),id):null;
+  if(hit)ty.appendChild(el("b",{class:"dupe",text:"⚠ Dupe: Familie schon gefangen ("+(hit.name||"Route")+")"}));
+  ty.hidden=!ty.children.length;
+}
+function teamClashes(ids){var out=[];
+  IDX.forEach(function(i){var seen={};ids.forEach(function(id){var r=S.routes.get(id),t0=(typesOfName(cellOf(r,i).sp)||[])[0];if(t0===undefined)return;var t=TYPES[t0];(seen[t]=seen[t]||[]).push(nickOf(r)||r.name||id)});
+    Object.keys(seen).forEach(function(t){if(seen[t].length>1)out.push({i:i,type:t,names:seen[t]})})});
+  return out}
+function renderTeam(){
+  var ids=teamIds(),box=$("team");box.textContent="";
+  $("teamNote").textContent=ids.length+" von 6 Links";
+  if(!ids.length)box.appendChild(el("p",{class:"empty2",text:"Noch kein Link im Team. Bei einer lebenden Route „☆ Ins Team“ anklicken."}));
+  var cl=teamClashes(ids),bad={};cl.forEach(function(c){c.names.forEach(function(n){bad[c.i+"|"+n]=c.type})});
+  ids.forEach(function(id){var r=S.routes.get(id),nm=nickOf(r)||r.name||"";
+    var card=el("div",{class:"card tm"},[el("div",{class:"tmh"},[el("b",{text:nm}),el("small",{text:nickOf(r)?r.name||"":""})])]);
+    IDX.forEach(function(i){var d=cellOf(r,i),dx=dexOf(d.sp),line=el("div",{class:"tmp","data-p":String(i)});
+      line.appendChild(dx?el("img",{class:"spi",alt:"",src:spriteUrl(dx),loading:"lazy"}):el("span",{class:"spi spx",text:MARK[i]}));
+      var tx=typesOfName(d.sp)||[];
+      line.appendChild(el("div",null,[el("span",{class:"tmn",text:d.sp||pname(i)}),tx.length?tyList(tx,true):el("small",{text:d.sp?"":"Pokémon nicht eingetragen"})]));
+      if(bad[i+"|"+nm])line.setAttribute("data-clash","1");
+      card.appendChild(line)});
+    box.appendChild(card)});
+  var w=$("teamWarn");w.textContent="";
+  cl.forEach(function(c){w.appendChild(el("div",{text:"⚠ "+pname(c.i)+": "+c.names.join(" und ")+" haben beide den Primärtyp "+c.type+"."}))});
+  w.hidden=!cl.length;
 }
 function matches(r,st){
   if(ui.filter!=="all"&&st!==ui.filter)return false;
@@ -547,7 +603,7 @@ function renderAna(){
     var dt=h.endedAt?new Date(h.endedAt).toLocaleDateString("de-DE"):"";
     hb.appendChild(el("tr",null,[el("td",{class:"k"},[document.createTextNode("Run "+h.no),el("small",{class:"hg",text:GAME(h.game||GAMES.def).title})]),el("td",null,[el("span",{class:"chip "+(h.status||"run"),text:res})]),el("td",{text:en}),el("td",{text:h.where||""}),el("td",{text:String(h.badges||0)}),el("td",{text:String(h.links||0)}),el("td",{text:String((h.deadLinks||[]).length)}),el("td",{text:dt})]))});
 }
-function renderAll(){renderGame();renderRun();renderCaps();renderWk();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna();renderBk()}
+function renderAll(){renderGame();renderRun();renderTeam();renderCaps();renderWk();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna();renderBk()}
 
 /* ---------- Backup-Erinnerung ---------- */
 var BK_DAYS=7, autoBk=null;   // autoBk: letztes automatisches Backup (GitHub Action, config.js autoBackupUrl)
@@ -592,7 +648,7 @@ function startNewRun(){
   var next={tally:tally,run:{no:(+r.no||0)+1,status:"run",enders:NO_DEATHS(),where:"",cause:""}};
   var ng=S.meta.nextGame;
   if(ng&&GAMES.byId[ng]&&ng!==gameId()){patchMeta(next);switchGame(ng);return}
-  var n=0;S.routes.forEach(function(x,id){patchRoute(id,{nick:"",cells:EMPTY_CELLS(),killer:-1,cause:"",deaths:NO_DEATHS()},450+n*90);n++});
+  var n=0;S.routes.forEach(function(x,id){patchRoute(id,{nick:"",team:false,cells:EMPTY_CELLS(),killer:-1,cause:"",deaths:NO_DEATHS()},450+n*90);n++});
   var beat={};caps().forEach(function(cp){beat[cp.id]=false});next.caps={beaten:beat};
   patchMeta(next);
   ui.showAll=false;renderAll();
@@ -611,7 +667,7 @@ function onCellInput(t){
     var cur=cellOf(r,pi),has=!!(t.value.trim()||nickOf(r).trim());
     if(!cur.st&&has)part[p].st=status(r)==="miss"?"dead":"alive";else if(cur.st==="alive"&&!has)part[p].st="";
     patchRoute(id,{cells:part})}
-  var row=t.closest(".row");updateRow(row,id,Array.from(listEl.children).indexOf(row));renderStats();renderRun();if(wk.types.length)renderWk();
+  var row=t.closest(".row");updateRow(row,id,Array.from(listEl.children).indexOf(row));renderStats();renderRun();renderTeam();if(wk.types.length)renderWk();
 }
 listEl.addEventListener("input",function(e){var t=e.target;onCellInput(t);if(t.getAttribute("data-f")==="sp")showPk(t)});
 listEl.addEventListener("keydown",function(e){var t=e.target;if(t.getAttribute("data-f")==="sp")pkKeys(e,t)});
@@ -643,6 +699,9 @@ listEl.addEventListener("click",function(e){
   }else if(act==="revive"){
     var c2={};for(var k=0;k<NP;k++)if(cellOf(r,k).st==="dead")c2[P[k]]={st:"alive"};
     patchRoute(id,{cells:c2,killer:-1,cause:"",deaths:NO_DEATHS()});
+  }else if(act==="team"){
+    if(!r.team&&teamIds().length>=6)return;
+    patchRoute(id,{team:!onTeam(r)});
   }else if(act==="rm"){
     if(b.getAttribute("data-sure")!=="1"){b.setAttribute("data-sure","1");b.textContent="Wirklich entfernen?";return}
     S.routes.delete(id);pend.delete(id);if(store)store.del("routes/"+id).catch(function(){setSync("warn","Löschen fehlgeschlagen")});
@@ -652,7 +711,7 @@ listEl.addEventListener("click",function(e){
 $("addBtn").addEventListener("click",function(){
   if(!canWrite||!store)return;
   var max=0;S.routes.forEach(function(r){if((r.order||0)>max)max=r.order||0});
-  var id="c"+Date.now().toString(36),r={order:Math.floor(max)+1,name:"Neue Route",nick:"",custom:true,killer:-1,cause:"",deaths:NO_DEATHS(),cells:EMPTY_CELLS()};
+  var id="c"+Date.now().toString(36),r={order:Math.floor(max)+1,name:"Neue Route",nick:"",custom:true,team:false,killer:-1,cause:"",deaths:NO_DEATHS(),cells:EMPTY_CELLS()};
   S.routes.set(id,r);setView("edit");renderAll();
   store.set("routes/"+id,r).catch(function(){setSync("warn","Speichern fehlgeschlagen")});
   var row=rowEls.get(id);if(row){var inp=row.querySelector('[data-f="name"]');row.scrollIntoView({block:"center"});inp.focus();inp.select()}
@@ -664,7 +723,7 @@ async function seedRoutes(){
     S.routes.set(d.id,r);try{await store.set("routes/"+d.id,r)}catch(e){setSync("warn","Speichern fehlgeschlagen")}await sleep(40)}
   $("seedBtn").disabled=false;renderAll();
 }
-function newRoute(d){var r={order:d.order,name:d.name,nick:"",custom:false,killer:-1,cause:"",deaths:NO_DEATHS(),cells:EMPTY_CELLS()};
+function newRoute(d){var r={order:d.order,name:d.name,nick:"",custom:false,team:false,killer:-1,cause:"",deaths:NO_DEATHS(),cells:EMPTY_CELLS()};
   if(d.extra){r.extra=true;r.hint=d.hint||""}return r}
 /* Spiel wechseln: Routen des neuen Spiels anlegen (gleiche IDs werden überschrieben), übrige Routen löschen,
    Level-Caps zurücksetzen (auch eigene Level, die IDs g1 … g8 usw. gelten in jedem Spiel). */
@@ -732,11 +791,8 @@ var FW_SHAPES={
   ball:["....KKKKK....","..KKRRRRRKK..",".KRRRRRRRRRK.",".KRRRRRRRRRK.","KRRRRRRRRRRRK","KRRRRKKKRRRRK","KKKKKKWKKKKKK","KWWWWKKKWWWWK","KWWWWWWWWWWWK",".KWWWWWWWWWK.",".KWWWWWWWWWK.","..KKWWWWWKK..","....KKKKK...."],
   pika:["K.............K","KK...........KK",".KY.........YK.",".YY.........YY.","..YY.......YY..","..YYYYYYYYYYY..",".YYYYYYYYYYYYY.",".YYKKYYYYYKKYY.",".YYKKYYYYYKKYY.","YYYYYYYKYYYYYYY","YRRYYYYYYYYYRRY","YRRYYKYYYKYYRRY",".YYYYYKKKYYYYY.","..YYYYYYYYYYY..","....YYYYYYY...."]
 };
-/* Figuren der überlebenden Pokémon: Sprites aus Schwarz/Weiß (PokeAPI, #1–649, danach die Standard-Sprites), je Spieler bis zu zwei
-   zufällige Pokémon aus komplett lebenden Links, höchstens sechs. Fehlt ein Sprite, springt Pikachu ein. */
-var SPRITE_URL="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/";
-var SPRITE_URL_NEW="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
-function dexOf(name){var i=name?NORM.indexOf(norm(name)):-1;return i>-1?i+1:0}
+/* Figuren der überlebenden Pokémon (spriteUrl), je Spieler bis zu zwei zufällige Pokémon aus komplett
+   lebenden Links, höchstens sechs. Fehlt ein Sprite, springt Pikachu ein. */
 function winDex(){
   var per=IDX.map(function(){return []});
   sorted().forEach(function(e){if(status(e[1])!=="alive")return;for(var i=0;i<NP;i++){var d=dexOf(cellOf(e[1],i).sp);if(d)per[i].push(d)}});
@@ -760,7 +816,7 @@ function spriteShape(dex){return new Promise(function(res){
     res({cols:cols,rows:rows,cells:cells});
   }catch(e){res(null)}};
   im.onerror=function(){res(null)};
-  im.src=(dex<=649?SPRITE_URL:SPRITE_URL_NEW)+dex+".png";
+  im.src=spriteUrl(dex);
 })}
 function fireworks(){
   try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return}catch(e){}

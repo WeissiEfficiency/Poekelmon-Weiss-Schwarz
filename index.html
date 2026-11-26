@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="pokedex" data-v="202611262200">
+<html lang="de" data-theme="pokedex" data-v="202611262332">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Soul Link</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Crimson+Pro:wght@400;500;600;700&family=Tiny5&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=202611262200">
+<link rel="stylesheet" href="css/style.css?v=202611262332">
 <script>/* Theme vor dem ersten Zeichnen setzen (Standard Pokédex; andere Wahl nur für den Admin, prüft js/app.js nach der Anmeldung) */try{var t=localStorage.getItem("soullink-theme");if(t==="pastell"||t==="lovecraft")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
 <body class="gated">
@@ -106,6 +106,12 @@
   <div class="players" id="players"></div>
 </section>
 
+<section aria-labelledby="h-team">
+  <div class="sec-h"><h2 id="h-team">Team</h2><small id="teamNote"></small></div>
+  <div class="team" id="team"></div>
+  <div class="card teamwarn" id="teamWarn" role="status" hidden></div>
+</section>
+
 <section aria-labelledby="h-rt">
   <div class="sec-h"><h2 id="h-rt">Routen und Fänge</h2><small id="rtCount"></small></div>
   <div class="tools">
@@ -189,10 +195,11 @@
 <footer>✓ lebt, ✕ tot, ∅ nicht gefangen. Stirbt ein Pokémon, sterben die verbundenen mit und zählen als ein Encounter. Nicht gefangen (∅) zählt genauso: Der Link ist verloren, die verbundenen Pokémon sterben mit, und jeder, der nicht gefangen hat, bekommt einen Encounter. Der Spitzname gilt für alle Pokémon eines Links. Wer den Encounter getötet hat und bei wem das Pokémon im Kampf gefallen ist (Death), trägst du beim toten Link ein. Extra-Encounter wie Fossilien zählen nur, wenn alle eins gefunden haben (｡•̀ᴗ-)✧</footer>
 </main>
 
-<script src="config.js?v=202611262200"></script>
-<script src="js/games.js?v=202611262200"></script>
-<script src="js/pokemon.js?v=202611262200"></script>
-<script src="js/types.js?v=202611262200"></script>
-<script src="js/app.js?v=202611262200"></script>
+<script src="config.js?v=202611262332"></script>
+<script src="js/games.js?v=202611262332"></script>
+<script src="js/pokemon.js?v=202611262332"></script>
+<script src="js/evo.js?v=202611262332"></script>
+<script src="js/types.js?v=202611262332"></script>
+<script src="js/app.js?v=202611262332"></script>
 </body>
 </html>
