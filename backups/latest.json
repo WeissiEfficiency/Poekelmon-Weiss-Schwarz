@@ -1,6 +1,6 @@
 {
  "app": "soullink-bw",
- "exportedAt": "2026-11-25T12:58:44.313Z",
+ "exportedAt": "2026-11-26T12:38:09.222Z",
  "history": {
   "run39-mwl21hc2": {
    "badges": 0,
@@ -164,7 +164,17 @@
   },
   "cmwtlm9vt": {
    "cause": "",
-   "cells": {},
+   "cells": {
+    "p0": {
+     "st": "alive"
+    },
+    "p1": {
+     "st": "alive"
+    },
+    "p2": {
+     "st": "alive"
+    }
+   },
    "custom": true,
    "deaths": {
     "p0": false,
