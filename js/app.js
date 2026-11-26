@@ -3,7 +3,7 @@
 "use strict";
 /* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
    APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
-var APP_V="202611171350";
+var APP_V="202611262200";
 var HTML_V=document.documentElement.getAttribute("data-v");
 if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
 /* Spieler: Anzahl aus config.js (playerCount, 2 bis 6, Standard 3). Schlüssel p0 … p5, Namen stehen in meta.players. */
@@ -100,13 +100,15 @@ function search(q){
   out.sort(function(a,b){return b[1]-a[1]||a[0]-b[0]});return out.slice(0,8).map(function(x){return x[0]});
 }
 var pk=el("ul",{id:"pk",role:"listbox","aria-label":"Pokémon-Vorschläge",hidden:""});document.body.appendChild(pk);
+/* Vorschlagsliste: Einträge {t: Name, s: Dex-Text, ...}. Routenfelder nutzen search(), die Schwächen-Karte wkSearch() (mit Regionalformen). */
 var pkFor=null,pkRes=[],pkAct=-1;
-function showPk(inp){
-  var res=search(inp.value);
+function pokeHits(q){return search(q).map(function(i){return {t:POKE[i],s:"#"+String(i+1).padStart(3,"0"),dex:i+1}})}
+function showPk(inp,res){
+  res=res||pokeHits(inp.value);
   if(pkFor&&pkFor!==inp)closePk();
   if(!res.length){closePk();return}
   pkFor=inp;pkRes=res;pkAct=0;pk.textContent="";
-  res.forEach(function(i,k){pk.appendChild(el("li",{id:"pk"+k,role:"option","aria-selected":String(k===0),"data-k":k},[el("span",{text:POKE[i]}),el("small",{text:"#"+String(i+1).padStart(3,"0")})]))});
+  res.forEach(function(h,k){pk.appendChild(el("li",{id:"pk"+k,role:"option","aria-selected":String(k===0),"data-k":k},[el("span",{text:h.t}),el("small",{text:h.s})]))});
   var r=inp.getBoundingClientRect();pk.style.left=(r.left+window.scrollX)+"px";pk.style.top=(r.bottom+window.scrollY+4)+"px";pk.style.width=Math.max(r.width,230)+"px";pk.hidden=false;
   inp.setAttribute("aria-expanded","true");inp.setAttribute("aria-activedescendant","pk0");
 }
@@ -114,7 +116,12 @@ function closePk(){pk.hidden=true;if(pkFor){pkFor.setAttribute("aria-expanded","
 function movePk(d){if(pk.hidden||!pkRes.length)return;pkAct=(pkAct+d+pkRes.length)%pkRes.length;
   Array.prototype.forEach.call(pk.children,function(li,k){li.setAttribute("aria-selected",String(k===pkAct))});
   pkFor.setAttribute("aria-activedescendant","pk"+pkAct);pk.children[pkAct].scrollIntoView({block:"nearest"})}
-function pickPk(k){var inp=pkFor;if(!inp||k<0)return;inp.value=POKE[pkRes[k]];closePk();onCellInput(inp)}
+function pickPk(k){var inp=pkFor,h=pkRes[k];if(!inp||!h)return;inp.value=h.t;closePk();if(inp.id==="wkQ")wkPick(h);else onCellInput(inp)}
+function pkKeys(e,t,hits){
+  if(e.key==="ArrowDown"){if(pk.hidden)showPk(t,hits&&hits());else movePk(1);e.preventDefault()}
+  else if(e.key==="ArrowUp"){movePk(-1);e.preventDefault()}
+  else if(e.key==="Enter"&&!pk.hidden&&pkFor===t){pickPk(pkAct);e.preventDefault()}
+  else if(e.key==="Escape"){closePk()}}
 pk.addEventListener("mousedown",function(e){var li=e.target.closest("li");if(li){e.preventDefault();pickPk(+li.getAttribute("data-k"))}});
 window.addEventListener("resize",closePk);
 
@@ -384,6 +391,131 @@ function renderRun(){
   else line.textContent=tt("run");
 }
 
+/* ---------- Schwächen-Karte ----------
+   Gegner wählen (Pokémon samt Regionalformen oder ein bis zwei Typen). Gezeigt wird, welche Angriffstypen wie stark wirken,
+   wogegen die Typen des Gegners stark sind und wie die lebenden Pokémon des Runs dagegen stehen. Die Typentabelle richtet sich
+   nach der Generation des gewählten Spiels (Gen 1 ohne Unlicht, Stahl, Fee und mit den alten Ausnahmen, Gen 2 bis 5 ohne Fee).
+   Reiner Anzeige-Zustand, nichts davon wird gespeichert. Typen der Pokémon stehen in js/types.js. */
+var TYPES=["Normal","Feuer","Wasser","Pflanze","Elektro","Eis","Kampf","Gift","Boden","Flug","Psycho","Käfer","Gestein","Geist","Drache","Unlicht","Stahl","Fee"];
+var TY_AB=["Nor","Feu","Was","Pfl","Ele","Eis","Kam","Gif","Bod","Flu","Psy","Käf","Ges","Gei","Dra","Unl","Sta","Fee"];
+var TY_LT=[0,3,4,5,8,9,11,12,16,17];   // helle Typfarben bekommen dunkle Schrift
+/* Je Angriffstyp: [sehr effektiv, nicht sehr effektiv, wirkungslos] gegen diese Typen, Stand ab Gen 6 */
+var EFF=[[[],[12,16],[13]],[[3,5,11,16],[1,2,12,14]],[[1,8,12],[2,3,14]],[[2,8,12],[1,3,7,9,11,14,16]],[[2,9],[3,4,14],[8]],[[3,8,9,14],[1,2,5,16]],
+  [[0,5,12,15,16],[7,9,10,11,17],[13]],[[3,17],[7,8,12,13],[16]],[[1,4,7,12,16],[3,11],[9]],[[3,6,11],[4,12,16]],[[6,7],[10,16],[15]],
+  [[3,10,15],[1,6,7,9,13,16,17]],[[1,5,9,11],[6,8,16]],[[10,13],[15],[0]],[[14],[16],[17]],[[10,13],[6,15,17]],[[5,12,17],[1,2,4,16]],[[6,14,15],[1,7,16]]];
+var chartCache={};
+function tyGen(){return GAME().gen||5}
+function tyEra(g){return g<=1?1:g<=5?2:6}
+function tyCount(g){return [0,15,17,0,0,0,18][tyEra(g)]}
+function chart(g){var e=tyEra(g);if(chartCache[e])return chartCache[e];
+  var m=TYPES.map(function(_,a){var row=TYPES.map(function(){return 1});
+    EFF[a][0].forEach(function(d){row[d]=2});EFF[a][1].forEach(function(d){row[d]=0.5});(EFF[a][2]||[]).forEach(function(d){row[d]=0});return row});
+  if(e<6){m[13][16]=0.5;m[15][16]=0.5}                                   // bis Gen 5: Stahl widersteht Geist und Unlicht
+  if(e===1){m[13][10]=0;m[11][7]=2;m[7][11]=2;m[5][1]=1}                 // Gen 1: Geist trifft Psycho nicht, Käfer/Gift gegenseitig stark, Eis neutral gegen Feuer
+  return chartCache[e]=m}
+function mult(m,a,defs){return defs.reduce(function(x,d){return x*m[a][d]},1)}
+function decTypes(s){var o=[s.charCodeAt(0)-97];if(s.charAt(1)!=="-")o.push(s.charCodeAt(1)-97);return o}
+function monTypes(dex,g){var best=null;
+  POKE_TYPES_PAST.forEach(function(p){if(p[0]===dex&&g<=p[1]&&(!best||p[1]<best[1]))best=p});
+  return decTypes(best?best[2]:POKE_TYPES.substr((dex-1)*2,2))}
+var FORMS=POKE_FORMS.map(function(f){var b=POKE[f[0]-1];return {t:f[1]+"-"+b+(f[3]?" ("+f[3]+")":""),s:"#"+String(f[0]).padStart(3,"0"),dex:f[0],gen:f[2],ty:decTypes(f[4]),n1:norm(f[1]+b+f[3]),n2:norm(b+f[1]+f[3])}});
+function formsOn(){var g=tyGen();return FORMS.filter(function(f){return g>=f.gen&&inGame(f.dex-1)})}
+function typesOfName(name){var n=norm(name||"");if(!n)return null;
+  var f=formsOn().filter(function(x){return x.n1===n||x.n2===n})[0];if(f)return f.ty;
+  var i=NORM.indexOf(n);return i>-1&&inGame(i)?monTypes(i+1,tyGen()):null}
+function wkSearch(q){var n=norm(q);if(!n)return [];var on=formsOn(),out=[],seen={};
+  function add(h){if(!seen[h.t]){seen[h.t]=1;out.push(h)}}
+  on.forEach(function(f){if(f.n1.indexOf(n)===0)add(f)});                 // „Alola…“ zuerst die Formen
+  pokeHits(q).forEach(function(h){add(h);on.forEach(function(f){if(f.dex===h.dex)add(f)})});
+  return out.slice(0,10)}
+var wk={label:"",dex:0,form:false,types:[]};
+function fmtX(x){return x===0?"0×":x===0.25?"¼×":x===0.5?"½×":x+"×"}
+function tyBadge(t,sm){return el("span",{class:"ty"+(TY_LT.indexOf(t)>-1?" lt":"")+(sm?" sm":""),style:"--tyc:var(--ty"+t+")",text:TYPES[t]})}
+function tyList(ts,sm){return el("div",{class:"tys"},ts.map(function(t){return tyBadge(t,sm)}))}
+function wkScore(m,own){
+  return {atk:Math.max.apply(null,own.map(function(a){return mult(m,a,wk.types)})),   // beste eigene Typ-Attacke gegen den Gegner
+          def:Math.max.apply(null,wk.types.map(function(t){return mult(m,t,own)}))}}  // härtester Treffer vom Typ des Gegners
+function wkVal(sc){return sc.atk/Math.max(sc.def,0.125)}
+function renderWk(){
+  var g=tyGen(),n=tyCount(g),m=chart(g);
+  if(wk.dex&&!wk.form)wk.types=monTypes(wk.dex,g);
+  wk.types=wk.types.filter(function(t){return t<n});
+  var box=$("wkTypes");
+  if(box.children.length!==n){box.textContent="";for(var t=0;t<n;t++)box.appendChild(el("button",{type:"button",class:"ty tyb"+(TY_LT.indexOf(t)>-1?" lt":""),style:"--tyc:var(--ty"+t+")","data-ty":String(t),"aria-pressed":"false",text:TYPES[t]}))}
+  Array.prototype.forEach.call(box.children,function(b){b.setAttribute("aria-pressed",String(wk.types.indexOf(+b.getAttribute("data-ty"))>-1))});
+  $("wkClear").hidden=!(wk.types.length||$("wkQ").value);
+  var e=tyEra(g);
+  $("wkGen").textContent="Typentabelle "+(e===1?"Gen 1":e===2?"Gen 2 bis 5":"ab Gen 6")+" für "+GAME().title+(e===1?": ohne Unlicht, Stahl und Fee, Geist wirkt nicht gegen Psycho.":e===2?": noch ohne Fee.":".");
+  renderWkChart(m,n);
+  var out=$("wkOut");out.textContent="";
+  if(!wk.types.length){out.appendChild(el("p",{class:"empty2",text:"Wähle links einen Gegner. Dann siehst du, womit ihr angreifen solltet, was der Gegner hart trifft und welche eurer Pokémon gut dagegen stehen."}));return}
+  out.appendChild(el("div",{class:"wk-h"},[el("b",{text:wk.label||"Gegner"}),tyList(wk.types)]));
+  var all=[];for(var a=0;a<n;a++)all.push(a);
+  // Angreifen mit …
+  var b1=el("div",{class:"wk-b"},[el("h3",{text:"Angreifen mit"})]),neu=0;
+  [[4,"sehr effektiv"],[2,"effektiv"],[0.5,"schwach"],[0.25,"sehr schwach"],[0,"wirkungslos"]].forEach(function(x){
+    var ts=all.filter(function(a){return mult(m,a,wk.types)===x[0]});if(!ts.length)return;
+    b1.appendChild(el("div",{class:"wk-r","data-x":String(x[0])},[el("div",{class:"wk-x"},[el("b",{text:fmtX(x[0])}),el("small",{text:x[1]})]),tyList(ts)]))});
+  all.forEach(function(a){if(mult(m,a,wk.types)===1)neu++});
+  if(neu)b1.appendChild(el("p",{class:"note",text:"Alle anderen "+neu+" Typen treffen normal (1×)."}));
+  out.appendChild(b1);
+  // Der Gegner trifft hart mit …
+  var b2=el("div",{class:"wk-b"},[el("h3",{text:"Der Gegner trifft hart"})]);
+  wk.types.forEach(function(t){var ts=all.filter(function(d){return m[t][d]===2});
+    b2.appendChild(el("div",{class:"wk-r"},[el("div",{class:"wk-x"},[tyBadge(t),el("small",{text:"stark gegen"})]),ts.length?tyList(ts):el("span",{class:"sm2",text:"keinen Typ"})]))});
+  var tough=all.filter(function(d){return wk.types.every(function(t){return m[t][d]<=0.5})});
+  if(tough.length)b2.appendChild(el("div",{class:"wk-r","data-x":"tough"},[el("div",{class:"wk-x"},[el("b",{text:"Hält aus"}),el("small",{text:"alle seine Typen"})]),tyList(tough)]));
+  out.appendChild(b2);
+  renderWkTeam(out,m);
+}
+function renderWkTeam(out,m){
+  var rows=[];
+  sorted().forEach(function(e){var r=e[1];if(isLost(status(r)))return;var mons=[],any=false;
+    for(var i=0;i<NP;i++){var c=cellOf(r,i),ty=c.st==="alive"?typesOfName(c.sp):null;
+      mons.push(c.st!=="alive"?null:{sp:c.sp,ty:ty,sc:ty?wkScore(m,ty):null});if(ty)any=true}
+    if(any)rows.push({r:r,mons:mons})});
+  var b=el("div",{class:"wk-b"},[el("h3",{text:"Euer Team"})]);out.appendChild(b);
+  if(!rows.length){b.appendChild(el("p",{class:"empty2",text:"Sobald lebende Pokémon in den Routen stehen, siehst du hier, wer gegen diesen Gegner gut steht."}));return}
+  var best=IDX.map(function(i){var v=0;rows.forEach(function(x){var q=x.mons[i];if(q&&q.sc)v=Math.max(v,wkVal(q.sc))});return v});
+  var hr=el("tr",null,[el("th",{text:"Link"})]);IDX.forEach(function(i){hr.appendChild(el("th",{class:"pk"+i,text:MARK[i]+" "+pname(i)}))});
+  var body=el("tbody");
+  rows.forEach(function(x){var tr=el("tr",null,[el("td",{class:"k",text:nickOf(x.r)||x.r.name||""})]);
+    x.mons.forEach(function(q,i){var td=el("td");tr.appendChild(td);if(!q)return;
+      td.appendChild(el("span",{class:"wk-mon",text:q.sp||"gefangen"}));
+      if(!q.sc){td.appendChild(el("small",{class:"sm2",text:q.sp?"Typ unbekannt":""}));return}
+      td.appendChild(tyList(q.ty,true));
+      td.appendChild(el("div",{class:"wk-sc"},[
+        el("span",{class:q.sc.atk>=2?"good":q.sc.atk<1?"bad":"",text:"trifft "+fmtX(q.sc.atk)}),
+        el("span",{class:q.sc.def<=0.5?"good":q.sc.def>=2?"bad":"",text:"kassiert "+fmtX(q.sc.def)})]));
+      if(best[i]>1&&wkVal(q.sc)===best[i]){td.className="best";td.appendChild(el("span",{class:"wk-tip",text:"Tipp"}))}})
+    body.appendChild(tr)});
+  b.appendChild(el("div",{class:"tw0"},[el("table",{class:"mini wk-tt"},[el("thead",null,[hr]),body])]));
+  b.appendChild(el("p",{class:"note",text:"trifft = stärkste Attacke vom eigenen Typ, kassiert = härtester Treffer vom Typ des Gegners. Tipp = bester Konter je Spieler. Fähigkeiten (z. B. Schwebe), Items und Attacken anderer Typen sind nicht eingerechnet."}));
+}
+function renderWkChart(m,n){
+  var box=$("wkChart");box.textContent="";var on=function(d){return wk.types.indexOf(d)>-1};
+  var hr=el("tr",null,[el("th",{class:"c0",text:"Angriff ↓ · Ziel →"})]);
+  for(var d=0;d<n;d++)hr.appendChild(el("th",{class:"ty-h"+(TY_LT.indexOf(d)>-1?" lt":"")+(on(d)?" on":""),style:"--tyc:var(--ty"+d+")",title:TYPES[d],text:TY_AB[d]}));
+  var body=el("tbody");
+  for(var a=0;a<n;a++){var tr=el("tr",null,[el("th",{class:"ty-r"+(TY_LT.indexOf(a)>-1?" lt":""),style:"--tyc:var(--ty"+a+")",text:TYPES[a]})]);
+    for(d=0;d<n;d++){var x=m[a][d];tr.appendChild(el("td",{"data-x":String(x),class:on(d)?"on":"",title:TYPES[a]+" gegen "+TYPES[d]+": "+fmtX(x),text:x===1?"":fmtX(x).replace("×","")}))}
+    body.appendChild(tr)}
+  box.appendChild(el("table",{class:"mini tychart"},[el("thead",null,[hr]),body]));
+}
+function wkPick(h){wk={label:h.t,dex:h.dex,form:!!h.ty,types:h.ty?h.ty.slice():monTypes(h.dex,tyGen())};renderWk()}
+function wkReset(){wk={label:"",dex:0,form:false,types:[]};$("wkQ").value="";closePk();renderWk()}
+var wkQ=$("wkQ");
+wkQ.addEventListener("input",function(){var v=wkQ.value,res=wkSearch(v),nv=norm(v);showPk(wkQ,res);
+  var hit=res.filter(function(h){return norm(h.t)===nv||h.n1===nv||h.n2===nv})[0];
+  if(hit)wkPick(hit);else if(!v.trim()&&wk.label){wk={label:"",dex:0,form:false,types:[]};renderWk()}else $("wkClear").hidden=!(wk.types.length||v)});
+wkQ.addEventListener("keydown",function(e){pkKeys(e,wkQ,function(){return wkSearch(wkQ.value)})});
+wkQ.addEventListener("focusout",function(){setTimeout(function(){if(document.activeElement!==wkQ&&pkFor===wkQ)closePk()},120)});
+$("wkClear").addEventListener("click",wkReset);
+$("wkTypes").addEventListener("click",function(e){var b=e.target.closest(".tyb");if(!b)return;var t=+b.getAttribute("data-ty");
+  if(wk.label){wk={label:"",dex:0,form:false,types:[t]};wkQ.value=""}
+  else{var k=wk.types.indexOf(t);if(k>-1)wk.types.splice(k,1);else if(wk.types.length<2)wk.types.push(t);else wk.types[1]=t}
+  renderWk()});
+
 /* ---------- Auswertung ---------- */
 function barRow(label,p,val,max,extra){var w=max>0?Math.round(val/max*100):0;
   return el("div",{class:"bar","data-p":p},[el("span",{class:"nmb",text:label}),el("div",{class:"tr"},[el("div",{class:"fl",style:"width:"+w+"%"})]),el("span",{class:"vl"},[document.createTextNode(String(val))].concat(extra?[el("small",{text:extra})]:[]))])}
@@ -415,7 +547,7 @@ function renderAna(){
     var dt=h.endedAt?new Date(h.endedAt).toLocaleDateString("de-DE"):"";
     hb.appendChild(el("tr",null,[el("td",{class:"k"},[document.createTextNode("Run "+h.no),el("small",{class:"hg",text:GAME(h.game||GAMES.def).title})]),el("td",null,[el("span",{class:"chip "+(h.status||"run"),text:res})]),el("td",{text:en}),el("td",{text:h.where||""}),el("td",{text:String(h.badges||0)}),el("td",{text:String(h.links||0)}),el("td",{text:String((h.deadLinks||[]).length)}),el("td",{text:dt})]))});
 }
-function renderAll(){renderGame();renderRun();renderCaps();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna();renderBk()}
+function renderAll(){renderGame();renderRun();renderCaps();renderWk();renderTally();renderStats();renderList();if(ui.view==="all")renderAllView();renderAna();renderBk()}
 
 /* ---------- Backup-Erinnerung ---------- */
 var BK_DAYS=7, autoBk=null;   // autoBk: letztes automatisches Backup (GitHub Action, config.js autoBackupUrl)
@@ -479,14 +611,10 @@ function onCellInput(t){
     var cur=cellOf(r,pi),has=!!(t.value.trim()||nickOf(r).trim());
     if(!cur.st&&has)part[p].st=status(r)==="miss"?"dead":"alive";else if(cur.st==="alive"&&!has)part[p].st="";
     patchRoute(id,{cells:part})}
-  var row=t.closest(".row");updateRow(row,id,Array.from(listEl.children).indexOf(row));renderStats();renderRun();
+  var row=t.closest(".row");updateRow(row,id,Array.from(listEl.children).indexOf(row));renderStats();renderRun();if(wk.types.length)renderWk();
 }
 listEl.addEventListener("input",function(e){var t=e.target;onCellInput(t);if(t.getAttribute("data-f")==="sp")showPk(t)});
-listEl.addEventListener("keydown",function(e){var t=e.target;if(t.getAttribute("data-f")!=="sp")return;
-  if(e.key==="ArrowDown"){if(pk.hidden)showPk(t);else movePk(1);e.preventDefault()}
-  else if(e.key==="ArrowUp"){movePk(-1);e.preventDefault()}
-  else if(e.key==="Enter"&&!pk.hidden&&pkFor===t){pickPk(pkAct);e.preventDefault()}
-  else if(e.key==="Escape"){closePk()}});
+listEl.addEventListener("keydown",function(e){var t=e.target;if(t.getAttribute("data-f")==="sp")pkKeys(e,t)});
 listEl.addEventListener("focusout",function(e){if(e.target===pkFor)setTimeout(function(){if(document.activeElement!==pkFor)closePk()},120)});
 listEl.addEventListener("change",function(e){
   var t=e.target;if(t.getAttribute("data-f")!=="killer")return;patchRoute(rowsOf(t),{killer:+t.value});renderAll();

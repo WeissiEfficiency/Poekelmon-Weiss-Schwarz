@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-26
+
+### Hinzugefügt
+- Schwächen-Karte (unter den Level-Caps): Gegner-Pokémon suchen (auch Regionalformen wie Alola-Vulpix) oder ein bis zwei Typen antippen. Zeigt, welche Angriffstypen 4×, 2×, ½×, ¼× oder gar nicht wirken, was der Gegner hart trifft und welche Typen alles aushalten. „Euer Team“ bewertet jedes lebende Pokémon des Runs (trifft / kassiert) und markiert den besten Konter je Spieler. Die ganze Typentabelle lässt sich aufklappen. Alles richtet sich nach der Generation des gewählten Spiels (Gen 1 ohne Unlicht/Stahl, bis Gen 5 ohne Fee, alte Typen wie Piepi als Normal). Nichts wird gespeichert, auch ohne Schreibrecht nutzbar.
+
 ## 2026-11-17
 
 ### Hinzugefügt
