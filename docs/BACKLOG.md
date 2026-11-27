@@ -4,7 +4,7 @@
 
 Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus `firestore.rules` veröffentlicht). Die Firestore-Regeln prüfen das Datenmodell, die Seite erinnert an Sicherungen, Ansehen und Schreiben gehen nur mit Google-Anmeldung und Freigabe durch den Admin, und eine GitHub Action sichert täglich nach `backups/` (bei `privateRead: true` in einem privaten Backup-Repo; dann liest Firestore nur noch für Admin und Freigeschaltete). Spieleranzahl 2 bis 6 über `config.js`; der Admin wählt das Spiel (Gen 1 bis 9, gilt ab dem nächsten Run). Andere Gruppen richten eigene Kopien mit `tools/setup.py` ein (`docs/INSTALLATION.md`).
 
-**Nächster Schritt:** T-009 (Google-E-Mails der Mitspieler unter „Schreibrechte“ eintragen), dann T-004.
+**Nächster Schritt:** T-004.
 
 ## Aufgaben
 
@@ -31,7 +31,7 @@ Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus
 | T-020 | Schwächen-Karte: Gegner-Pokémon oder Typen wählen, Angriffstypen, Gefahren und passende Pokémon des Teams, Typentabelle je Generation | mittel | erledigt | M2 |
 | T-021 | Team (bis 6 Links) mit Leiste, Sprites und Typen in den Routen, Hinweis bei gleichem Primärtyp im Team | mittel | erledigt | M2 |
 | T-022 | Auswertung nach Spiel filtern, „Verpasst“ pro Spieler, „Gestoppt vor“ (Level-Cap, an dem Runs enden) | mittel | erledigt | M2 |
-| T-009 | Google-E-Mails der Mitspieler unter „Schreibrechte“ eintragen | hoch | offen | M1 |
+| T-009 | Google-E-Mails der Mitspieler unter „Schreibrechte“ eintragen | hoch | erledigt | M1 |
 
 ## Erledigt
 
