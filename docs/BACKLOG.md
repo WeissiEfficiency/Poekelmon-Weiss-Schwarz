@@ -2,7 +2,7 @@
 
 ## Aktueller Stand
 
-Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus `firestore.rules` veröffentlicht). Die Firestore-Regeln prüfen das Datenmodell, die Seite erinnert an Sicherungen, Ansehen und Schreiben gehen nur mit Google-Anmeldung und Freigabe durch den Admin, und eine GitHub Action sichert täglich nach `backups/`. Spieleranzahl 2 bis 6 über `config.js`; der Admin wählt das Spiel (Gen 1 bis 9, gilt ab dem nächsten Run). Andere Gruppen richten eigene Kopien mit `tools/setup.py` ein (`docs/INSTALLATION.md`).
+Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus `firestore.rules` veröffentlicht). Die Firestore-Regeln prüfen das Datenmodell, die Seite erinnert an Sicherungen, Ansehen und Schreiben gehen nur mit Google-Anmeldung und Freigabe durch den Admin, und eine GitHub Action sichert täglich nach `backups/` (bei `privateRead: true` in einem privaten Backup-Repo; dann liest Firestore nur noch für Admin und Freigeschaltete). Spieleranzahl 2 bis 6 über `config.js`; der Admin wählt das Spiel (Gen 1 bis 9, gilt ab dem nächsten Run). Andere Gruppen richten eigene Kopien mit `tools/setup.py` ein (`docs/INSTALLATION.md`).
 
 **Nächster Schritt:** T-009 (Google-E-Mails der Mitspieler unter „Schreibrechte“ eintragen), dann T-004.
 
