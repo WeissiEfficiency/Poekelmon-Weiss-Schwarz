@@ -70,7 +70,7 @@ service cloud.firestore {
     }
 
     match /meta/{doc} {
-      allow read: if true;
+      allow read: if isWriter();
       allow create, update: if isWriter() && doc == 'main' && validMeta(request.resource.data);
       allow delete: if false;
     }
@@ -110,7 +110,7 @@ service cloud.firestore {
     }
 
     match /routes/{id} {
-      allow read: if true;
+      allow read: if isWriter();
       // r01 … r99 sind Standardrouten des gewählten Spiels, c… sind selbst angelegte Routen.
       allow create, update: if isWriter() && id.matches('r[0-9]{2}|c[a-z0-9]{1,12}') && validRoute(request.resource.data);
       allow delete: if isWriter();
@@ -130,7 +130,7 @@ service cloud.firestore {
     }
 
     match /history/{id} {
-      allow read: if true;
+      allow read: if isWriter();
       allow create: if isWriter() && id.matches('run[0-9]+-[a-z0-9]+') && validHistory(request.resource.data);
       // Abgeschlossene Runs ändern sich nicht. Gleiche Daten erneut schreiben (Backup einspielen) ist erlaubt.
       allow update: if isWriter() && request.resource.data == resource.data;

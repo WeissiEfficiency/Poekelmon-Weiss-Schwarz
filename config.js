@@ -17,5 +17,7 @@ window.SOULLINK_CONFIG = {
   // Muss mit der UID in firestore.rules übereinstimmen (tools/setup.py hält beide gleich).
   adminUid: "3jGRsgfX3DcYPwOTzzTWJBm8EJF2",
   // Letztes automatisches Backup (GitHub Action, tools/backup.py). Dient nur der Backup-Erinnerung.
-  autoBackupUrl: "https://raw.githubusercontent.com/WeissiEfficiency/Poekelmon-Weiss-Schwarz/main/backups/latest.json"
+  autoBackupUrl: "",
+  // true: Daten lesen nur Admin und Freigeschaltete (firestore.rules), Backup im privaten Repo.
+  privateRead: true
 };
