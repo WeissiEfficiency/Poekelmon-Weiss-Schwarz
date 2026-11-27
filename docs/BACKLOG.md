@@ -23,7 +23,7 @@ Seite ist fertig und läuft auf GitHub Pages mit Firebase (Firestore, Regeln aus
 | T-012 | Routen nacheinander einblenden, „Route hinzufügen“ unter der Liste | mittel | erledigt | M2 |
 | T-013 | Run-Status automatisch (Verloren-Knopf, Sieg mit Feuerwerk), Verpasst wie Tod | mittel | erledigt | M2 |
 | T-014 | Willkommensseite statt Dashboard für nicht freigegebene Konten | mittel | erledigt | M2 |
-| T-015 | Firestore-Lesen auf freigegebene Konten beschränken (Backup-Action braucht dann eigenen Zugang, öffentliche Backups im Repo bedenken) | mittel | offen | M2 |
+| T-015 | Firestore-Lesen auf freigegebene Konten beschränken (Backup-Action braucht dann eigenen Zugang, öffentliche Backups im Repo bedenken) | mittel | erledigt (`setup.py --private on`, Backup im privaten Repo mit Dienstkonto) | M2 |
 | T-016 | Anonymisiert, Spieleranzahl 2 bis 6, Einrichtungsskript und Installationsanleitung für andere Gruppen | mittel | erledigt | M2 |
 | T-017 | Saubere Vorlage ohne eigene Daten und Git-Verlauf (Template-Repo `soul-link-dashboard`); Änderungen am Code dort nachziehen | niedrig | erledigt | M2 |
 | T-018 | Spiele-Schalter für den Admin: alle Hauptspiele Gen 1 bis 9 mit Routen, Level-Caps, 1025 Pokémon; gilt ab dem nächsten Run | mittel | erledigt (Regeln veröffentlichen) | M2 |

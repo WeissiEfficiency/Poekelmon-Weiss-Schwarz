@@ -3,6 +3,7 @@
 ## 2026-11-27
 
 ### Hinzugefügt
+- Daten nicht öffentlich (optional, `python tools/setup.py --private on`): Firestore lässt nur noch Admin und Freigeschaltete lesen. Das tägliche Backup läuft dann in einem privaten Repo (`tools/private-backup.yml`) mit einem Firebase-Dienstkonto und meldet sich über `meta.autoBackupAt` bei der Backup-Erinnerung. Anleitung in `docs/INSTALLATION.md`.
 - Klicktest: `python tools/test.py` klickt Fangen, Team, Dupe, Tod, Verpasst, Schwächen-Karte und „Neuer Run“ in einem Browser ohne Fenster durch, auch als GitHub Action nach jedem Push. Die Seite läuft dafür im Testmodus (`index.html?test=1`) mit eigenem Speicher, nie gegen Firebase.
 
 ## 2026-11-26
