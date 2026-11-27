@@ -3,7 +3,7 @@
 "use strict";
 /* Versionsschutz: passt index.html nicht zu dieser Datei (Browser-Cache nach einem Deploy), einmal neu laden.
    APP_V setzt tools/bump.py zusammen mit data-v und ?v= in index.html. */
-var APP_V="202611271056";
+var APP_V="202611271104";
 var HTML_V=document.documentElement.getAttribute("data-v");
 if(HTML_V&&HTML_V!==APP_V){try{var rk="soullink-reload-"+HTML_V+"-"+APP_V;if(!sessionStorage.getItem(rk)){sessionStorage.setItem(rk,"1");location.reload();return}}catch(e){}}
 /* Spieler: Anzahl aus config.js (playerCount, 2 bis 6, Standard 3). Schlüssel p0 … p5, Namen stehen in meta.players. */
