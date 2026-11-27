@@ -1,6 +1,6 @@
 {
  "app": "soullink-bw",
- "exportedAt": "2026-11-26T12:38:09.222Z",
+ "exportedAt": "2026-11-27T12:25:13.073Z",
  "history": {
   "run39-mwl21hc2": {
    "badges": 0,
@@ -68,6 +68,297 @@
    },
    "status": "lost",
    "where": ""
+  },
+  "run40-mwxxvyb1": {
+   "badges": 5,
+   "cause": "",
+   "deadLinks": [
+    {
+     "cause": "",
+     "deaths": {
+      "p0": true,
+      "p1": true,
+      "p2": false
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "Hotdog",
+     "route": "Starter (Avenitia)"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": false,
+      "p2": true
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "Hanssarpai",
+     "route": "Route 1"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": true,
+      "p2": false
+     },
+     "killer": 1,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "Rin DA",
+     "route": "Route 2"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": true,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "Porygon-Z",
+     "route": "Orion City (Geschenk)"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": true,
+      "p2": false
+     },
+     "killer": 1,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "DJ Ledwa",
+     "route": "Traumbrache"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": true,
+      "p2": false
+     },
+     "killer": 1,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "Omlett",
+     "route": "Route 3"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": true,
+      "p2": false
+     },
+     "killer": 1,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "metigel",
+     "route": "Grundwassersenke"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": true,
+      "p2": false
+     },
+     "killer": 1,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "altprotein",
+     "route": "Ewigenwald"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": true,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "bischkek",
+     "route": "Fossil (Extra-Encounter)"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": true,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "",
+     "route": "Marea City"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": false,
+      "p2": true
+     },
+     "killer": 2,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "",
+     "route": "Route 6"
+    },
+    {
+     "cause": "nicht gefangen",
+     "deaths": {
+      "p0": false,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 2,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "",
+     "route": "Elektrolithhöhle"
+    },
+    {
+     "cause": "nicht gefangen",
+     "deaths": {
+      "p0": false,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 1,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "",
+     "route": "Route 7"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": true,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "MetIgel",
+     "route": "Turm des Himmels"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": true,
+      "p1": false,
+      "p2": false
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "benis",
+     "route": "Wendelberg"
+    },
+    {
+     "cause": "",
+     "deaths": {
+      "p0": false,
+      "p1": true,
+      "p2": true
+     },
+     "killer": 0,
+     "mons": [
+      "",
+      "",
+      ""
+     ],
+     "nick": "ALT-Protein",
+     "route": "Fossil 2"
+    }
+   ],
+   "endedAt": "2026-11-26T19:22:26.797Z",
+   "enders": {
+    "p0": false,
+    "p1": true,
+    "p2": false
+   },
+   "game": "bw",
+   "lastCap": "Géraldine",
+   "links": 14,
+   "no": 40,
+   "perPlayer": {
+    "p0": {
+     "death": 6,
+     "enc": 8,
+     "run": 0
+    },
+    "p1": {
+     "death": 7,
+     "enc": 6,
+     "run": 1
+    },
+    "p2": {
+     "death": 3,
+     "enc": 2,
+     "run": 0
+    }
+   },
+   "status": "lost",
+   "where": ""
   }
  },
  "meta": {
@@ -76,10 +367,10 @@
    "beaten": {
     "ch": false,
     "e4": false,
-    "g1": true,
-    "g2": true,
-    "g3": true,
-    "g4": true,
+    "g1": false,
+    "g2": false,
+    "g3": false,
+    "g4": false,
     "g5": false,
     "g6": false,
     "g7": false,
@@ -109,24 +400,24 @@
     "p1": false,
     "p2": false
    },
-   "no": 40,
+   "no": 41,
    "status": "run",
    "where": ""
   },
   "tally": {
    "p0": {
-    "death": 49,
-    "enc": 10,
+    "death": 55,
+    "enc": 18,
     "run": 21
    },
    "p1": {
-    "death": 35,
-    "enc": 11,
-    "run": 11
+    "death": 42,
+    "enc": 17,
+    "run": 12
    },
    "p2": {
-    "death": 22,
-    "enc": 11,
+    "death": 25,
+    "enc": 13,
     "run": 9
    }
   }
@@ -166,13 +457,19 @@
    "cause": "",
    "cells": {
     "p0": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": true,
@@ -183,20 +480,26 @@
    },
    "killer": -1,
    "name": "Fossil 2",
-   "nick": "ALT-Protein",
+   "nick": "",
    "order": 43
   },
   "r01": {
    "cause": "",
    "cells": {
     "p0": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": false,
@@ -207,68 +510,86 @@
    },
    "killer": -1,
    "name": "Starter (Avenitia)",
-   "nick": "Hotdog",
+   "nick": "",
    "order": 1
   },
   "r02": {
    "cause": "",
    "cells": {
     "p0": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
     "p1": false,
-    "p2": true
+    "p2": false
    },
-   "killer": 0,
+   "killer": -1,
    "name": "Route 1",
-   "nick": "Hanssarpai",
+   "nick": "",
    "order": 2
   },
   "r03": {
    "cause": "",
    "cells": {
     "p0": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
-    "p1": true,
+    "p1": false,
     "p2": false
    },
-   "killer": 1,
+   "killer": -1,
    "name": "Route 2",
-   "nick": "Rin DA",
+   "nick": "",
    "order": 3
   },
   "r04": {
    "cause": "",
    "cells": {
     "p0": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "alive"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": false,
@@ -279,55 +600,67 @@
    },
    "killer": -1,
    "name": "Orion City (Geschenk)",
-   "nick": "Porygon-Z",
+   "nick": "",
    "order": 4
   },
   "r05": {
    "cause": "",
    "cells": {
     "p0": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
-    "p1": true,
+    "p1": false,
     "p2": false
    },
-   "killer": 1,
+   "killer": -1,
    "name": "Traumbrache",
-   "nick": "DJ Ledwa",
+   "nick": "",
    "order": 5
   },
   "r06": {
    "cause": "",
    "cells": {
     "p0": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p1": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     },
     "p2": {
-     "st": "dead"
+     "nick": "",
+     "sp": "",
+     "st": ""
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
-    "p1": true,
+    "p1": false,
     "p2": false
    },
-   "killer": 1,
+   "killer": -1,
    "name": "Route 3",
-   "nick": "Omlett",
+   "nick": "",
    "order": 6
   },
   "r07": {
@@ -542,7 +875,23 @@
   },
   "r15": {
    "cause": "",
-   "cells": {},
+   "cells": {
+    "p0": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p1": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    },
+    "p2": {
+     "nick": "",
+     "sp": "",
+     "st": ""
+    }
+   },
    "custom": false,
    "deaths": {
     "p0": false,
@@ -551,7 +900,7 @@
    },
    "killer": -1,
    "name": "Route 5",
-   "nick": "Sanrakun",
+   "nick": "",
    "order": 15
   },
   "r16": {
@@ -560,17 +909,17 @@
     "p0": {
      "nick": "",
      "sp": "",
-     "st": "alive"
+     "st": ""
     },
     "p1": {
      "nick": "",
      "sp": "",
-     "st": "alive"
+     "st": ""
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": "alive"
+     "st": ""
     }
    },
    "custom": false,
@@ -600,16 +949,16 @@
     "p2": {
      "nick": "",
      "sp": "",
-     "st": "dead"
+     "st": ""
     }
    },
    "custom": false,
    "deaths": {
     "p0": false,
     "p1": false,
-    "p2": true
+    "p2": false
    },
-   "killer": 2,
+   "killer": -1,
    "name": "Route 6",
    "nick": "",
    "order": 17
@@ -1369,18 +1718,18 @@
    "cells": {
     "p0": {
      "nick": "",
-     "sp": "Schilterus",
-     "st": "alive"
+     "sp": "",
+     "st": ""
     },
     "p1": {
      "nick": "",
-     "sp": "Zurrokex",
-     "st": "alive"
+     "sp": "",
+     "st": ""
     },
     "p2": {
      "nick": "",
      "sp": "",
-     "st": "alive"
+     "st": ""
     }
    },
    "custom": false,
